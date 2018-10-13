@@ -2,7 +2,9 @@
   <div class="comic-item">
     <div class="comic-item__cover">
       <div class="cover__image"
-        :style="{backgroundImage:`url('${cover}')`}"></div>
+        :style="{backgroundImage:`url('${cover}')`}">
+        <div class="image__link"></div>
+      </div>
       <div class="comic-item__title">{{name}}</div>
     </div>
     <div class="comic-item__details">
@@ -27,20 +29,56 @@ export default {
 .comic-item {
   position: relative;
   width: 150px;
+  &,
+  * {
+    transition: 0.2s;
+  }
+  &:hover {
+    .cover__image {
+      border-color: #ff8c00;
+      .image__link {
+        opacity: 0.1;
+        background-color: #000;
+      }
+    }
+    .comic-item {
+      &__title {
+        color: #ff8c00;
+        font-size: 16px;
+      }
+    }
+  }
   &__cover {
     .cover__image {
+      position: relative;
+      border: 2px solid #bebebe;
+      box-sizing: border-box;
       background-size: cover;
       background-repeat: no-repeat;
       background-clip: content-box;
       background-position: center;
       height: 200px;
       width: 100%;
+      .image__link {
+        cursor: pointer;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+      }
     }
   }
   &__title {
+    cursor: pointer;
     overflow-x: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    font-size: 14px;
+    height: 20px;
+    line-height: 20px;
+    margin-top: 5px;
   }
   &__details {
     display: none;

@@ -44,12 +44,5 @@ export default {
     }
   }
 }
-@media screen and (max-width: 980px) {
-  .home {
-    &__main {
-      width: 100%;
-    }
-  }
-}
 </style>
 

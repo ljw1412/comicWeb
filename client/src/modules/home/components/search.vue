@@ -7,10 +7,18 @@
     <div class="search__result">
       <comic-item v-for="item of list"
         :key="item.id"
+        class="result__item"
         :name="item.name"
         :cover="item.cover"
-        :description="item.description"></comic-item>
+        :description="item.description"
+        @click.native="onComicItemClick(item)"></comic-item>
     </div>
+    <i-modal ref="derailModal"
+      v-model="isDetailShow"
+      footer-hide>
+      <div :style="{'backgroud-image':`url(${currentComic.cover})`}"></div>
+      <div>{{currentComic.description}}</div>
+    </i-modal>
   </div>
 </template>
 
@@ -22,10 +30,15 @@ export default {
   },
   data() {
     return {
-      list: []
+      list: [],
+      isDetailShow: false,
+      currentComic: {}
     }
   },
   methods: {
+    setModalNotRadius() {
+      this.$refs.derailModal.$refs.content.style.borderRadius = 0
+    },
     onSearch(value) {
       if (!value.trim()) return
       this.$callApi({
@@ -38,7 +51,15 @@ export default {
       }).then(data => {
         this.list = data
       })
+    },
+    onComicItemClick(item) {
+      console.log(item)
+      this.currentComic = item
+      this.isDetailShow = true
     }
+  },
+  mounted() {
+    this.setModalNotRadius()
   }
 }
 </script>
@@ -55,6 +76,20 @@ export default {
     overflow-y: auto;
     display: flex;
     flex-wrap: wrap;
+    .result__item {
+      margin: 8px 5px;
+    }
+  }
+  &__detail {
+    border-radius: 0;
+  }
+}
+
+@media screen and (max-width: 1160px) {
+  .search {
+    .result__item {
+      margin: 6px 4px;
+    }
   }
 }
 </style>
