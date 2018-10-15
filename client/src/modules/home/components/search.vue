@@ -13,20 +13,22 @@
         :description="item.description"
         @click.native="onComicItemClick(item)"></comic-item>
     </div>
-    <i-modal ref="derailModal"
+    <i-modal ref="detailModal"
       v-model="isDetailShow"
+      width="500px"
       footer-hide>
-      <div :style="{'backgroud-image':`url(${currentComic.cover})`}"></div>
-      <div>{{currentComic.description}}</div>
+      <comic-detail :comic="currentComic"></comic-detail>
     </i-modal>
   </div>
 </template>
 
 <script>
 import ComicItem from './comicItem'
+import ComicDetail from './comicDetail'
 export default {
   components: {
-    ComicItem
+    ComicItem,
+    ComicDetail
   },
   data() {
     return {
@@ -37,23 +39,25 @@ export default {
   },
   methods: {
     setModalNotRadius() {
-      this.$refs.derailModal.$refs.content.style.borderRadius = 0
+      this.$refs.detailModal.$refs.content.style.borderRadius = 0
     },
-    onSearch(value) {
-      if (!value.trim()) return
+    search(keyword) {
       this.$callApi({
         method: 'post',
         api: '/comic/search',
         param: {
           website: 'dmzj',
-          keyword: value
+          keyword
         }
       }).then(data => {
         this.list = data
       })
     },
+    onSearch(value) {
+      if (!value.trim()) return
+      this.search(value)
+    },
     onComicItemClick(item) {
-      console.log(item)
       this.currentComic = item
       this.isDetailShow = true
     }

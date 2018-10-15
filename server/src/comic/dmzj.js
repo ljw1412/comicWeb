@@ -51,7 +51,9 @@ module.exports = {
           // 是否竖排版
           isVertical: data.direction != '1',
           title: data.title,
-          cover: data.cover,
+          cover:
+            '//localhost:3000/image?website=dmzj&url=' +
+            data.cover.replace(/^\/\//, 'https://'),
           description: data.description,
           lastUpdateTime: data.last_updatetime,
           types: data.types.map(item => item.tag_name),
