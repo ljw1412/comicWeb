@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import loginBlock from '../components/loginBlock'
+import loginBlock from './components/loginBlock'
 export default {
   components: {
     loginBlock
