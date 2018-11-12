@@ -10,10 +10,10 @@
 </template>
 
 <script>
-import loginBlock from './components/loginBlock'
+import LoginBlock from './components/loginBlock'
 export default {
   components: {
-    loginBlock
+    LoginBlock
   },
   data() {
     return {
