@@ -12,6 +12,8 @@ import Store from 'store'
 
 import iView from 'iview'
 import './my-theme/index.less'
+// https://the-allstars.com/vue2-animate/
+import 'vue2-animate/dist/vue2-animate.min.css'
 import pageTitle from './components/pageTitle'
 import Chart from './components/chart'
 

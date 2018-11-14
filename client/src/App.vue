@@ -19,10 +19,12 @@ html,
 body,
 #app {
   height: 100%;
+  overflow: hidden;
 }
 
 ::-webkit-scrollbar {
   width: 10px;
+  height: 10px;
   background-color: rgba(0, 0, 0, 0);
   -webkit-border-radius: 100px;
   border-radius: 100px;
@@ -40,6 +42,7 @@ body,
   background-clip: padding-box;
   border: 2px solid transparent;
   min-height: 10px;
+  min-width: 10px;
 }
 
 ::-webkit-scrollbar-thumb:vertical:active {

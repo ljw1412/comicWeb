@@ -3,17 +3,14 @@
     <div class="home__main">
       <router-view/>
     </div>
-    <sidebar :postion="2"></sidebar>
     <taskbar></taskbar>
   </div>
 </template>
 
 <script>
 import Taskbar from '../../components/taskbar'
-import Sidebar from './components/sidebar'
 export default {
   components: {
-    Sidebar,
     Taskbar
   },
   data() {

@@ -3,9 +3,9 @@
     <div class="taskbar__menu">菜单</div>
     <div class="taskbar__tasks">任务</div>
     <div class="taskbar__status">
-      <div class="status__item">
-        <Badge class-name="item__badge"
-          dot
+      <div class="status__notifications"
+        @click="onNotificationsClick">
+        <Badge dot
           :count="messageCount"
           :overflow-count="9"
           :offset="[4,4]">
@@ -19,12 +19,20 @@
       <div>{{date}}</div>
     </div>
     <div class="taskbar__back-home"></div>
+    <notifications v-model="isNotificationsShow"></notifications>
+    <calendar></calendar>
   </div>
 </template>
 
 <script>
+import Notifications from './notifications'
+import Calendar from './calendar'
 import moment from 'moment'
 export default {
+  components: {
+    Notifications,
+    Calendar
+  },
   props: {
     messageCount: {
       type: Number,
@@ -45,7 +53,8 @@ export default {
   data() {
     return {
       dateTimeTimer: null,
-      now: new Date()
+      now: new Date(),
+      isNotificationsShow: false
     }
   },
   methods: {
@@ -58,6 +67,9 @@ export default {
     clearTimer() {
       clearInterval(this.timer)
       this.timer = null
+    },
+    onNotificationsClick() {
+      this.isNotificationsShow = !this.isNotificationsShow
     }
   },
   mounted() {
@@ -95,7 +107,7 @@ export default {
     color: #fff;
     display: flex;
     align-items: center;
-    .status__item {
+    .status__notifications {
       padding: 9px 5px;
       height: 100%;
       @include hover;
