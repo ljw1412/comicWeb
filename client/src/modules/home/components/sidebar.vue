@@ -28,7 +28,7 @@ export default {
     },
     siderbarStyle() {
       const style = {
-        [this.isTop ? 'top' : 'bottom']: '20px',
+        [this.isTop ? 'top' : 'bottom']: '50px',
         [this.isLeft ? 'left' : 'right']: '20px'
       }
       return style

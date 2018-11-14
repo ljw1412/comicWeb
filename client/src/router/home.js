@@ -4,16 +4,14 @@ import Main from '@/modules/home/main'
 module = {
   path: '/',
   name: 'home',
-  component: Home,
-  redirect: { name: 'main' }
+  component: Home
 }
 
 module.children = [
   {
     path: '/main',
     name: 'main',
-    component: Main,
-    alias: ''
+    component: Main
   }
 ]
 export default module

@@ -3,17 +3,18 @@
     <div class="home__main">
       <router-view/>
     </div>
-    <div class="home__sidebar">
-      <sidebar :postion="2"></sidebar>
-    </div>
+    <sidebar :postion="2"></sidebar>
+    <taskbar></taskbar>
   </div>
 </template>
 
 <script>
+import Taskbar from '../../components/taskbar'
 import Sidebar from './components/sidebar'
 export default {
   components: {
-    Sidebar
+    Sidebar,
+    Taskbar
   },
   data() {
     return {}
@@ -38,20 +39,13 @@ export default {
   height: 100%;
   max-height: 100%;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
   &__main {
-    margin: 0 auto;
-    width: 1160px;
-    height: 100%;
-    padding: 10px;
-  }
-  &__sidebar {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    max-height: 100%;
+    flex-grow: 1;
     width: 100%;
-    height: 100%;
+    height: 0;
+    padding: 10px;
   }
 }
 @media screen and (max-width: 1160px) {
