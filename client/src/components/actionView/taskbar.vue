@@ -14,69 +14,43 @@
         </Badge>
       </div>
     </div>
-    <div class="taskbar__date-time">
-      <div>{{time}}</div>
-      <div>{{date}}</div>
+    <div class="taskbar__date-time"
+      @click="onDateTimeClick">
+      <div>{{nTime}}</div>
+      <div>{{nDate}}</div>
     </div>
     <div class="taskbar__back-home"></div>
-    <notifications v-model="isNotificationsShow"></notifications>
-    <calendar></calendar>
   </div>
 </template>
 
 <script>
-import Notifications from './notifications'
-import Calendar from './calendar'
-import moment from 'moment'
 export default {
-  components: {
-    Notifications,
-    Calendar
-  },
+  components: {},
   props: {
     messageCount: {
       type: Number,
       default: 0
-    }
+    },
+    nTime: String,
+    nDate: String,
+    isNotificationsShow: Boolean,
+    isDateTimeShow: Boolean
   },
   computed: {
-    date() {
-      return moment(this.now).format('YYYY-MM-DD')
-    },
-    time() {
-      return moment(this.now).format('HH:mm:ss')
-    },
     notificationsIcon() {
       return this.messageCount ? 'md-notifications' : 'md-notifications-outline'
     }
   },
   data() {
-    return {
-      dateTimeTimer: null,
-      now: new Date(),
-      isNotificationsShow: false
-    }
+    return {}
   },
   methods: {
-    startTimer() {
-      this.clearTimer()
-      this.timer = setInterval(() => {
-        this.now = new Date()
-      }, 1000)
-    },
-    clearTimer() {
-      clearInterval(this.timer)
-      this.timer = null
-    },
     onNotificationsClick() {
-      this.isNotificationsShow = !this.isNotificationsShow
+      this.$emit('update:isNotificationsShow', !this.isNotificationsShow)
+    },
+    onDateTimeClick() {
+      this.$emit('update:isDateTimeShow', !this.isDateTimeShow)
     }
-  },
-  mounted() {
-    this.startTimer()
-  },
-  beforeDestroy() {
-    this.clearTimer()
   }
 }
 </script>
@@ -91,6 +65,11 @@ export default {
   user-select: none;
 }
 .taskbar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
   flex-shrink: 0;
   height: 40px;
   background-color: rgba(0, 179, 0, 0.6);

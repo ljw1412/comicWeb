@@ -3,15 +3,15 @@
     <div class="home__main">
       <router-view/>
     </div>
-    <taskbar></taskbar>
+    <action-view></action-view>
   </div>
 </template>
 
 <script>
-import Taskbar from '../../components/taskbar'
+import ActionView from '../../components/actionView'
 export default {
   components: {
-    Taskbar
+    ActionView
   },
   data() {
     return {}
