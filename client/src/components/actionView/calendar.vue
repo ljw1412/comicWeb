@@ -28,8 +28,9 @@
         <td v-for="weekday of 7"
           :key="weekday+(week-1)*7"
           class="table__cell"
+          :class="{'table__cell--today':isToday(week, weekday)}"
           :data-x="week"
-          :data-y="weekday">{{calendarList[weekday+(week-1)*7]}}</td>
+          :data-y="weekday">{{getDay(week,weekday)}}</td>
       </tr>
     </table>
   </div>
@@ -54,11 +55,7 @@ export default {
       // 选择月份下的日历数组
       calendarList: [],
       // 按年月缓存日历的映射
-      calendarMap: {},
-      highlightCircle: {
-        x: 0,
-        y: 0
-      }
+      calendarMap: {}
     }
   },
   computed: {
@@ -81,20 +78,41 @@ export default {
     }
   },
   methods: {
-    calculate(month) {
-      this.calendarList = []
-      if (this.calendarMap[month]) {
+    // reflush 强制更新输入的月份，用于24点日期交替的今日判断刷新
+    calculate(month, reflush = false) {
+      if (this.calendarMap[month] && !reflush) {
         this.calendarList = this.calendarMap[month]
         return
       }
+      // 用于月份变更(从一个月的最后一天，变为下个月的一天)要更新上一个月的日历
+      if (reflush) {
+        const preMonth = moment(month, 'YYYY-MM')
+          .subtract(1, 'months')
+          .format('YYYY-MM')
+        console.log(preMonth)
+
+        this.updateCalendarMap(preMonth)
+      }
+      this.updateCalendarMap(month)
+      if (this.formatSeletedMonth == month) {
+        this.calendarList = this.calendarMap[month]
+      }
+    },
+    updateCalendarMap(month) {
+      const list = []
       const dayCount = this.daysInMonth(month)
       const startWeekOfMonth =
         (this.startWeekdayOfMonth(month) + (this.sundayIsFirstDay ? 1 : 0)) % 7
 
       for (let i = 1; i <= dayCount; i++) {
-        this.calendarList[startWeekOfMonth + i] = i
+        const date = moment(month + '-' + i, 'YYYY-MM-D').format('YYYY-MM-DD')
+        list[startWeekOfMonth + i] = {
+          day: i,
+          date,
+          isToday: this.nDate === date
+        }
       }
-      this.calendarMap[month] = [...this.calendarList]
+      this.calendarMap[month] = list
     },
     daysInMonth(month) {
       return moment(month, 'YYYY-MM').daysInMonth()
@@ -104,6 +122,20 @@ export default {
       return moment(month, 'YYYY-MM')
         .startOf('month')
         .weekday()
+    },
+    // 是否为无效的日期
+    isInvalidDate(week, weekday) {
+      return !this.calendarList[weekday + (week - 1) * 7]
+    },
+    // 是否为今天
+    isToday(week, weekday) {
+      if (this.isInvalidDate(week, weekday)) return false
+      return this.calendarList[weekday + (week - 1) * 7].isToday
+    },
+    // 获得日期中的日
+    getDay(week, weekday) {
+      if (this.isInvalidDate(week, weekday)) return ''
+      return this.calendarList[weekday + (week - 1) * 7].day
     },
     // 上一个月
     onPreMonthClick() {
@@ -125,6 +157,11 @@ export default {
     formatSeletedMonth(val) {
       if (val) {
         this.calculate(val)
+      }
+    },
+    nDate(val) {
+      if (val) {
+        this.calculate(val.substr(0, val.lastIndexOf('-')), true)
       }
     }
   }
@@ -185,6 +222,9 @@ export default {
       border: 2px solid rgba(0, 0, 0, 0);
       &:hover {
         background: rgba($color: #fff, $alpha: 0.6);
+      }
+      &--today {
+        border: 1px solid #fff;
       }
     }
   }
