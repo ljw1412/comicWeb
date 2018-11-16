@@ -1,7 +1,6 @@
 // 日历
 <template>
-  <div ref="calendar"
-    class="calendar">
+  <div class="calendar">
     <div class="calendar__datetime">
       <div class="datetime__time">{{nTime}}</div>
       <div class="datetime__date">{{dateWithWeekday}}</div>
@@ -17,9 +16,7 @@
           @click="onNextMonthClick" />
       </div>
     </div>
-    <table ref="table"
-      class="calendar__table"
-      @mousemove="onCellMousemove">
+    <table class="calendar__table">
       <tr class="table__header">
         <th v-for="(weekName,index) of weekNameList"
           :key="index"
@@ -34,10 +31,6 @@
           :data-x="week"
           :data-y="weekday">{{calendarList[weekday+(week-1)*7]}}</td>
       </tr>
-      <div ref="circle"
-        class="table__circle"
-        :style="{top:highlightCircle.y+'px',
-          left:highlightCircle.x+'px'}"></div>
     </table>
   </div>
 </template>
@@ -123,14 +116,6 @@ export default {
       this.seletedMonth = moment(this.seletedMonth)
         .add(1, 'months')
         .toDate()
-    },
-    onCellMousemove(e) {
-      const table = this.$refs.table
-      const calendar = this.$refs.calendar
-      const circle = this.$refs.circle
-      console.log(e.target)
-      this.highlightCircle.x = e.layerX // - circle.clientWidth / 2
-      this.highlightCircle.y = e.layerY // + circle.clientHeight / 2
     }
   },
   mounted() {
@@ -192,23 +177,15 @@ export default {
     text-align: center;
     font-size: 16px;
     color: #fff;
+    // background-color: #000;
     .table__cell {
       height: 36px;
       box-sizing: border-box;
+      background-color: #000;
+      border: 2px solid rgba(0, 0, 0, 0);
       &:hover {
         background: rgba($color: #fff, $alpha: 0.6);
       }
-    }
-    .table__circle {
-      position: absolute;
-      width: 108px;
-      height: 108px;
-      // border-radius: 50%;
-      background-image: radial-gradient(
-        circle,
-        rgba(255, 255, 255, 0.9),
-        rgba(255, 255, 255, 0)
-      );
     }
   }
 }
