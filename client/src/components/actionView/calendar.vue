@@ -79,24 +79,21 @@ export default {
   },
   methods: {
     // reflush 强制更新输入的月份，用于24点日期交替的今日判断刷新
-    calculate(month, reflush = false) {
-      if (this.calendarMap[month] && !reflush) {
+    calculate(month, reflushPreMonth = false) {
+      if (this.calendarMap[month] && !reflushPreMonth) {
         this.calendarList = this.calendarMap[month]
         return
       }
       // 用于月份变更(从一个月的最后一天，变为下个月的一天)要更新上一个月的日历
-      if (reflush) {
+      if (reflushPreMonth) {
         const preMonth = moment(month, 'YYYY-MM')
           .subtract(1, 'months')
           .format('YYYY-MM')
-        console.log(preMonth)
-
         this.updateCalendarMap(preMonth)
       }
       this.updateCalendarMap(month)
-      if (this.formatSeletedMonth == month) {
-        this.calendarList = this.calendarMap[month]
-      }
+      // 刷新当前查看页面的数据
+      this.calendarList = this.calendarMap[this.formatSeletedMonth]
     },
     updateCalendarMap(month) {
       const list = []
