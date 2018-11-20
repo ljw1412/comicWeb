@@ -1,7 +1,5 @@
 <template>
-  <div class="action-view"
-    @contextmenu.prevent="onContextmenu">
-    <contextmenu></contextmenu>
+  <div class="action-view">
     <taskbar :n-time="time"
       :n-date="date"
       :isNotificationsShow.sync="isNotificationsShow"
@@ -27,7 +25,6 @@
 </template>
 
 <script>
-import Contextmenu from '../menu/contextmenu'
 import Taskbar from './taskbar'
 import Notifications from './notifications'
 import Calendar from './calendar'
@@ -35,7 +32,6 @@ import moment from 'moment'
 
 export default {
   components: {
-    Contextmenu,
     Taskbar,
     Notifications,
     Calendar
@@ -66,9 +62,6 @@ export default {
     clearTimer() {
       clearInterval(this.timer)
       this.timer = null
-    },
-    onContextmenu(e) {
-      console.log(e)
     }
   },
   mounted() {
@@ -82,18 +75,13 @@ export default {
 
 <style lang="scss" scoped>
 .action-view {
-  position: absolute;
-  z-index: 9999;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
   &__notifications {
     width: 300px;
     position: absolute;
     right: 0;
     top: 0;
     bottom: 40px;
+    z-index: 9990;
     animation-duration: 0.3s;
   }
   &__calendar {
@@ -101,7 +89,7 @@ export default {
     position: absolute;
     bottom: 40px;
     right: 0;
-    z-index: -1;
+    z-index: 9980;
     animation-duration: 0.5s;
   }
 }

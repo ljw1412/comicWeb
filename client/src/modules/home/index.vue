@@ -1,22 +1,49 @@
 <template>
   <div class="home">
-    <div class="home__main">
+    <div class="home__main"
+      @contextmenu.prevent="onContextmenu">
+      <contextmenu v-show="contextmenu.isShow"
+        ref="contextmenu"
+        :x="contextmenu.x"
+        :y="contextmenu.y"></contextmenu>
       <router-view/>
+      <modal-view></modal-view>
     </div>
     <action-view></action-view>
   </div>
 </template>
 
 <script>
+import Contextmenu from '../../components/menu/contextmenu'
 import ActionView from '../../components/actionView'
+import ModalView from '../../components/modalView'
+
 export default {
   components: {
+    ModalView,
+    Contextmenu,
     ActionView
   },
   data() {
-    return {}
+    return {
+      contextmenu: {
+        x: 0,
+        y: 0,
+        isShow: true
+      }
+    }
   },
-  methods: {},
+  methods: {
+    onContextmenu(e) {
+      console.log(e)
+      console.log(this.$refs)
+      console.log()
+
+      this.contextmenu.x = e.x
+      this.contextmenu.y = e.y
+      // this.contextmenu.isShow = !this.contextmenu.isShow
+    }
+  },
   mounted() {
     // this.$callApi({
     //   method: 'post',
@@ -39,6 +66,7 @@ export default {
   overflow: hidden;
   &__main {
     height: 100%;
+    // height: calc(100% - 40px);
     width: 100%;
   }
 }

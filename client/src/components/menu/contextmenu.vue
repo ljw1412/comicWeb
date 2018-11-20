@@ -1,8 +1,11 @@
 <template>
   <div class="contextmenu"
-    :style="{top:mX,left:mY}">
+    :style="{top:mY,left:mX}">
     <ul>
       <li>菜单一</li>
+      <li>菜单二</li>
+      <li>菜单三</li>
+      <li>菜单四</li>
     </ul>
   </div>
 </template>
@@ -23,10 +26,12 @@ export default {
   mounted() {},
   watch: {
     x(val) {
-      mX = val
+      if (typeof val === 'number') val += 'px'
+      this.mX = val
     },
     y(val) {
-      mY = val
+      if (typeof val === 'number') val += 'px'
+      this.mY = val
     }
   }
 }
@@ -35,5 +40,16 @@ export default {
 <style lang="scss" scoped>
 .contextmenu {
   position: absolute;
+  z-index: 9980;
+  user-select: none;
+  border: 1px solid #ccc;
+}
+ul {
+  list-style: none;
+  li {
+    line-height: 20px;
+    padding: 3px 10px;
+    font-size: 16px;
+  }
 }
 </style>
