@@ -6,7 +6,8 @@
       @mousedown="onDragStart">
       <slot name="header">{{title}}</slot>
     </div>
-    <div class="model-view__body">
+    <div class="model-view__body"
+      @click="increaseModalIndex">
       <slot></slot>
     </div>
     <div class="model-view__footer">
@@ -17,10 +18,17 @@
 
 <script>
 import { on, off } from '../../utils/dom'
+import viewIndex from './ViewIndex'
 
 export default {
   props: {
-    title: String
+    title: String,
+    zIndex: {
+      type: Number,
+      default: 100
+    },
+    windowWidth: Number,
+    windowHeight: Number
   },
 
   computed: {
@@ -29,6 +37,7 @@ export default {
 
       if (this.dragData.x !== null) style.left = `${this.dragData.x}px`
       if (this.dragData.y !== null) style.top = `${this.dragData.y}px`
+      style.zIndex = this.modalIndex + this.zIndex
 
       return style
     }
@@ -42,7 +51,8 @@ export default {
         dragX: null,
         dragY: null,
         dragging: false
-      }
+      },
+      modalIndex: viewIndex.getIndex()
     }
   },
 
@@ -58,6 +68,8 @@ export default {
       this.dragData.dragY = event.clientY
 
       this.dragData.dragging = true
+
+      this.increaseModalIndex()
       // 将鼠标拖动事件和抬起事件监听于全局
       on(window, 'mousemove', this.onDragMove)
       on(window, 'mouseup', this.onDragEnd)
@@ -85,7 +97,41 @@ export default {
       if (this.dragData.y < 0) {
         this.dragData.y = 0
       }
-      console.log(event)
+      const model = this.$refs.model
+      const rect = model.getBoundingClientRect()
+
+      const validWidth =
+        window.innerWidth ||
+        document.documentElement.clientWidth ||
+        document.body.clientWidth
+      const validHeight =
+        window.innerHeight ||
+        document.documentElement.clientHeight ||
+        document.body.clientHeight
+      if (validWidth < this.dragData.x + 20) {
+        this.dragData.x = validWidth - 20
+      }
+      if (validHeight < this.dragData.y + 60) {
+        this.dragData.y = validHeight - 60
+      }
+    },
+
+    increaseModalIndex() {
+      viewIndex.indexIncrease()
+      this.modalIndex = viewIndex.getIndex()
+    }
+  },
+
+  watch: {
+    windowWidth(val) {
+      if (val) {
+        this.checkVaildPostion()
+      }
+    },
+    windowHeight(val) {
+      if (val) {
+        this.checkVaildPostion()
+      }
     }
   }
 }
@@ -95,11 +141,14 @@ export default {
 .model-view {
   position: absolute;
   background-color: #000;
-  height: 100px;
   width: 100px;
   &__header {
     background-color: red;
     height: 40px;
+  }
+  &__body {
+    // padding: 5px;
+    height: 100px;
   }
 }
 </style>

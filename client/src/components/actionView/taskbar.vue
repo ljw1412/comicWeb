@@ -66,6 +66,7 @@ export default {
 }
 .taskbar {
   position: absolute;
+  z-index: 99999;
   bottom: 0;
   left: 0;
   right: 0;

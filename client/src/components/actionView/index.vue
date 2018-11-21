@@ -81,7 +81,7 @@ export default {
     right: 0;
     top: 0;
     bottom: 40px;
-    z-index: 9990;
+    z-index: 99990;
     animation-duration: 0.3s;
   }
   &__calendar {
@@ -89,7 +89,7 @@ export default {
     position: absolute;
     bottom: 40px;
     right: 0;
-    z-index: 9980;
+    z-index: 99980;
     animation-duration: 0.5s;
   }
 }

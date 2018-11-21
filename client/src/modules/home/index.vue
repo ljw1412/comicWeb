@@ -7,7 +7,12 @@
         :x="contextmenu.x"
         :y="contextmenu.y"></contextmenu>
       <router-view/>
+      <modal-view :window-height="view.height"
+        :window-width="view.width">
+        <!-- <search-page></search-page> -->
+      </modal-view>
       <modal-view></modal-view>
+
     </div>
     <action-view></action-view>
   </div>
@@ -17,15 +22,23 @@
 import Contextmenu from '../../components/menu/contextmenu'
 import ActionView from '../../components/actionView'
 import ModalView from '../../components/modalView'
+import SearchPage from './searchPage'
+
+import { on, off } from '../../utils/dom.js'
 
 export default {
   components: {
     ModalView,
     Contextmenu,
-    ActionView
+    ActionView,
+    SearchPage
   },
   data() {
     return {
+      view: {
+        width: 0,
+        height: 0
+      },
       contextmenu: {
         x: 0,
         y: 0,
@@ -42,9 +55,27 @@ export default {
       this.contextmenu.x = e.x
       this.contextmenu.y = e.y
       // this.contextmenu.isShow = !this.contextmenu.isShow
+    },
+    resizeListener() {
+      this.view.width =
+        window.innerWidth ||
+        document.documentElement.clientWidth ||
+        document.body.clientWidth
+      this.view.height =
+        window.innerHeight ||
+        document.documentElement.clientHeight ||
+        document.body.clientHeight
+    },
+    addResizeListener() {
+      this.resizeListener()
+      on(window, 'resize', this.resizeListener)
+    },
+    removeResizeListener() {
+      off(window, 'resize', this.resizeListener)
     }
   },
   mounted() {
+    this.addResizeListener()
     // this.$callApi({
     //   method: 'post',
     //   api: 'user/login',
@@ -55,6 +86,9 @@ export default {
     // }).then(data => {
     //   console.log(data)
     // })
+  },
+  beforeDestroy() {
+    this.removeResizeListener()
   }
 }
 </script>

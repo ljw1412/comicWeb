@@ -7,11 +7,4 @@ module = {
   component: Home
 }
 
-module.children = [
-  {
-    path: '/main',
-    name: 'main',
-    component: Main
-  }
-]
 export default module
