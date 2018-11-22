@@ -1,7 +1,8 @@
 <template>
   <div class="home">
-    <div class="home__main"
-      @contextmenu.prevent="onContextmenu">
+    <div class="home__main">
+      <div class="main__warpper"
+        @contextmenu.prevent="onContextmenu"></div>
       <contextmenu v-show="contextmenu.isShow"
         ref="contextmenu"
         :x="contextmenu.x"
@@ -11,7 +12,7 @@
         :window-width="view.width">
         <!-- <search-page></search-page> -->
       </modal-view>
-      <modal-view></modal-view>
+      <modal-view resizable></modal-view>
 
     </div>
     <action-view></action-view>
@@ -100,8 +101,11 @@ export default {
   overflow: hidden;
   &__main {
     height: 100%;
-    // height: calc(100% - 40px);
     width: 100%;
+    .main__warpper {
+      width: 100%;
+      height: 100%;
+    }
   }
 }
 </style>

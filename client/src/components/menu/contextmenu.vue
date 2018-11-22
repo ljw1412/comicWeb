@@ -1,6 +1,6 @@
 <template>
   <div class="contextmenu"
-    :style="{top:mY,left:mX}">
+    :style="styles">
     <ul>
       <li>菜单一</li>
       <li>菜单二</li>
@@ -15,8 +15,20 @@ export default {
   props: {
     value: Boolean,
     x: [String, Number],
-    y: [String, Number]
+    y: [String, Number],
+    zIndex: { type: Number, default: 9980 }
   },
+
+  computed: {
+    styles() {
+      return {
+        top: this.mY,
+        left: this.mX,
+        zIndex: this.zIndex
+      }
+    }
+  },
+
   data() {
     return {
       mX: '',
