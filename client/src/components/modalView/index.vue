@@ -8,8 +8,7 @@
       @mousedown="onDragStart">
       <slot name="header">{{title}}</slot>
     </div>
-    <div class="modal-view__body"
-      @click="increaseModalIndex">
+    <div class="modal-view__body">
       <slot></slot>
     </div>
     <div class="modal-view__footer">
@@ -132,6 +131,7 @@ export default {
     },
     // 当鼠标按下时
     onModalMousedown(event) {
+      this.increaseModalIndex()
       if (!this.resizable || event.button) return false
       this.resizeData.direction = this.checkEdgeArea(event)
       if (!this.resizeData.direction) return
@@ -222,7 +222,7 @@ export default {
 
       this.dragData.dragging = true
 
-      this.increaseModalIndex()
+      // this.increaseModalIndex()
       // 将鼠标拖动事件和抬起事件监听于全局
       on(window, 'mousemove', this.onDragging)
       on(window, 'mouseup', this.onDragEnd)
