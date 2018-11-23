@@ -2,7 +2,7 @@
   <div class="search">
     <i-input class="search__input"
       search
-      placeholder="Enter something..."
+      placeholder="请输入关键词..."
       @on-search="onSearch" />
     <div class="search__result">
       <comic-item v-for="item of list"

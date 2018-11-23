@@ -23,31 +23,24 @@ body,
 }
 
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 6px;
+  height: 6px;
   background-color: rgba(0, 0, 0, 0);
-  -webkit-border-radius: 100px;
-  border-radius: 100px;
 }
 
-::-webkit-scrollbar:hover {
-  background-color: rgba(0, 0, 0, 0.09);
+/*滚动条里面轨道*/
+::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0);
 }
 
-::-webkit-scrollbar-thumb:vertical {
-  background: rgba(0, 0, 0, 0.5);
-  -webkit-border-radius: 100px;
+/* 滚动条 */
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
   border-radius: 100px;
-  -webkit-background-clip: padding-box;
-  background-clip: padding-box;
   border: 2px solid transparent;
-  min-height: 10px;
-  min-width: 10px;
 }
 
-::-webkit-scrollbar-thumb:vertical:active {
-  background: rgba(0, 0, 0, 0.61);
-  -webkit-border-radius: 100px;
-  border-radius: 100px;
+::-webkit-scrollbar-thumb:active {
+  background-color: rgba(0, 0, 0, 0.4);
 }
 </style>

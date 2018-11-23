@@ -1,20 +1,20 @@
 <template>
-  <div class="main">
-    <search></search>
+  <div class="search">
+    <i-input class="search__input"
+      search
+      placeholder="请输入关键词..."
+      @on-search="onSearch" />
   </div>
 </template>
 
 <script>
-import search from '../components/search'
 export default {
-  components: {
-    search
-  }
+  components: {}
 }
 </script>
 
 <style lang="scss" scoped>
-.main {
+.search-wrapper {
   overflow-y: auto;
   height: 100%;
   border: 1px solid #e8eaec;

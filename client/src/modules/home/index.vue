@@ -7,12 +7,14 @@
         ref="contextmenu"
         :x="contextmenu.x"
         :y="contextmenu.y"></contextmenu>
-      <router-view/>
-      <modal-view :window-height="view.height"
-        :window-width="view.width">
-        <!-- <search-page></search-page> -->
-      </modal-view>
-      <modal-view resizable></modal-view>
+      <!-- <modal-view :window-height="view.height"
+        :window-width="view.width"
+        resizable>
+      </modal-view> -->
+      <search-modal></search-modal>
+      <!-- <modal-view resizable
+        :body-style="{'background-color':'#ccc'}">
+      </modal-view> -->
 
     </div>
     <action-view></action-view>
@@ -23,7 +25,7 @@
 import Contextmenu from '../../components/menu/contextmenu'
 import ActionView from '../../components/actionView'
 import ModalView from '../../components/modalView'
-import SearchPage from './searchPage'
+import SearchModal from './pages/searchModal'
 
 import { on, off } from '../../utils/dom.js'
 
@@ -32,7 +34,7 @@ export default {
     ModalView,
     Contextmenu,
     ActionView,
-    SearchPage
+    SearchModal
   },
   data() {
     return {

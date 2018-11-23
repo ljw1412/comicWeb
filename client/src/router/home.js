@@ -1,7 +1,7 @@
 import Home from '@/modules/home'
 
 module = {
-  path: '/',
+  path: '/home',
   name: 'home',
   component: Home
 }
