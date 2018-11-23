@@ -12,10 +12,13 @@ import Store from 'store'
 
 import iView from 'iview'
 import './my-theme/index.less'
-// https://the-allstars.com/vue2-animate/
+/* https://the-allstars.com/vue2-animate/ */
 import 'vue2-animate/dist/vue2-animate.min.css'
 import pageTitle from './components/pageTitle'
 import Chart from './components/chart'
+
+// 设置全局语言
+moment.locale('zh-cn')
 
 Vue.use(iView)
 Vue.component(pageTitle.name, pageTitle)
@@ -26,16 +29,14 @@ Vue.prototype.$callApi = callApi
 window.Cookies = Cookies
 window.Store = Store
 
-window.router = router
-window.vuex = vuexStore
 /* eslint-disable no-new */
-export default new Vue({
+const vue = new Vue({
   el: '#app',
   router,
   store: vuexStore,
   components: { App },
   template: '<App/>'
 })
+window.vue = vue
 
-// 设置全局语言
-moment.locale('zh-cn')
+export default vue

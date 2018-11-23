@@ -1,6 +1,7 @@
 <template>
   <div class="action-view">
-    <taskbar :n-time="time"
+    <taskbar :taskList="taskList"
+      :n-time="time"
       :n-date="date"
       :isNotificationsShow.sync="isNotificationsShow"
       :isDateTimeShow.sync="isDateTimeShow"></taskbar>
@@ -36,6 +37,11 @@ export default {
     Notifications,
     Calendar
   },
+
+  props: {
+    taskList: { type: Array, default: () => [] }
+  },
+
   computed: {
     date() {
       return moment(this.now).format('YYYY-MM-DD')
@@ -44,6 +50,7 @@ export default {
       return moment(this.now).format('HH:mm:ss')
     }
   },
+
   data() {
     return {
       dateTimeTimer: null,
@@ -52,6 +59,7 @@ export default {
       isDateTimeShow: false
     }
   },
+
   methods: {
     startTimer() {
       this.clearTimer()
@@ -59,14 +67,17 @@ export default {
         this.now = new Date()
       }, 1000)
     },
+
     clearTimer() {
       clearInterval(this.timer)
       this.timer = null
     }
   },
+
   mounted() {
     this.startTimer()
   },
+
   beforeDestroy() {
     this.clearTimer()
   }

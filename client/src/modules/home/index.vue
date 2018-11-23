@@ -11,13 +11,16 @@
         :window-width="view.width"
         resizable>
       </modal-view> -->
-      <search-modal></search-modal>
+      <task-layer ref="taskLayer">
+        <search-modal></search-modal>
+      </task-layer>
+
       <!-- <modal-view resizable
         :body-style="{'background-color':'#ccc'}">
       </modal-view> -->
 
     </div>
-    <action-view></action-view>
+    <action-view :taskList='taskList'></action-view>
   </div>
 </template>
 
@@ -25,6 +28,7 @@
 import Contextmenu from '../../components/menu/contextmenu'
 import ActionView from '../../components/actionView'
 import ModalView from '../../components/modalView'
+import TaskLayer from './pages/taskLayer'
 import SearchModal from './pages/searchModal'
 
 import { on, off } from '../../utils/dom.js'
@@ -34,8 +38,10 @@ export default {
     ModalView,
     Contextmenu,
     ActionView,
+    TaskLayer,
     SearchModal
   },
+
   data() {
     return {
       view: {
@@ -46,9 +52,11 @@ export default {
         x: 0,
         y: 0,
         isShow: true
-      }
+      },
+      taskList: []
     }
   },
+
   methods: {
     onContextmenu(e) {
       console.log(e)
@@ -59,6 +67,7 @@ export default {
       this.contextmenu.y = e.y
       // this.contextmenu.isShow = !this.contextmenu.isShow
     },
+
     resizeListener() {
       this.view.width =
         window.innerWidth ||
@@ -69,16 +78,31 @@ export default {
         document.documentElement.clientHeight ||
         document.body.clientHeight
     },
+
     addResizeListener() {
       this.resizeListener()
       on(window, 'resize', this.resizeListener)
     },
+
     removeResizeListener() {
       off(window, 'resize', this.resizeListener)
+    },
+
+    initTaskList() {
+      console.log(this.$refs['taskLayer'].$children)
+      if (this.$refs.taskLayer && this.$refs.taskLayer.$children.length) {
+        this.taskList = this.$refs.taskLayer.$children.map(item => {
+          return { component: item, name: item.name, isDisplay: true }
+        })
+      }
     }
   },
   mounted() {
     this.addResizeListener()
+    this.initTaskList()
+    // setTimeout(() => {
+    //   this.taskList[0].component.visible = false
+    // }, 5000)
     // this.$callApi({
     //   method: 'post',
     //   api: 'user/login',
@@ -90,6 +114,7 @@ export default {
     //   console.log(data)
     // })
   },
+
   beforeDestroy() {
     this.removeResizeListener()
   }
