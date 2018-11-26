@@ -4,7 +4,12 @@ const path = require('path')
 const URL = require('url')
 
 const refererFetch = require('../utils/refererFetch')
-const { mkdirsSync, writeFile } = require('../utils/fsUtil')
+const {
+  mkdirsSync,
+  writeFile,
+  unzipFile,
+  readDir
+} = require('../utils/fileUtil')
 
 const searchUrl = 'https://sacg.dmzj.com/comicsum/search.php?s=*'
 const chapterUrl = 'http://v2.api.dmzj.com/comic/*.json'
@@ -100,29 +105,35 @@ const download = async ({ website, url, type }) => {
     referer = 'http://images.dmzj.com/'
   }
 
+  let success = false
   await refererFetch(url, referer)
     .then(response => {
-      if (response.status === 403) {
+      if (response.status === 403 || response.status === 404) {
         return Promise.reject(response.status)
       }
-      console.log(response.status)
-
+      console.log('下载流的请求情况:', response.status)
       return response.arrayBuffer()
     })
     .then(data => {
       console.log('正在写入文件流:' + filePath)
-
       return writeFile(filePath, Buffer.from(data))
     })
+    .then(zipFile => {
+      return unzipFile(zipFile)
+    })
     .then(() => {
+      success = true
       console.log('下载成功')
     })
-    .catch(err => console.error('下载失败:' + err))
-  return 'success'
+    .catch(err => console.error('下载失败:', err))
+  return success
 }
+
+const getLocalImageList = async ({ website, id, chapterId }) => {}
 
 module.exports = {
   search,
   details,
-  download
+  download,
+  getLocalImageList
 }

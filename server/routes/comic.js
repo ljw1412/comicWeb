@@ -39,8 +39,8 @@ router.post('/download', async (ctx, next) => {
   const { website, url, type } = ctx.request.body
   if (website && url && type) {
     if (website === 'dmzj') {
-      const result = await dmzj.download({ website, url, type })
-      ctx.body = { error: false, massage: result }
+      const success = await dmzj.download({ website, url, type })
+      ctx.body = { error: !success, massage: success ? 'success' : 'error' }
     } else {
       ctx.body = { error: true, errorMsg: '暂时不支持这个站点' }
     }

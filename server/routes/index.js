@@ -3,7 +3,6 @@ const router = require('koa-router')()
 const userRouter = require('./user')
 const comicRouter = require('./comic')
 
-
 router.prefix('/api')
 
 router.all('*', async (ctx, next) => {
