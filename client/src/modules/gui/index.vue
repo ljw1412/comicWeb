@@ -11,8 +11,12 @@
         :window-width="view.width"
         resizable>
       </modal-view> -->
-      <task-layer ref="taskLayer">
+      <task-layer ref="taskLayer"
+        @close="onTaskClose">
         <search-modal></search-modal>
+        <modal-view resizable
+          :body-style="{'background-color':'#ccc'}">
+        </modal-view>
       </task-layer>
 
       <!-- <modal-view resizable
@@ -60,8 +64,6 @@ export default {
   methods: {
     onContextmenu(e) {
       console.log(e)
-      console.log(this.$refs)
-      console.log()
 
       this.contextmenu.x = e.x
       this.contextmenu.y = e.y
@@ -86,6 +88,15 @@ export default {
 
     removeResizeListener() {
       off(window, 'resize', this.resizeListener)
+    },
+
+    onTaskClose(component) {
+      console.log(component)
+      let index = this.taskList.findIndex(item => item.name === component.name)
+      if (index != -1) {
+        this.taskList.splice(index, 1)
+        component.isClose = true
+      }
     },
 
     initTaskList() {

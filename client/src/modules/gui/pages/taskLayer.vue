@@ -5,7 +5,11 @@
 </template>
 
 <script>
-export default { name: 'TaskLayer' }
+export default {
+  created() {
+    this.name = 'TaskLayer'
+  }
+}
 </script>
 
 <style lang="scss" scoped>

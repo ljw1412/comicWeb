@@ -1,8 +1,9 @@
 <template>
-  <modal-view v-show="visible"
+  <modal-view v-model="visible"
     class="search-modal"
     resizable
     icon="ios-search"
+    :close="isClose"
     :title="title"
     :windowHeight="windowHeight"
     :minWidth="minWidth"
@@ -18,7 +19,6 @@
 <script>
 import ModalView from '../../../components/modalView'
 export default {
-  componentName: 'taskSearch',
   props: {
     // 浏览器有效的宽高
     windowWidth: Number,
@@ -41,7 +41,8 @@ export default {
   data() {
     return {
       title: '搜索',
-      visible: true
+      visible: true,
+      isClose: false
     }
   },
 

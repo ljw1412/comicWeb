@@ -1,41 +1,52 @@
 <template>
-  <div ref="modal"
-    class="modal-view"
-    :style="[styles,mouseStyles]"
-    @mousemove="onModalMousemove"
-    @mousedown="onModalMousedown">
-    <div class="modal-view__header"
-      @mousedown="onDragStart">
-      <slot name="header">
-        <div v-if="backable"
-          class="header__back"
-          @click.prevent="onBackClick">
-          <Icon class="back__icon"
-            type="md-arrow-back"
-            color="#fff"
-            size="18" />
-        </div>
-        <div class="header__title">
-          <slot name="icon">
-            <Icon v-if="icon"
-              :type="icon" />
-          </slot>
-          <span>{{title}}</span>
-        </div>
-      </slot>
-    </div>
-    <div class="modal-view__body"
-      :style="bodyStyle">
-      <div class="modal-view__body-warpper">
-        <slot></slot>
+  <div v-if="!isClose">
+    <div v-show="visible"
+      ref="modal"
+      class="modal-view"
+      :style="[styles,mouseStyles]"
+      @mousemove="onModalMousemove"
+      @mousedown="onModalMousedown">
+      <div class="modal-view__header"
+        @mousedown="onDragStart">
+        <slot name="header">
+          <div v-if="backable"
+            class="header__back"
+            @click.prevent="onBackClick">
+            <Icon class="back__icon"
+              type="md-arrow-back"
+              color="#fff"
+              size="18" />
+          </div>
+          <div class="header__title">
+            <slot name="icon">
+              <Icon v-if="icon"
+                :type="icon" />
+            </slot>
+            <span>{{title}}</span>
+          </div>
+          <div class="header__handle">
+            <div class="handle__minimize"
+              @click="onMinimizeClick"></div>
+            <div class="handle__maximize"
+              @click="onMaximizeClick"></div>
+            <div class="handle__close"
+              @click="onCloseClick"></div>
+          </div>
+        </slot>
       </div>
+      <div class="modal-view__body"
+        :style="bodyStyle">
+        <div class="modal-view__body-warpper">
+          <slot></slot>
+        </div>
+      </div>
+      <div v-if="$slots.footer"
+        class="modal-view__footer">
+        <slot name="footer"></slot>
+      </div>
+      <div v-if="resizable"
+        class="modal-view__resize-icon"></div>
     </div>
-    <div v-if="$slots.footer"
-      class="modal-view__footer">
-      <slot name="footer"></slot>
-    </div>
-    <div v-if="resizable"
-      class="modal-view__resize-icon"></div>
   </div>
 </template>
 
@@ -44,6 +55,7 @@ import { on, off } from '../../utils/dom'
 import viewIndex from './ViewIndex'
 export default {
   props: {
+    value: { type: Boolean, default: true },
     icon: String,
     title: String,
     // modal的层级
@@ -65,7 +77,8 @@ export default {
     // 可以返回上一级
     backable: Boolean,
     // body的样式
-    bodyStyle: Object
+    bodyStyle: Object,
+    close: Boolean
   },
 
   computed: {
@@ -87,6 +100,8 @@ export default {
 
   data() {
     return {
+      visible: this.value,
+      isClose: this.close,
       dragData: {
         x: this.x,
         y: this.y,
@@ -277,11 +292,58 @@ export default {
     },
 
     onBackClick() {
-      this.$emit('back')
+      this.$emit('back', this)
+    },
+
+    onMinimizeClick() {
+      this.parentEmit('minimize', this)
+    },
+
+    onMaximizeClick() {
+      this.parentEmit('maximize', this)
+    },
+
+    onCloseClick() {
+      this.parentEmit('close', this)
+    },
+
+    // 向父级递归直到找到TaskLayer
+    findTaskLayer(current) {
+      if (
+        typeof current.$parent === 'object' &&
+        current.$parent.name === 'TaskLayer'
+      ) {
+        return current.$parent
+      } else if (current.$parent === undefined) {
+        return undefined
+      } else {
+        return this.findTaskLayer(current.$parent)
+      }
+    },
+
+    /**
+     * 如果找到存在父级是 TaskLayer，那么事件就由 TaskLayer 发出。
+     * 否则由自己发出。
+     */
+    parentEmit(event, obj) {
+      const taskLayer = this.findTaskLayer(this)
+      if (taskLayer) {
+        taskLayer.$emit(event, obj)
+        return
+      }
+      this.$emit(event, obj)
     }
   },
 
   watch: {
+    value(val) {
+      this.visible = val
+    },
+    visible(val) {
+      if (val) {
+        this.increaseModalIndex()
+      }
+    },
     windowWidth(val) {
       if (val) {
         this.checkVaildPostion()
@@ -292,6 +354,10 @@ export default {
         this.checkVaildPostion()
       }
     }
+  },
+
+  created() {
+    this.name = 'ModalView'
   },
 
   mounted() {}
@@ -309,6 +375,7 @@ export default {
   flex-direction: column;
 
   &__header {
+    position: relative;
     flex-shrink: 0;
     background-color: red;
     height: 30px;
@@ -336,6 +403,7 @@ export default {
           transform: translate(-50%, -50%);
         }
       }
+
       &__title {
         display: flex;
         align-items: center;
@@ -346,6 +414,65 @@ export default {
         i {
           margin-top: 2px;
           font-size: 16px;
+        }
+      }
+
+      &__handle {
+        position: absolute;
+        right: 0;
+        top: 0;
+        display: flex;
+        .handle {
+          &__minimize,
+          &__maximize,
+          &__close {
+            width: 30px;
+            height: 30px;
+            position: relative;
+          }
+          &__minimize {
+            &::before {
+              content: ' ';
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%);
+              width: 10px;
+              height: 1px;
+              background-color: #fff;
+            }
+          }
+          &__maximize {
+            &::before {
+              content: ' ';
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%);
+              width: 10px;
+              height: 10px;
+              box-sizing: border-box;
+              border: 1px solid #fff;
+            }
+          }
+          &__close {
+            &::after,
+            &::before {
+              content: ' ';
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              width: 14.14px;
+              height: 1px;
+              background-color: #fff;
+            }
+            &::before {
+              transform: translate(-50%, -50%) rotate(45deg);
+            }
+            &::after {
+              transform: translate(-50%, -50%) rotate(-45deg);
+            }
+          }
         }
       }
     }
