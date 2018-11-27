@@ -34,6 +34,21 @@ router.post('/details', async (ctx, next) => {
   ctx.body = { error: true, errorMsg: '入参有误' }
 })
 
+router.post('/chapter', async (ctx, next) => {
+  console.log('chapter:', ctx.request.body)
+  const params = ctx.request.body
+  if (params.website && params.id && params.chapterId) {
+    if (params.website === 'dmzj') {
+      const list = await dmzj.chapter(params)
+      ctx.body = { list }
+    } else {
+      ctx.body = { error: true, errorMsg: '暂时不支持这个站点' }
+    }
+    return
+  }
+  ctx.body = { error: true, errorMsg: '入参有误' }
+})
+
 router.post('/download', async (ctx, next) => {
   console.log('download:', ctx.request.body)
   const { website, url, type } = ctx.request.body

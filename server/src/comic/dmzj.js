@@ -87,6 +87,11 @@ const details = async id => {
   return result
 }
 
+const chapter = async ({ website, id, chapterId }) => {
+  const list = await getLocalImageList({ website, id, chapterId })
+  if (list.length) return list
+}
+
 const download = async ({ website, url, type }) => {
   const baseDir = path.join('download', website)
   let pathName = URL.parse(url).pathname
@@ -129,11 +134,27 @@ const download = async ({ website, url, type }) => {
   return success
 }
 
-const getLocalImageList = async ({ website, id, chapterId }) => {}
+const getLocalImageList = async ({ website, id, chapterId }) => {
+  const chapterPath = path.join('.', 'download/dmzj/b/42084/67136')
+  let result = []
+  await readDir(chapterPath)
+    .then(data => {
+      data.sort((a, b) => {
+        return a.length == b.length ? a.localeCompare(b) : a.length - b.length
+      })
+      for (let i in data) {
+        data[i] = path.relative('download', path.join(chapterPath, data[i]))
+      }
+      result = data
+    })
+    .catch(err => console.error(err))
+  return result
+}
 
 module.exports = {
   search,
   details,
+  chapter,
   download,
   getLocalImageList
 }

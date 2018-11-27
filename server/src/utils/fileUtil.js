@@ -58,6 +58,7 @@ const mkdirsSync = dirname => {
 
 module.exports = {
   mkdirsSync,
+  readDir,
   writeFile,
   unzipFile
 }
