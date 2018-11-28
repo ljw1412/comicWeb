@@ -29,6 +29,8 @@ Vue.prototype.$callApi = callApi
 window.Cookies = Cookies
 window.Store = Store
 
+Vue.prototype.$eventBus = Vue.prototype.$eventBus || new Vue()
+
 /* eslint-disable no-new */
 const vue = new Vue({
   el: '#app',

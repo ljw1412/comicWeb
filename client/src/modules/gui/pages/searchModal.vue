@@ -1,5 +1,6 @@
 <template>
   <modal-view v-model="visible"
+    name="TaskSearch"
     class="search-modal"
     resizable
     icon="ios-search"

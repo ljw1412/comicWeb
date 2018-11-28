@@ -36,6 +36,7 @@ import TaskLayer from './pages/taskLayer'
 import SearchModal from './pages/searchModal'
 
 import { on, off } from '../../utils/dom.js'
+import { mapState, mapMutations } from 'vuex'
 
 export default {
   components: {
@@ -44,6 +45,10 @@ export default {
     ActionView,
     TaskLayer,
     SearchModal
+  },
+
+  computed: {
+    ...mapState('gui', ['taskList'])
   },
 
   data() {
@@ -56,12 +61,13 @@ export default {
         x: 0,
         y: 0,
         isShow: true
-      },
-      taskList: []
+      }
+      // taskList: []
     }
   },
 
   methods: {
+    ...mapMutations('gui', ['ADD_TASK']),
     onContextmenu(e) {
       console.log(e)
 
@@ -90,20 +96,26 @@ export default {
       off(window, 'resize', this.resizeListener)
     },
 
-    onTaskClose(component) {
-      console.log(component)
-      let index = this.taskList.findIndex(item => item.name === component.name)
-      if (index != -1) {
-        this.taskList.splice(index, 1)
-        component.isClose = true
-      }
+    onTaskClose(componentName) {
+      // console.log(componentName)
+      // let index = this.taskList.findIndex(item => item.name === componentName)
+      // if (index != -1) {
+      //   // this.taskList.splice(index, 1)
+      //   this.taskList[index].component.isClose = true
+      //   this.taskList[index].isClose = true
+      // }
     },
 
     initTaskList() {
       console.log(this.$refs['taskLayer'].$children)
       if (this.$refs.taskLayer && this.$refs.taskLayer.$children.length) {
-        this.taskList = this.$refs.taskLayer.$children.map(item => {
-          return { component: item, name: item.name, isDisplay: true }
+        this.$refs.taskLayer.$children.forEach(item => {
+          this.ADD_TASK({
+            component: item,
+            name: item.name,
+            isDisplay: true,
+            isClose: false
+          })
         })
       }
     }
@@ -111,6 +123,10 @@ export default {
   mounted() {
     this.addResizeListener()
     this.initTaskList()
+    this.$eventBus.$on('close', data => {
+      console.log(data)
+    })
+
     // setTimeout(() => {
     //   this.taskList[0].component.visible = false
     // }, 5000)

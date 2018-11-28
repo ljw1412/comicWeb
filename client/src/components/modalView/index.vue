@@ -55,6 +55,7 @@ import { on, off } from '../../utils/dom'
 import viewIndex from './ViewIndex'
 export default {
   props: {
+    name: { type: String, default: 'ModalView' },
     value: { type: Boolean, default: true },
     icon: String,
     title: String,
@@ -292,19 +293,22 @@ export default {
     },
 
     onBackClick() {
-      this.$emit('back', this)
+      this.$emit('back', this.name)
     },
 
     onMinimizeClick() {
-      this.parentEmit('minimize', this)
+      this.$eventBus.$emit('minimize', this.name)
+      this.parentEmit('minimize', this.name)
     },
 
     onMaximizeClick() {
-      this.parentEmit('maximize', this)
+      this.$eventBus.$emit('maximize', this.name)
+      this.parentEmit('maximize', this.name)
     },
 
     onCloseClick() {
-      this.parentEmit('close', this)
+      this.$eventBus.$emit('close', this.name)
+      this.parentEmit('close', this.name)
     },
 
     // 向父级递归直到找到TaskLayer
@@ -339,6 +343,9 @@ export default {
     value(val) {
       this.visible = val
     },
+    close(val) {
+      this.isClose = val
+    },
     visible(val) {
       if (val) {
         this.increaseModalIndex()
@@ -354,10 +361,6 @@ export default {
         this.checkVaildPostion()
       }
     }
-  },
-
-  created() {
-    this.name = 'ModalView'
   },
 
   mounted() {}
@@ -438,7 +441,7 @@ export default {
               left: 50%;
               transform: translate(-50%, -50%);
               width: 10px;
-              height: 1px;
+              height: 2px;
               background-color: #fff;
             }
           }

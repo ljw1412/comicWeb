@@ -2,10 +2,12 @@
   <div class="taskbar">
     <div class="taskbar__menu">菜单</div>
     <div class="taskbar__tasks">
-      <div class="tasks__item"
-        v-for="(item,index) of taskList"
-        :key="index"
-        @click="onTaskClick(item)">{{item.name}}</div>
+      <template v-for="(item,index) of taskList">
+        <div v-if="!item.isClose"
+          :key="index"
+          class="tasks__item"
+          @click="onTaskClick(item)">{{item.name}}</div>
+      </template>
     </div>
     <div class="taskbar__status">
       <div class="status__notifications"

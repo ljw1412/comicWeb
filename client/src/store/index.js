@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import admin from './admin'
+import gui from './gui'
 
 Vue.use(Vuex)
 
@@ -12,7 +13,8 @@ const base = {
 }
 
 base.modules = {
-  admin
+  admin,
+  gui
 }
 
 export default new Vuex.Store(base)
