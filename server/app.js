@@ -21,7 +21,14 @@ app.use(
 )
 app.use(json())
 app.use(logger())
-app.use(cors())
+app.use(
+  cors({
+    origin: ctx => ctx.header.origin,
+    optionsSuccessStatus: 200,
+    credentials: true // 是否带cookie
+  })
+)
+
 app.use(require('koa-static')(path.join(__dirname, 'static')))
 app.use(require('koa-static')(path.join(__dirname, 'download')))
 

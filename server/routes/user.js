@@ -14,6 +14,7 @@ router.post('/login', async (ctx, next) => {
   result = { success: false }
   try {
     const { username, password } = ctx.request.body
+    ctx.cookies.set('username', username)
     if (username === 'lll' && password === '123456') {
       result.success = true
     }

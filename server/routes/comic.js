@@ -64,4 +64,11 @@ router.post('/download', async (ctx, next) => {
   ctx.body = { error: true, errorMsg: '入参有误' }
 })
 
+const { test } = require('../src/browser')
+router.post('/test', async (ctx, next) => {
+  console.log(ctx.request.body)
+  const { url } = ctx.request.body
+  ctx.body = await test(url)
+})
+
 module.exports = router
