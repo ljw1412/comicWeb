@@ -30,10 +30,10 @@
 
 <script>
 import Contextmenu from '../../components/menu/contextmenu'
-import ActionView from '../../components/actionView'
+import ActionView from './views/actionView'
 import ModalView from '../../components/modalView'
-import TaskLayer from './pages/taskLayer'
-import SearchModal from './pages/searchModal'
+import TaskLayer from './views/taskLayer'
+import SearchModal from './views/searchModal'
 
 import { on, off } from '../../utils/dom.js'
 import { mapState, mapMutations } from 'vuex'
@@ -126,20 +126,6 @@ export default {
     this.$eventBus.$on('close', data => {
       console.log(data)
     })
-
-    // setTimeout(() => {
-    //   this.taskList[0].component.visible = false
-    // }, 5000)
-    // this.$callApi({
-    //   method: 'post',
-    //   api: 'user/login',
-    //   param: {
-    //     username: 'lll',
-    //     password: '123456'
-    //   }
-    // }).then(data => {
-    //   console.log(data)
-    // })
   },
 
   beforeDestroy() {

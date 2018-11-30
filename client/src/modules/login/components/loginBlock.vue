@@ -4,7 +4,7 @@
       :model="user">
       <transition name="slide-fade-1">
         <i-form-item v-if="isLoaded">
-          <i-input v-model="user.name"
+          <i-input v-model="user.username"
             placeholder="请输入用户名"></i-input>
         </i-form-item>
       </transition>
@@ -33,7 +33,8 @@
         <div v-if="isLoaded"
           class="login-block__button">
           <span @click="onRegisterClick">{{registerText}}</span>
-          <i-button type="primary">{{buttonText}}</i-button>
+          <i-button type="primary"
+            @click="onButtonClick">{{buttonText}}</i-button>
         </div>
       </transition>
     </i-form>
@@ -56,7 +57,7 @@ export default {
       isRegister: false,
       isRegisterInputShow: false,
       user: {
-        name: '',
+        username: '',
         password: '',
         retypePassword: '',
         email: ''
@@ -67,6 +68,13 @@ export default {
     onRegisterClick() {
       this.isRegisterInputShow = !this.isRegisterInputShow
       this.isRegister = !this.isRegister
+    },
+    onButtonClick() {
+      if (this.isRegister) {
+        this.$emit('register', this.user)
+      } else {
+        this.$emit('login', this.user)
+      }
     }
   },
   mounted() {

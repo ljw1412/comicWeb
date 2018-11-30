@@ -7,6 +7,7 @@
       @mousemove="onModalMousemove"
       @mousedown="onModalMousedown">
       <div class="modal-view__header"
+        :style="[headerStyle]"
         @mousedown="onDragStart">
         <slot name="header">
           <div v-if="backable"
@@ -79,6 +80,8 @@ export default {
     backable: Boolean,
     // body的样式
     bodyStyle: Object,
+    // 头部的样式
+    headerStyle: Object,
     close: Boolean
   },
 
@@ -145,21 +148,12 @@ export default {
       let direction = ''
 
       // 不支持，暂时没有想到很好的解决left，width，min-width之间的关系
-      // if (x <= 5) {
-      //   direction += 'left'
-      // }
-
-      if (x >= this.view.width - 3) {
-        direction += 'right'
-      }
-
-      if (y >= this.view.height - 3) {
-        direction += 'bottom'
-      }
-
+      // if (x <= 5)  direction += 'left'
+      if (x >= this.view.width - 3) direction += 'right'
+      if (y >= this.view.height - 3) direction += 'bottom'
       return direction
     },
-    // 当鼠标在视图上移动时
+    // 当鼠标在视图上移动时,如果在边缘修改鼠标样式
     onModalMousemove(event) {
       if (!this.resizable) return false
       const direction = this.checkEdgeArea(event)
@@ -176,7 +170,7 @@ export default {
 
       this.resizeData.cursor = ''
     },
-    // 当鼠标按下时
+    // 当鼠标按下时，如果是边缘开始缩放拖拽
     onModalMousedown(event) {
       this.increaseModalIndex()
       if (!this.resizable || event.button) return false
@@ -231,6 +225,7 @@ export default {
       off(window, 'mousemove', this.onResizing)
       off(window, 'mouseup', this.onResizeEnd)
     },
+
     // 拖拽时检查位置的合理性
     checkVaildPostion(event) {
       if (this.dragData.x < 0) {
@@ -256,10 +251,16 @@ export default {
         this.dragData.y = validHeight - 60
       }
     },
-
+    // 当头部被点击时，开始拖拽
     onDragStart(event) {
       if (event.button) return false
       const rect = this.getModalRect()
+      // 头部操作区不可以拖拽
+      if (
+        (this.backable && event.clientX - rect.x < 35) ||
+        event.clientX - rect.x > rect.width - 90
+      )
+        return false
 
       this.dragData.x = rect.x
       this.dragData.y = rect.y

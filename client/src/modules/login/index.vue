@@ -3,7 +3,7 @@
     <transition name="expand">
       <div v-if="isReady"
         class="login__warpper">
-        <login-block></login-block>
+        <login-block @login="login"></login-block>
       </div>
     </transition>
   </div>
@@ -18,6 +18,17 @@ export default {
   data() {
     return {
       isReady: false
+    }
+  },
+  methods: {
+    login({ username, password }) {
+      this.$callApi({
+        method: 'post',
+        api: 'user/login',
+        param: { username, password }
+      }).then(data => {
+        console.log(data)
+      })
     }
   },
   mounted() {

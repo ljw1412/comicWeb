@@ -12,6 +12,7 @@ axios.defaults.baseURL = `${base}:3000/api/`
 axios.defaults.headers.post['Content-Type'] =
   'application/x-www-form-urlencoded; charset=UTF-8'
 axios.defaults.timeout = 10000
+axios.defaults.withCredentials = true
 
 const callApi = ({ method = 'get', api, param, axiosOptions = {} } = {}) => {
   const $ = axios.create(axiosOptions)
