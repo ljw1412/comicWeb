@@ -9,31 +9,30 @@
       <div class="modal-view__header"
         :style="[headerStyle]"
         @mousedown="onDragStart">
-        <slot name="header">
-          <div v-if="backable"
-            class="header__back"
-            @click.prevent="onBackClick">
-            <Icon class="back__icon"
-              type="md-arrow-back"
-              color="#fff"
-              size="18" />
-          </div>
-          <div class="header__title">
-            <slot name="icon">
-              <Icon v-if="icon"
-                :type="icon" />
-            </slot>
-            <span>{{title}}</span>
-          </div>
-          <div class="header__handle">
-            <div class="handle__minimize"
-              @click="onMinimizeClick"></div>
-            <div class="handle__maximize"
-              @click="onMaximizeClick"></div>
-            <div class="handle__close"
-              @click="onCloseClick"></div>
-          </div>
-        </slot>
+        <div v-if="backable"
+          class="header__back"
+          @click.prevent="onBackClick">
+          <Icon class="back__icon"
+            type="md-arrow-back"
+            color="#fff"
+            size="18" />
+        </div>
+        <div class="header__title">
+          <slot name="icon">
+            <Icon v-if="icon"
+              :type="icon" />
+          </slot>
+          <span>{{title}}</span>
+        </div>
+        <div class="header__handle">
+          <div class="handle__minimize"
+            @click="onMinimizeClick"></div>
+          <div class="handle__maximize"
+            @click="onMaximizeClick"></div>
+          <div class="handle__close"
+            @click="onCloseClick"></div>
+        </div>
+        <slot name="header"></slot>
       </div>
       <div class="modal-view__body"
         :style="bodyStyle">
@@ -493,7 +492,6 @@ export default {
   &__body-warpper {
     height: 100%;
     overflow-y: auto;
-    margin: 0 3px;
   }
 
   &__resize-icon {

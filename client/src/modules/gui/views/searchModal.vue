@@ -13,13 +13,20 @@
     :height="height"
     :x="x"
     :y="y">
-
+    <search></search>
   </modal-view>
 </template>
 
 <script>
 import ModalView from '../../../components/modalView'
+import Search from '../page/search'
+
 export default {
+  components: {
+    ModalView,
+    Search
+  },
+
   props: {
     // 浏览器有效的宽高
     windowWidth: Number,
@@ -33,10 +40,6 @@ export default {
     // modal 初始化时的位置
     x: { type: Number, default: 0 },
     y: { type: Number, default: 0 }
-  },
-
-  components: {
-    ModalView
   },
 
   data() {

@@ -8,7 +8,7 @@ let browser = null
 let page = null
 ;(async () => {
   browser = await puppeteer.launch({
-    headless: false,
+    headless: true,
     ignoreHTTPSErrors: true,
     devtools: true,
     ignoreDefaultArgs: ['--mute-audio']

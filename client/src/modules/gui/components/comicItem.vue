@@ -1,5 +1,6 @@
 <template>
-  <div class="comic-item">
+  <div class="comic-item"
+    :style="{width,padding:'5px'}">
     <div class="comic-item__cover">
       <div class="cover__image"
         :style="{backgroundImage:`url('${cover}')`}">
@@ -16,6 +17,7 @@
 <script>
 export default {
   props: {
+    width: { type: String, default: '150px' },
     name: String,
     cover: String,
     // 是否隐藏介绍提示
@@ -27,8 +29,8 @@ export default {
 
 <style lang="scss" scoped>
 .comic-item {
+  flex-shrink: 0;
   position: relative;
-  width: 150px;
   &,
   * {
     transition: 0.2s;
