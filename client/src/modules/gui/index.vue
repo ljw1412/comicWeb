@@ -10,17 +10,13 @@
       <task-layer ref="taskLayer"
         @close="onTaskClose">
         <search-modal></search-modal>
+        <detail-modal cover="http://localhost:3000/image?website=dmzj&url=https://images.dmzj.com/webpic/5/naruto4698.jpg"></detail-modal>
         <!-- <modal-view resizable
           :window-height="view.height"
           :window-width="view.width"
-          :body-style="{'background-color':'#ccc'}"> -->
-        </modal-view>
+          :body-style="{'background-color':'#ccc'}"> 
+        </modal-view>-->
       </task-layer>
-
-      <!-- <modal-view resizable
-        :body-style="{'background-color':'#ccc'}">
-      </modal-view> -->
-
     </div>
     <action-view :taskList='taskList'></action-view>
   </div>
@@ -32,6 +28,7 @@ import ActionView from './views/actionView'
 import ModalView from '../../components/modalView'
 import TaskLayer from './views/taskLayer'
 import SearchModal from './views/searchModal'
+import DetailModal from './views/detailModal'
 
 import { on, off } from '../../utils/dom.js'
 import { mapState, mapMutations } from 'vuex'
@@ -42,7 +39,8 @@ export default {
     Contextmenu,
     ActionView,
     TaskLayer,
-    SearchModal
+    SearchModal,
+    DetailModal
   },
 
   computed: {
@@ -60,7 +58,6 @@ export default {
         y: 0,
         isShow: true
       }
-      // taskList: []
     }
   },
 
@@ -71,7 +68,6 @@ export default {
 
       this.contextmenu.x = e.x
       this.contextmenu.y = e.y
-      // this.contextmenu.isShow = !this.contextmenu.isShow
     },
 
     resizeListener() {
@@ -102,25 +98,10 @@ export default {
       //   this.taskList[index].component.isClose = true
       //   this.taskList[index].isClose = true
       // }
-    },
-
-    initTaskList() {
-      console.log(this.$refs['taskLayer'].$children)
-      if (this.$refs.taskLayer && this.$refs.taskLayer.$children.length) {
-        this.$refs.taskLayer.$children.forEach(item => {
-          this.ADD_TASK({
-            component: item,
-            name: item.name,
-            isDisplay: true,
-            isClose: false
-          })
-        })
-      }
     }
   },
   mounted() {
     this.addResizeListener()
-    this.initTaskList()
     this.$eventBus.$on('close', data => {
       console.log(data)
     })

@@ -33,9 +33,9 @@
             @click="onCloseClick"></div>
         </div>
       </div>
-      <slot name="center"></slot>
       <div class="modal-view__body"
         :style="bodyStyle">
+        <slot name="bodyTop"></slot>
         <div class="modal-view__body-warpper">
           <slot></slot>
         </div>
@@ -121,7 +121,8 @@ export default {
         index: viewIndex.getIndex(),
         width: this.width,
         height: this.height
-      }
+      },
+      rect: {}
     }
   },
 
@@ -216,6 +217,7 @@ export default {
           }
           break
       }
+      this.$emit('resize', rect)
     },
 
     onResizeEnd(event) {
@@ -223,6 +225,7 @@ export default {
       this.resizeData.resizing = false
       off(window, 'mousemove', this.onResizing)
       off(window, 'mouseup', this.onResizeEnd)
+      this.$emit('resize', this.getModalRect())
     },
 
     // 拖拽时检查位置的合理性
@@ -363,7 +366,9 @@ export default {
     }
   },
 
-  mounted() {}
+  mounted() {
+    this.rect = this.getModalRect()
+  }
 }
 </script>
 

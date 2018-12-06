@@ -12,8 +12,9 @@
     :width="width"
     :height="height"
     :x="x"
-    :y="y">
-    <div slot="center"
+    :y="y"
+    @resize="onModalResize">
+    <div slot="bodyTop"
       class="search__input">
       <i-input class="search__input"
         search
@@ -45,8 +46,11 @@
 <script>
 import ModalView from '../../../components/modalView'
 import ComicItem from '../components/comicItem'
+import { mapMutations } from 'vuex'
 
 export default {
+  name: 'TaskSearch',
+
   components: {
     ModalView,
     ComicItem
@@ -80,6 +84,8 @@ export default {
   },
 
   methods: {
+    ...mapMutations('gui', ['ADD_TASK']),
+
     search(keyword) {
       this.$callApi({
         method: 'post',
@@ -101,11 +107,21 @@ export default {
     onComicItemClick(item) {
       this.currentComic = item
       this.isDetailShow = true
+    },
+
+    onModalResize(e) {
+      console.log(e)
     }
   },
 
   created() {
     this.name = 'TaskSearch'
+    this.ADD_TASK({
+      component: this,
+      name: this.name,
+      isDisplay: true,
+      isClose: false
+    })
     this.website = this.websiteList[0].value
   }
 }
