@@ -1,6 +1,7 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
+import VueLazyload from 'vue-lazyload'
 import Vuex from 'vuex'
 import App from './App'
 import router from './router'
@@ -20,6 +21,7 @@ import Chart from './components/chart'
 // 设置全局语言
 moment.locale('zh-cn')
 
+Vue.use(VueLazyload)
 Vue.use(iView)
 Vue.component(pageTitle.name, pageTitle)
 Vue.component(Chart.name, Chart)

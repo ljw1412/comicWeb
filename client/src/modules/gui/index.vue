@@ -7,15 +7,13 @@
         ref="contextmenu"
         :x="contextmenu.x"
         :y="contextmenu.y"></contextmenu>
-      <!-- <modal-view :window-height="view.height"
-        :window-width="view.width"
-        resizable>
-      </modal-view> -->
       <task-layer ref="taskLayer"
         @close="onTaskClose">
         <search-modal></search-modal>
-        <modal-view resizable
-          :body-style="{'background-color':'#ccc'}">
+        <!-- <modal-view resizable
+          :window-height="view.height"
+          :window-width="view.width"
+          :body-style="{'background-color':'#ccc'}"> -->
         </modal-view>
       </task-layer>
 

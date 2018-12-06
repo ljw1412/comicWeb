@@ -13,18 +13,43 @@
     :height="height"
     :x="x"
     :y="y">
-    <search></search>
+    <div slot="center"
+      class="search__input">
+      <i-input class="search__input"
+        search
+        placeholder="请输入关键词..."
+        @on-search="onSearch">
+        <i-select v-model="website"
+          slot="prepend"
+          placeholder="请选择站点"
+          style="width: 120px">
+          <i-option v-for="website of websiteList"
+            :key="website.id"
+            :value="website.value"
+            :label="website.label"></i-option>
+        </i-select>
+      </i-input>
+    </div>
+    <div class="search__result">
+      <comic-item v-for="item of list"
+        :key="item.id"
+        class="result__item"
+        :name="item.name"
+        :cover="item.cover"
+        :description="item.description"
+        @click.native="onComicItemClick(item)"></comic-item>
+    </div>
   </modal-view>
 </template>
 
 <script>
 import ModalView from '../../../components/modalView'
-import Search from '../page/search'
+import ComicItem from '../components/comicItem'
 
 export default {
   components: {
     ModalView,
-    Search
+    ComicItem
   },
 
   props: {
@@ -46,15 +71,60 @@ export default {
     return {
       title: '搜索',
       visible: true,
-      isClose: false
+      isClose: false,
+      list: [],
+      currentComic: {},
+      website: '',
+      websiteList: [{ id: 0, value: 'dmzj', label: '动漫之家' }]
+    }
+  },
+
+  methods: {
+    search(keyword) {
+      this.$callApi({
+        method: 'post',
+        api: '/comic/search',
+        param: {
+          website: this.website,
+          keyword
+        }
+      }).then(data => {
+        this.list = data
+      })
+    },
+
+    onSearch(value) {
+      if (!value.trim()) return
+      this.search(value)
+    },
+
+    onComicItemClick(item) {
+      this.currentComic = item
+      this.isDetailShow = true
     }
   },
 
   created() {
     this.name = 'TaskSearch'
+    this.website = this.websiteList[0].value
   }
 }
 </script>
 
 <style lang="scss" scoped>
+* {
+  user-select: none;
+}
+.search {
+  &__input {
+    margin-bottom: 1px;
+  }
+  &__result {
+    overflow-y: auto;
+    height: 100%;
+    margin-right: 2px;
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
 </style>

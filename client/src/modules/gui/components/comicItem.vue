@@ -1,9 +1,9 @@
 <template>
   <div class="comic-item"
-    :style="{width,padding:'5px'}">
+    :style="{width,height,padding:'5px'}">
     <div class="comic-item__cover">
       <div class="cover__image"
-        :style="{backgroundImage:`url('${cover}')`}">
+        v-lazy:background-image="cover">
         <div class="image__link"></div>
       </div>
       <div class="comic-item__title">{{name}}</div>
@@ -17,7 +17,8 @@
 <script>
 export default {
   props: {
-    width: { type: String, default: '150px' },
+    width: { type: String, default: '140px' },
+    height: { type: String, default: '200px' },
     name: String,
     cover: String,
     // 是否隐藏介绍提示
@@ -51,7 +52,11 @@ export default {
     }
   }
   &__cover {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
     .cover__image {
+      flex-grow: 1;
       position: relative;
       border: 2px solid #bebebe;
       box-sizing: border-box;
@@ -59,7 +64,7 @@ export default {
       background-repeat: no-repeat;
       background-clip: content-box;
       background-position: center;
-      height: 200px;
+      // height: 200px;
       width: 100%;
       .image__link {
         cursor: pointer;
@@ -73,6 +78,7 @@ export default {
     }
   }
   &__title {
+    flex-shrink: 0;
     cursor: pointer;
     overflow-x: hidden;
     text-overflow: ellipsis;

@@ -32,8 +32,8 @@
           <div class="handle__close"
             @click="onCloseClick"></div>
         </div>
-        <slot name="header"></slot>
       </div>
+      <slot name="center"></slot>
       <div class="modal-view__body"
         :style="bodyStyle">
         <div class="modal-view__body-warpper">
