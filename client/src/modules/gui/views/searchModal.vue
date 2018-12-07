@@ -46,10 +46,10 @@
 <script>
 import ModalView from '../../../components/modalView'
 import ComicItem from '../components/comicItem'
-import { mapMutations } from 'vuex'
+import customModal from '../mixins/customModal.js'
 
 export default {
-  name: 'TaskSearch',
+  mixins: [customModal],
 
   components: {
     ModalView,
@@ -84,8 +84,6 @@ export default {
   },
 
   methods: {
-    ...mapMutations('gui', ['ADD_TASK']),
-
     search(keyword) {
       this.$callApi({
         method: 'post',
@@ -106,7 +104,7 @@ export default {
 
     onComicItemClick(item) {
       this.currentComic = item
-      this.isDetailShow = true
+      this.newTask('TaskDetail', item)
     },
 
     onModalResize(e) {
@@ -114,14 +112,11 @@ export default {
     }
   },
 
-  created() {
+  beforeCreate() {
     this.name = 'TaskSearch'
-    this.ADD_TASK({
-      component: this,
-      name: this.name,
-      isDisplay: true,
-      isClose: false
-    })
+  },
+
+  created() {
     this.website = this.websiteList[0].value
   }
 }

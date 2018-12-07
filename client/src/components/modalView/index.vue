@@ -33,9 +33,9 @@
             @click="onCloseClick"></div>
         </div>
       </div>
+      <slot name="bodyTop"></slot>
       <div class="modal-view__body"
         :style="bodyStyle">
-        <slot name="bodyTop"></slot>
         <div class="modal-view__body-warpper">
           <slot></slot>
         </div>

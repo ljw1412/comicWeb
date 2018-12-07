@@ -31,6 +31,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   components: {},
 
@@ -42,13 +43,24 @@ export default {
     nTime: String,
     nDate: String,
     isNotificationsShow: Boolean,
-    isDateTimeShow: Boolean,
-    taskList: { type: Array, default: () => [] }
+    isDateTimeShow: Boolean
   },
 
   computed: {
+    ...mapState('gui', ['taskTree']),
     notificationsIcon() {
       return this.messageCount ? 'md-notifications' : 'md-notifications-outline'
+    },
+    taskList() {
+      return Object.keys(this.taskTree)
+        .filter(
+          item =>
+            this.taskTree[item].tasks && this.taskTree[item].tasks.length > 0
+        )
+        .map(item => ({
+          name: item,
+          list: this.taskTree[item].tasks
+        }))
     }
   },
 
@@ -66,8 +78,13 @@ export default {
     },
 
     onTaskClick(item) {
-      item.isDisplay = !item.isDisplay
-      item.component.visible = item.isDisplay
+      console.log(item)
+
+      if (item.list.length === 1) {
+        const task = item.list[0]
+        task.isDisplay = !task.isDisplay
+        task.component.visible = task.isDisplay
+      }
     }
   }
 }

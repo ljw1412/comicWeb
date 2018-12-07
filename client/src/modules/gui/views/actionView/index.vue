@@ -1,7 +1,6 @@
 <template>
   <div class="action-view">
-    <taskbar :taskList="taskList"
-      :n-time="time"
+    <taskbar :n-time="time"
       :n-date="date"
       :isNotificationsShow.sync="isNotificationsShow"
       :isDateTimeShow.sync="isDateTimeShow"></taskbar>
@@ -36,10 +35,6 @@ export default {
     Taskbar,
     Notifications,
     Calendar
-  },
-
-  props: {
-    taskList: { type: Array, default: () => [] }
   },
 
   computed: {

@@ -10,7 +10,9 @@
       <task-layer ref="taskLayer"
         @close="onTaskClose">
         <search-modal></search-modal>
-        <detail-modal cover="http://localhost:3000/image?website=dmzj&url=https://images.dmzj.com/webpic/5/naruto4698.jpg"></detail-modal>
+        <detail-modal v-for="(item,index) of taskDetailList"
+          :key="index"
+          :data="item.config"></detail-modal>
         <!-- <modal-view resizable
           :window-height="view.height"
           :window-width="view.width"
@@ -18,7 +20,7 @@
         </modal-view>-->
       </task-layer>
     </div>
-    <action-view :taskList='taskList'></action-view>
+    <action-view></action-view>
   </div>
 </template>
 
@@ -44,7 +46,13 @@ export default {
   },
 
   computed: {
-    ...mapState('gui', ['taskList'])
+    ...mapState('gui', ['taskTree']),
+    taskDetailList() {
+      if (this.taskTree['TaskDetail']) {
+        return this.taskTree['TaskDetail'].tasks
+      }
+      return []
+    }
   },
 
   data() {
@@ -68,6 +76,7 @@ export default {
 
       this.contextmenu.x = e.x
       this.contextmenu.y = e.y
+      console.log(this.$refs.taskLayer)
     },
 
     resizeListener() {
@@ -90,16 +99,15 @@ export default {
       off(window, 'resize', this.resizeListener)
     },
 
-    onTaskClose(componentName) {
-      // console.log(componentName)
-      // let index = this.taskList.findIndex(item => item.name === componentName)
-      // if (index != -1) {
-      //   // this.taskList.splice(index, 1)
-      //   this.taskList[index].component.isClose = true
-      //   this.taskList[index].isClose = true
-      // }
+    onTaskClose(componentName) {}
+  },
+
+  watch: {
+    taskTree(val) {
+      console.log(val)
     }
   },
+
   mounted() {
     this.addResizeListener()
     this.$eventBus.$on('close', data => {

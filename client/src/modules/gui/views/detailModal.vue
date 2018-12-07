@@ -22,12 +22,17 @@
 
 <script>
 import ModalView from '../../../components/modalView'
-import { mapMutations } from 'vuex'
+import customModal from '../mixins/customModal.js'
+import { mapState } from 'vuex'
 
 export default {
+  mixins: [customModal],
+
   components: {
     ModalView
   },
+
+  computed: {},
 
   props: {
     // 浏览器有效的宽高
@@ -43,27 +48,33 @@ export default {
     x: { type: Number, default: 0 },
     y: { type: Number, default: 0 },
 
-    cover: { type: String }
+    data: { type: Object, default: () => ({}) }
   },
 
   data() {
     return {
       title: '详情页',
       visible: true,
-      isClose: false
+      isClose: false,
+      cover: ''
     }
   },
 
-  methods: { ...mapMutations('gui', ['ADD_TASK']) },
+  methods: {},
 
-  created() {
+  watch: {
+    data: {
+      immediate: true,
+      handler(val) {
+        if (val) {
+          this.cover = val.cover
+        }
+      }
+    }
+  },
+
+  beforeCreate() {
     this.name = 'TaskDetail'
-    this.ADD_TASK({
-      component: this,
-      name: this.name,
-      isDisplay: true,
-      isClose: false
-    })
   }
 }
 </script>
