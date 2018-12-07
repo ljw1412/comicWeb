@@ -15,7 +15,9 @@
     :y="y">
     <div class="detail">
       <div class="detail__cover"
-        v-lazy:background-image="cover"></div>
+        v-lazy:background-image="comic.cover">
+        <div class="cover__name">{{comic.name}}</div>
+      </div>
     </div>
   </modal-view>
 </template>
@@ -56,7 +58,10 @@ export default {
       title: '详情页',
       visible: true,
       isClose: false,
-      cover: ''
+      comic: {
+        cover: '',
+        name: ''
+      }
     }
   },
 
@@ -67,7 +72,8 @@ export default {
       immediate: true,
       handler(val) {
         if (val) {
-          this.cover = val.cover
+          this.comic.cover = val.cover
+          this.comic.name = val.name
         }
       }
     }
@@ -94,10 +100,20 @@ export default {
     overflow: hidden;
     &::after {
       position: absolute;
+      top: 0;
       width: 100%;
       height: 100%;
       content: ' ';
-      background-color: rgba($color: #333, $alpha: 0.25);
+      background-color: rgba($color: #333, $alpha: 0.3);
+    }
+    .cover__name {
+      z-index: 9;
+      color: #fff;
+      font-size: 16px;
+      position: absolute;
+      bottom: 30px;
+      left: 25%;
+      margin-left: 15px;
     }
   }
 }
