@@ -34,4 +34,14 @@ const callApi = ({ method = 'get', api, param, axiosOptions = {} } = {}) => {
     })
 }
 
+const post = ({ api, param, axiosOptions = {} }) => {
+  return callApi({ method: 'post', api, param, axiosOptions })
+}
+
+const get = ({ api, param, axiosOptions = {} }) => {
+  return callApi({ api, param, axiosOptions })
+}
+
 export default callApi
+
+export { get, post }

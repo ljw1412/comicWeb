@@ -103,6 +103,7 @@ export default {
     },
 
     onComicItemClick(item) {
+      item.website = this.website
       this.currentComic = item
       this.newTask('TaskDetail', item)
     },
@@ -128,7 +129,8 @@ export default {
 }
 .search {
   &__input {
-    margin-bottom: 1px;
+    padding-bottom: 1px;
+    background-color: #fff;
   }
   &__result {
     overflow-y: auto;

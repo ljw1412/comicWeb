@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
@@ -23,24 +23,24 @@ body,
 }
 
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 0;
+  height: 0;
   background-color: rgba(0, 0, 0, 0);
 }
 
 /*滚动条里面轨道*/
-::-webkit-scrollbar-track {
+/* ::-webkit-scrollbar-track {
   background-color: rgba(0, 0, 0, 0);
-}
+} */
 
 /* 滚动条 */
-::-webkit-scrollbar-thumb {
+/* ::-webkit-scrollbar-thumb {
   background-color: rgba(0, 0, 0, 0.2);
   border-radius: 100px;
   border: 2px solid transparent;
-}
+} */
 
-::-webkit-scrollbar-thumb:active {
+/* ::-webkit-scrollbar-thumb:active {
   background-color: rgba(0, 0, 0, 0.4);
-}
+} */
 </style>

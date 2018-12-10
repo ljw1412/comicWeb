@@ -4,16 +4,14 @@
       :n-date="date"
       :isNotificationsShow.sync="isNotificationsShow"
       :isDateTimeShow.sync="isDateTimeShow"></taskbar>
-    <transition name="slideIn"
-      enter-active-class="slideInRight"
+    <transition enter-active-class="slideInRight"
       leave-active-class="slideOutRight">
       <div v-if="isNotificationsShow"
         class="action-view__notifications">
         <notifications></notifications>
       </div>
     </transition>
-    <transition name="fadeIn"
-      enter-active-class="fadeIn"
+    <transition enter-active-class="fadeIn"
       leave-active-class="fadeOut">
       <div v-if="isDateTimeShow"
         class="action-view__calendar">

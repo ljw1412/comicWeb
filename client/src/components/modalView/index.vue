@@ -33,10 +33,13 @@
             @click="onCloseClick"></div>
         </div>
       </div>
-      <slot name="bodyTop"></slot>
+      <div class="modal-view__body-top">
+        <slot name="bodyTop"></slot>
+      </div>
       <div class="modal-view__body"
         :style="bodyStyle">
-        <div class="modal-view__body-warpper">
+        <div ref="body"
+          class="modal-view__body-warpper">
           <slot></slot>
         </div>
       </div>
@@ -93,7 +96,8 @@ export default {
         minWidth: `${this.minWidth}px`,
         minHeight: `${this.minHeight}px`,
         left: `${this.dragData.x}px`,
-        top: `${this.dragData.y}px`
+        top: `${this.dragData.y}px`,
+        'background-color': '#fff'
       }
     },
     mouseStyles() {
@@ -484,6 +488,10 @@ export default {
         }
       }
     }
+  }
+
+  &__body-top {
+    position: relative;
   }
 
   &__body {

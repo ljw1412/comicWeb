@@ -8,6 +8,7 @@ import router from './router'
 import vuexStore from './store'
 import moment from 'moment'
 import callApi from './utils/api'
+import { get, post } from './utils/api'
 import Cookies from '../node_modules/js-cookie/src/js.cookie'
 import Store from 'store'
 
@@ -28,6 +29,8 @@ Vue.component(Chart.name, Chart)
 
 Vue.config.productionTip = false
 Vue.prototype.$callApi = callApi
+Vue.prototype.$get = get
+Vue.prototype.$post = post
 window.Cookies = Cookies
 window.Store = Store
 
