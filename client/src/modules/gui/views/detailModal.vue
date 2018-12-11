@@ -12,12 +12,17 @@
     :width="width"
     :height="height"
     :x="x"
-    :y="y">
+    :y="y"
+    @resize="onModalResize">
     <transition slot="bodyTop"
       name="fade">
       <div v-if="isDisplayTopDetail"
         class="detail__fixed-view">
-        <div class="fixed-view__info">{{comic.name}} <span>{{comic.status}}</span></div>
+        <div class="fixed-view__info">
+          <span class="info__title">{{comic.name}} </span>
+          <span class="info__status"
+            :class="isfinish?'finish':'serialize'">{{comic.status}}</span>
+        </div>
       </div>
     </transition>
     <div class="detail">
@@ -27,7 +32,7 @@
           <div>
             <span class="base-info__name">{{comic.name}}</span>
             <span class="base-info__status"
-              :class="isfinish?'base-info__status--finish':'base-info__status--serialize'">
+              :class="isfinish?'finish':'serialize'">
               {{comic.status}}
             </span>
           </div>
@@ -51,17 +56,23 @@
       <div class="detail__chapter-header">
         <span class="chapter-header__title">全部章节</span>
         <div class="chapter-header__order">
-          <span>正序</span>
-          <i-divider type="vertical" />
-          <span>倒序</span>
+          <span :class="!isReverseOrder?'order--active':''"
+            @click="onOrderClick(false)">正序</span>
+          <span class="order__divider"></span>
+          <span :class="isReverseOrder?'order--active':''"
+            @click="onOrderClick(true)">倒序</span>
         </div>
       </div>
       <div v-for="(item,index) of comic.chapters"
         :key="index"
         class="detail__chapter-group">
-        <div>{{item.title}}</div>
-        <div v-for="chapter of item.list"
-          :key="chapter.chapterId">{{chapter.chapterName}}</div>
+        <div class="chapter-group__title">{{item.title}}</div>
+        <div class="chapter-group__chapters">
+          <div v-for="chapter of item.list"
+            :key="chapter.chapterId"
+            class="chapters__item"
+            :style="{width:chapterWidth}">{{chapter.chapterName}}</div>
+        </div>
       </div>
     </div>
   </modal-view>
@@ -87,6 +98,10 @@ export default {
     },
     isfinish() {
       return this.comic.status.includes('完')
+    },
+    chapterWidth() {
+      const columnCount = Math.floor(this.self.width / 65)
+      return 100 / columnCount + '%'
     }
   },
 
@@ -113,8 +128,12 @@ export default {
       visible: true,
       isClose: false,
       bodyDOM: null,
+      // 是否展开介绍
       isDisplayDescription: false,
+      // 是否显示顶部悬浮标题
       isDisplayTopDetail: false,
+      // 是否为倒序
+      isReverseOrder: true,
       comic: {
         id: '',
         cover: '',
@@ -127,7 +146,8 @@ export default {
         authors: [],
         types: [],
         chapters: []
-      }
+      },
+      self: { width: this.width }
     }
   },
 
@@ -163,12 +183,21 @@ export default {
       }
     },
 
+    onOrderClick(isReverse) {
+      this.isReverseOrder = isReverse
+    },
+
+    // 当页面滚动时
     onScroll(e) {
       if (this.bodyDOM.scrollTop > this.$refs.operate.offsetTop + 10) {
         this.isDisplayTopDetail = true
       } else {
         this.isDisplayTopDetail = false
       }
+    },
+
+    onModalResize(e) {
+      this.self.width = e.width
     }
   },
 
@@ -185,6 +214,11 @@ export default {
           this.reFindDetail()
         }
       }
+    },
+    isReverseOrder(val) {
+      this.comic.chapters.forEach(item => {
+        item.list = item.list.reverse()
+      })
     }
   },
 
@@ -204,9 +238,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+$line-color: #ddd;
+* {
+  user-select: none;
+}
 .detail {
   position: relative;
-  user-select: none;
   overflow-x: hidden;
   &__fixed-view {
     z-index: 19;
@@ -217,12 +254,19 @@ export default {
     height: 40px;
     background: #fff;
     box-sizing: border-box;
-    box-shadow: 0 2px 8px rgba($color: #c2c2c2, $alpha: 0.5);
+    box-shadow: 0 2px 8px $line-color;
     animation-duration: 0.3s;
     .fixed-view__info {
-      padding-left: 15px;
+      padding: 0 15px;
       line-height: 40px;
-      font-size: 16px;
+      .info {
+        &__title {
+          font-size: 16px;
+        }
+        &__status {
+          font-size: 14px;
+        }
+      }
     }
   }
   &__cover {
@@ -263,14 +307,6 @@ export default {
           border-radius: 3px;
           font-size: 12px;
           line-height: 12px;
-          &--finish {
-            color: #ff8c00;
-            border-color: #ff8c00;
-          }
-          &--serialize {
-            color: #19be6b;
-            border-color: #19be6b;
-          }
         }
         &__authors {
           font-size: 12px;
@@ -285,13 +321,15 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    word-wrap: none;
+    word-wrap: break-word;
     &--more {
       overflow: visible;
       white-space: initial;
       word-wrap: initial;
       &::after {
-        transform: matrix(0.71, 0.71, 0.71, -0.71, 0, 0) translateX(-50%);
+        transform: matrix(0.71, -0.71, 0.71, 0.71, 0, 0) translateX(-50%)
+          rotate(180deg);
+        bottom: 12px !important;
       }
     }
     &--closed {
@@ -306,7 +344,6 @@ export default {
       width: 8px;
       border-width: 1px 1px 0 0;
       border-style: solid;
-
       position: absolute;
       bottom: 5px;
       right: 50%;
@@ -336,7 +373,7 @@ export default {
   &__chapter-header {
     border-width: 1px 0;
     border-style: solid;
-    border-color: rgba($color: #c2c2c2, $alpha: 0.5);
+    border-color: $line-color;
     padding: 5px 15px;
     display: flex;
     justify-content: space-between;
@@ -346,10 +383,55 @@ export default {
         font-size: 14px;
         font-weight: bold;
       }
+      &__order {
+        .order {
+          &__divider {
+            margin: 0 8px;
+            display: inline-block;
+            height: 1em;
+            width: 1px;
+            vertical-align: middle;
+            background: $line-color;
+          }
+          &--active {
+            color: #ff8c00 !important;
+          }
+        }
+      }
     }
   }
   &__chapter-group {
-    padding: 0 15px;
+    padding: 5px 10px;
+    .chapter-group {
+      &__title {
+        margin: 5px;
+        text-align: center;
+      }
+      &__chapters {
+        display: flex;
+        flex-wrap: wrap;
+        .chapters__item {
+          background: #fff;
+          border: 1px solid $line-color;
+          width: 25%;
+          margin: -0.5px;
+          padding: 4px 0;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          word-wrap: break-word;
+          text-align: center;
+        }
+      }
+    }
   }
+}
+.finish {
+  color: #ff8c00 !important;
+  border-color: #ff8c00 !important;
+}
+.serialize {
+  color: #19be6b !important;
+  border-color: #19be6b !important;
 }
 </style>
