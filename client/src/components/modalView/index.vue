@@ -381,7 +381,7 @@ export default {
   position: absolute;
   width: 100px;
   box-sizing: border-box;
-  border: 1px solid rgba($color: #9f9f9f, $alpha: 0.5);
+  // border: 1px solid rgba($color: #9f9f9f, $alpha: 0.5);
   border-top-width: 0;
   display: flex;
   flex-direction: column;
@@ -389,7 +389,9 @@ export default {
   &__header {
     position: relative;
     flex-shrink: 0;
+    box-sizing: border-box;
     background-color: red;
+    border: 1px solid rgba($color: #fff, $alpha: 0.3);
     height: 30px;
     display: flex;
     * {
@@ -492,6 +494,9 @@ export default {
 
   &__body-top {
     position: relative;
+    border-width: 0 1px;
+    border-style: solid;
+    border-color: #9f9f9f;
   }
 
   &__body {
@@ -500,6 +505,9 @@ export default {
     height: 0;
     background-color: #fff;
     padding-bottom: 3px;
+    border-width: 0 1px 1px 1px;
+    border-style: solid;
+    border-color: #9f9f9f;
   }
 
   &__body-warpper {

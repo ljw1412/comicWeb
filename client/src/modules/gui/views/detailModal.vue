@@ -26,7 +26,8 @@
       </div>
     </transition>
     <div class="detail">
-      <div class="detail__cover"
+      <div ref="cover"
+        class="detail__cover"
         v-lazy:background-image="comic.cover">
         <div class="cover__base-info">
           <div>
@@ -84,6 +85,7 @@ import customModal from '../mixins/customModal.js'
 import { mapState } from 'vuex'
 import { scrollTop, getScrollBarSize } from '../../../utils/assist.js'
 import { on, off } from '../../../utils/dom.js'
+import themeColor from '../../../utils/themeColor.js'
 
 export default {
   mixins: [customModal],
@@ -212,6 +214,15 @@ export default {
           this.comic.id = val.id
           this.comic.status = val.status
           this.reFindDetail()
+
+          const img = new Image()
+          img.crossOrigin = 'Anonymous'
+          img.src = val.cover
+          img.onload = () => {
+            themeColor(img, data => {
+              console.log(data)
+            })
+          }
         }
       }
     },
@@ -411,6 +422,7 @@ $line-color: #ddd;
         display: flex;
         flex-wrap: wrap;
         .chapters__item {
+          position: relative;
           background: #fff;
           border: 1px solid $line-color;
           width: 25%;
@@ -421,6 +433,9 @@ $line-color: #ddd;
           white-space: nowrap;
           word-wrap: break-word;
           text-align: center;
+          &:hover {
+            background: rgba($color: #ff8c00, $alpha: 0.5);
+          }
         }
       }
     }
@@ -433,5 +448,9 @@ $line-color: #ddd;
 .serialize {
   color: #19be6b !important;
   border-color: #19be6b !important;
+}
+.read-here {
+  background: #ff8c00 !important;
+  color: #fff;
 }
 </style>
