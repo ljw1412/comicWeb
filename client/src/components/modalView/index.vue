@@ -7,7 +7,7 @@
       @mousemove="onModalMousemove"
       @mousedown="onModalMousedown">
       <div class="modal-view__header"
-        :style="[headerStyle]"
+        :style="[headerStyle,titleBarStyles]"
         @mousedown="onDragStart">
         <div v-if="backable"
           class="header__back"
@@ -56,6 +56,7 @@
 <script>
 import { on, off } from '../../utils/dom'
 import viewIndex from './ViewIndex'
+import { mapState, mapGetters } from 'vuex'
 export default {
   props: {
     name: { type: String, default: 'ModalView' },
@@ -88,6 +89,8 @@ export default {
   },
 
   computed: {
+    ...mapGetters('gui', ['taskBackgroundColor']),
+    ...mapState('gui', ['taskbar', 'desktop']),
     styles() {
       return {
         zIndex: this.view.index + this.zIndex,
@@ -102,6 +105,9 @@ export default {
     },
     mouseStyles() {
       return { cursor: this.resizeData.cursor }
+    },
+    titleBarStyles() {
+      return { 'background-color': this.taskBackgroundColor }
     }
   },
 
@@ -390,7 +396,7 @@ export default {
     position: relative;
     flex-shrink: 0;
     box-sizing: border-box;
-    background-color: red;
+    transition: 1.2s;
     border: 1px solid rgba($color: #fff, $alpha: 0.3);
     height: 30px;
     display: flex;

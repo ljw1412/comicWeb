@@ -1,7 +1,8 @@
 <template>
   <div class="gui">
     <div class="desktop"
-      @contextmenu.prevent="onContextmenu"></div>
+      @contextmenu.prevent="onContextmenu"
+      :style="desktopStyle"></div>
     <contextmenu v-show="contextmenu.isShow"
       ref="contextmenu"
       :x="contextmenu.x"
@@ -24,9 +25,12 @@ import ModalView from '../../components/modalView'
 import TaskLayer from './views/taskLayer'
 import SearchModal from './views/searchModal'
 import DetailModal from './views/detailModal'
+import SettingModal from './views/settingModal'
 
 import { on, off } from '../../utils/dom.js'
 import { mapState, mapMutations } from 'vuex'
+import Color from 'color'
+import themeColor from '../../utils/themeColor.js'
 
 export default {
   components: {
@@ -35,7 +39,8 @@ export default {
     ActionView,
     TaskLayer,
     SearchModal,
-    DetailModal
+    DetailModal,
+    SettingModal
   },
 
   computed: {
@@ -45,6 +50,13 @@ export default {
         return this.taskTree['TaskDetail'].tasks
       }
       return []
+    },
+    desktopStyle() {
+      if (this.desktop.isPure) {
+        return { 'background-color': this.desktop.themeColor }
+      } else {
+        return { 'background-image': `url('${this.desktop.imageUrl}')` }
+      }
     }
   },
 
@@ -63,7 +75,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations('gui', ['ADD_TASK']),
+    ...mapMutations('gui', ['UPDATE_TASK', 'SET_THEME_COLOR', 'SET_WALLPAPER']),
     onContextmenu(e) {
       console.log(e)
 
@@ -92,12 +104,27 @@ export default {
       off(window, 'resize', this.resizeListener)
     },
 
-    onTaskClose(componentName) {}
+    onTaskClose(componentName) {},
+
+    getThemeColor() {
+      const img = new Image()
+      img.crossOrigin = 'Anonymous'
+      img.src = this.desktop.imageUrl
+      img.onload = () => {
+        themeColor(img).then(data => {
+          const primaryColor = Color.rgb(data[0])
+          this.SET_THEME_COLOR(primaryColor.hex())
+        })
+      }
+    }
   },
 
   watch: {
     taskTree(val) {
       console.log(val)
+    },
+    'desktop.imageUrl'(val) {
+      this.getThemeColor()
     }
   },
 
@@ -106,6 +133,9 @@ export default {
     this.$eventBus.$on('close', data => {
       console.log(data)
     })
+    this.getThemeColor()
+
+    window.SET_WALLPAPER = this.SET_WALLPAPER
   },
 
   beforeDestroy() {
@@ -122,6 +152,8 @@ export default {
   .desktop {
     height: 100%;
     width: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
   }
 }
 </style>

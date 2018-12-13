@@ -1,4 +1,9 @@
 /**
+ * 计算图片重要颜色
+ * 中位切分法
+ */
+
+/**
  * 颜色盒子类
  *
  * @param {Array} colorRange    [[rMin, rMax],[gMin, gMax], [bMin, bMax]] 颜色范围
@@ -237,4 +242,16 @@ function themeColor(img, callback) {
   callback(colorArr)
 }
 
-export default themeColor
+function themeColorPromise(img) {
+  return new Promise((resolve, reject) => {
+    try {
+      themeColor(img, resolve)
+    } catch (error) {
+      reject(error)
+    }
+  })
+}
+
+export default themeColorPromise
+
+export { themeColor, themeColorPromise }

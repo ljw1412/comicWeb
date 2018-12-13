@@ -1,6 +1,7 @@
 // 日历
 <template>
-  <div class="calendar">
+  <div class="calendar"
+    :style="[bgStyle]">
     <div class="calendar__datetime">
       <div class="datetime__time">{{nTime}}</div>
       <div class="datetime__date">{{dateWithWeekday}}</div>
@@ -37,7 +38,9 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import moment from 'moment'
+import Color from 'color'
 moment.locale('zh-cn')
 export default {
   props: {
@@ -59,6 +62,10 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('gui', ['taskBackgroundColor']),
+    bgStyle() {
+      return { 'background-color': Color(this.taskBackgroundColor).alpha(0.9) }
+    },
     sundayIsFirstDay() {
       return this.firstDay === 'SUN'
     },
@@ -168,8 +175,8 @@ export default {
 <style lang="scss" scoped>
 .calendar {
   user-select: none;
-  background-color: black;
   padding: 10px;
+  transition: 1.2s;
   &__datetime {
     color: #fff;
     .datetime {
@@ -211,11 +218,9 @@ export default {
     text-align: center;
     font-size: 16px;
     color: #fff;
-    // background-color: #000;
     .table__cell {
       height: 36px;
       box-sizing: border-box;
-      background-color: #000;
       border: 2px solid rgba(0, 0, 0, 0);
       &:hover {
         background: rgba($color: #fff, $alpha: 0.6);

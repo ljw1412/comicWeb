@@ -85,7 +85,6 @@ import customModal from '../mixins/customModal.js'
 import { mapState } from 'vuex'
 import { scrollTop, getScrollBarSize } from '../../../utils/assist.js'
 import { on, off } from '../../../utils/dom.js'
-import themeColor from '../../../utils/themeColor.js'
 
 export default {
   mixins: [customModal],
@@ -108,19 +107,6 @@ export default {
   },
 
   props: {
-    // 浏览器有效的宽高
-    windowWidth: Number,
-    windowHeight: Number,
-    // modal最小的宽高
-    minWidth: { type: Number, default: 300 },
-    minHeight: { type: Number, default: 400 },
-    // modal 初始化时的宽高
-    width: { type: Number, default: 300 },
-    height: { type: Number, default: 400 },
-    // modal 初始化时的位置
-    x: { type: Number, default: 0 },
-    y: { type: Number, default: 0 },
-
     data: { type: Object, default: () => ({}) }
   },
 
@@ -214,15 +200,6 @@ export default {
           this.comic.id = val.id
           this.comic.status = val.status
           this.reFindDetail()
-
-          const img = new Image()
-          img.crossOrigin = 'Anonymous'
-          img.src = val.cover
-          img.onload = () => {
-            themeColor(img, data => {
-              console.log(data)
-            })
-          }
         }
       }
     },

@@ -1,6 +1,7 @@
 // 通知栏
 <template>
-  <div class="notifications">
+  <div class="notifications"
+    :style="[bgStyle]">
     <div class="notifications__header">
       <div class="header__title">通知</div>
     </div>
@@ -9,7 +10,16 @@
 </template>
 
 <script>
-export default {}
+import { mapGetters } from 'vuex'
+import Color from 'color'
+export default {
+  computed: {
+    ...mapGetters('gui', ['taskBackgroundColor']),
+    bgStyle() {
+      return { 'background-color': Color(this.taskBackgroundColor).alpha(0.9) }
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -17,7 +27,7 @@ export default {}
   user-select: none;
   height: 100%;
   width: 100%;
-  background-color: rgba($color: #ccc, $alpha: 0.9);
+  transition: 1.2s;
   &__header {
     .header {
       &__title {
