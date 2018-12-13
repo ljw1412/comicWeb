@@ -1,8 +1,24 @@
 const namespaced = true
 
 const state = {
+  // 任务树
   taskTree: {
     TaskDetail: { tasks: [] }
+  },
+  // 桌面
+  desktop: {
+    // 主题色
+    themeColor: '',
+    background: 'http://localhost:3000/image/bg/windows10.jpeg'
+  },
+  // 任务栏
+  taskbar: {
+    // 使用主题色
+    useThemeColor: true,
+    // 背景色
+    bgColor: '',
+    // 透明度
+    opacity: 0.5
   }
 }
 

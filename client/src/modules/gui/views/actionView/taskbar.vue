@@ -1,5 +1,7 @@
 <template>
   <div class="taskbar">
+    <div class="taskbar__background"
+      :style="{'background-color':bgColor,opacity}"></div>
     <div class="taskbar__menu">菜单</div>
     <div class="taskbar__tasks">
       <template v-for="(item,index) of taskList">
@@ -47,7 +49,7 @@ export default {
   },
 
   computed: {
-    ...mapState('gui', ['taskTree']),
+    ...mapState('gui', ['taskTree', 'taskbar', 'desktop']),
     notificationsIcon() {
       return this.messageCount ? 'md-notifications' : 'md-notifications-outline'
     },
@@ -61,6 +63,16 @@ export default {
           name: item,
           list: this.taskTree[item].tasks
         }))
+    },
+    bgColor() {
+      return (
+        (this.taskbar.useThemeColor
+          ? this.desktop.themeColor
+          : this.taskbar.bgColor) || 'rgba(0, 179, 0)'
+      )
+    },
+    opacity() {
+      return this.taskbar.opacity
     }
   },
 
@@ -112,8 +124,14 @@ export default {
   width: 100%;
   flex-shrink: 0;
   height: 40px;
-  background-color: rgba(0, 179, 0, 0.6);
   display: flex;
+  &__background {
+    position: absolute;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 179, 0, 0.6);
+  }
   &__menu {
     flex-shrink: 0;
     width: 50px;

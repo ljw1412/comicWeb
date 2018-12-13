@@ -1,25 +1,18 @@
 <template>
-  <div class="home">
-    <div class="home__main">
-      <div class="main__warpper"
-        @contextmenu.prevent="onContextmenu"></div>
-      <contextmenu v-show="contextmenu.isShow"
-        ref="contextmenu"
-        :x="contextmenu.x"
-        :y="contextmenu.y"></contextmenu>
-      <task-layer ref="taskLayer"
-        @close="onTaskClose">
-        <search-modal></search-modal>
-        <detail-modal v-for="(item,index) of taskDetailList"
-          :key="index"
-          :data="item.config"></detail-modal>
-        <!-- <modal-view resizable
-          :window-height="view.height"
-          :window-width="view.width"
-          :body-style="{'background-color':'#ccc'}"> 
-        </modal-view>-->
-      </task-layer>
-    </div>
+  <div class="gui">
+    <div class="desktop"
+      @contextmenu.prevent="onContextmenu"></div>
+    <contextmenu v-show="contextmenu.isShow"
+      ref="contextmenu"
+      :x="contextmenu.x"
+      :y="contextmenu.y"></contextmenu>
+    <task-layer ref="taskLayer"
+      @close="onTaskClose">
+      <search-modal></search-modal>
+      <detail-modal v-for="(item,index) of taskDetailList"
+        :key="index"
+        :data="item.config"></detail-modal>
+    </task-layer>
     <action-view></action-view>
   </div>
 </template>
@@ -46,7 +39,7 @@ export default {
   },
 
   computed: {
-    ...mapState('gui', ['taskTree']),
+    ...mapState('gui', ['taskTree', 'desktop']),
     taskDetailList() {
       if (this.taskTree['TaskDetail']) {
         return this.taskTree['TaskDetail'].tasks
@@ -122,17 +115,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.home {
+.gui {
   height: 100%;
   max-height: 100%;
   overflow: hidden;
-  &__main {
+  .desktop {
     height: 100%;
     width: 100%;
-    .main__warpper {
-      width: 100%;
-      height: 100%;
-    }
   }
 }
 </style>
