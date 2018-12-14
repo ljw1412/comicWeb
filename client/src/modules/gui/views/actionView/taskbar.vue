@@ -2,7 +2,9 @@
   <div class="taskbar">
     <div class="taskbar__background"
       :style="{'background-color':taskBackgroundColor,opacity}"></div>
+    <!-- 菜单栏 -->
     <div class="taskbar__menu">菜单</div>
+    <!-- 任务栏 -->
     <div class="taskbar__tasks">
       <template v-for="(item,index) of taskList">
         <div v-if="!item.isClose"
@@ -11,23 +13,28 @@
           @click="onTaskClick(item)">{{item.name}}</div>
       </template>
     </div>
+    <!-- 状态栏 -->
     <div class="taskbar__status">
-      <div class="status__notifications"
-        @click="onNotificationsClick">
-        <Badge dot
-          :count="messageCount"
-          :overflow-count="9"
-          :offset="[4,4]">
-          <Icon :type="notificationsIcon"
-            size="22"></Icon>
-        </Badge>
-      </div>
+
     </div>
+    <!-- 时间日期 -->
     <div class="taskbar__date-time"
       @click="onDateTimeClick">
       <div>{{nTime}}</div>
       <div>{{nDate}}</div>
     </div>
+    <!-- 通知图标 -->
+    <div class="taskbar__notifications"
+      @click="onNotificationsClick">
+      <Badge dot
+        :count="messageCount"
+        :overflow-count="9"
+        :offset="[4,4]">
+        <Icon :type="notificationsIcon"
+          size="22"></Icon>
+      </Badge>
+    </div>
+    <!-- 返回桌面 -->
     <div class="taskbar__back-home"></div>
   </div>
 </template>
@@ -99,6 +106,7 @@ export default {
 <style lang="scss" scoped>
 // 与鼠标的互动
 @mixin interact {
+  transition-duration: 0.5s;
   &:hover {
     background: rgba(255, 255, 255, 0.2);
   }
@@ -125,6 +133,8 @@ export default {
     width: 100%;
     height: 100%;
     transition-duration: 1.2s;
+    box-sizing: border-box;
+    box-shadow: 0 0 5px rgba($color: #fff, $alpha: 0.2);
   }
   &__menu {
     flex-shrink: 0;
@@ -144,14 +154,6 @@ export default {
     color: #fff;
     display: flex;
     align-items: center;
-    .status__notifications {
-      padding: 9px 5px;
-      height: 100%;
-      @include interact;
-      .item__badge {
-        font-size: 10px;
-      }
-    }
   }
   &__date-time {
     font-family: 'Microsoft YaHei';
@@ -161,8 +163,18 @@ export default {
     padding: 0 5px;
     @include interact;
   }
+  &__notifications {
+    padding: 9px 5px;
+    height: 100%;
+    color: #fff;
+    text-align: center;
+    @include interact;
+    .item__badge {
+      font-size: 10px;
+    }
+  }
   &__back-home {
-    border-left: 1px solid rgba(0, 0, 0, 0.1);
+    border-left: 1px solid rgba($color: #fff, $alpha: 0.2);
     width: 10px;
     @include interact;
   }

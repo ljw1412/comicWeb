@@ -13,6 +13,7 @@
       <detail-modal v-for="(item,index) of taskDetailList"
         :key="index"
         :data="item.config"></detail-modal>
+      <setting-modal splashScreen></setting-modal>
     </task-layer>
     <action-view></action-view>
   </div>

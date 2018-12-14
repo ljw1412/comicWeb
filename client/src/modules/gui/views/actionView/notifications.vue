@@ -28,6 +28,7 @@ export default {
   height: 100%;
   width: 100%;
   transition: 1.2s;
+  box-shadow: 0 0 5px rgba($color: #fff, $alpha: 0.1);
   &__header {
     .header {
       &__title {

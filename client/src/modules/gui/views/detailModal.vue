@@ -3,7 +3,7 @@
     name="TaskDetail"
     class="detail-modal"
     resizable
-    icon="ios-search"
+    icon=""
     :close="isClose"
     :title="title"
     :windowHeight="windowHeight"
@@ -13,6 +13,7 @@
     :height="height"
     :x="x"
     :y="y"
+    :splashScreen="splashScreen"
     @resize="onModalResize">
     <transition slot="bodyTop"
       name="fade">
@@ -113,8 +114,6 @@ export default {
   data() {
     return {
       title: '详情页',
-      visible: true,
-      isClose: false,
       bodyDOM: null,
       // 是否展开介绍
       isDisplayDescription: false,
@@ -194,6 +193,7 @@ export default {
       immediate: true,
       handler(val) {
         if (val) {
+          this.title = val.name
           this.comic.website = val.website
           this.comic.cover = val.cover
           this.comic.name = val.name

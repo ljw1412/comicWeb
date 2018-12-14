@@ -14,7 +14,16 @@ export default {
     height: { type: Number, default: 400 },
     // modal 初始化时的位置
     x: { type: Number, default: 0 },
-    y: { type: Number, default: 0 }
+    y: { type: Number, default: 0 },
+    // 是否需要启动页
+    splashScreen: Boolean
+  },
+
+  data() {
+    return {
+      visible: true,
+      isClose: false
+    }
   },
 
   methods: {

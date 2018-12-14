@@ -13,6 +13,7 @@
     :height="height"
     :x="x"
     :y="y"
+    :splashScreen="splashScreen"
     @resize="onModalResize">
     <div slot="bodyTop"
       class="search__input">
@@ -59,8 +60,6 @@ export default {
   data() {
     return {
       title: '搜索',
-      visible: true,
-      isClose: false,
       list: [],
       currentComic: {},
       website: '',

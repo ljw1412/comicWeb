@@ -33,22 +33,32 @@
             @click="onCloseClick"></div>
         </div>
       </div>
-      <div class="modal-view__body-top">
-        <slot name="bodyTop"></slot>
-      </div>
-      <div class="modal-view__body"
-        :style="bodyStyle">
-        <div ref="body"
-          class="modal-view__body-warpper">
-          <slot></slot>
-        </div>
-      </div>
-      <div v-if="$slots.footer"
-        class="modal-view__footer">
-        <slot name="footer"></slot>
-      </div>
-      <div v-if="resizable"
-        class="modal-view__resize-icon"></div>
+      <transition enter-active-class="fadeIn"
+        leave-active-class="fadeOut">
+        <div v-if="splashScreen"
+          class="modal-view__splash"
+          :style="titleBarStyles"></div>
+        <template v-else>
+          <div class="modal-view__body">
+            <div class="body__top">
+              <slot name="bodyTop"></slot>
+            </div>
+            <div class="body__container"
+              :style="bodyStyle">
+              <div ref="body"
+                class="body__warpper">
+                <slot></slot>
+              </div>
+            </div>
+          </div>
+          <div v-if="$slots.footer"
+            class="modal-view__footer">
+            <slot name="footer"></slot>
+          </div>
+          <div v-if="resizable"
+            class="modal-view__resize-icon"></div>
+        </template>
+      </transition>
     </div>
   </div>
 </template>
@@ -85,7 +95,9 @@ export default {
     bodyStyle: Object,
     // 头部的样式
     headerStyle: Object,
-    close: Boolean
+    close: Boolean,
+    // 是否需要启动页
+    splashScreen: Boolean
   },
 
   computed: {
@@ -378,17 +390,22 @@ export default {
 
   mounted() {
     this.rect = this.getModalRect()
+    if (this.splashScreen) {
+      setTimeout(() => {
+        this.splashScreen = false
+      }, 3000)
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+$broder-color: #9f9f9f;
 .modal-view {
   position: absolute;
   width: 100px;
   box-sizing: border-box;
-  // border: 1px solid rgba($color: #9f9f9f, $alpha: 0.5);
-  border-top-width: 0;
+  box-shadow: 0 10px 50px rgba($color: #000000, $alpha: 0.7);
   display: flex;
   flex-direction: column;
 
@@ -396,8 +413,7 @@ export default {
     position: relative;
     flex-shrink: 0;
     box-sizing: border-box;
-    transition: 1.2s;
-    border: 1px solid rgba($color: #fff, $alpha: 0.3);
+    transition-duration: 1.2s;
     height: 30px;
     display: flex;
     * {
@@ -434,6 +450,9 @@ export default {
         i {
           margin-top: 2px;
           font-size: 16px;
+        }
+        span {
+          padding-left: 5px;
         }
       }
 
@@ -498,27 +517,35 @@ export default {
     }
   }
 
-  &__body-top {
-    position: relative;
-    border-width: 0 1px;
-    border-style: solid;
-    border-color: #9f9f9f;
+  &__splash {
+    height: 100%;
+    background: #ccc;
+    transition-duration: 1.2s;
   }
 
   &__body {
-    flex-grow: 1;
-    min-height: 100px;
-    height: 0;
-    background-color: #fff;
-    padding-bottom: 3px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     border-width: 0 1px 1px 1px;
     border-style: solid;
-    border-color: #9f9f9f;
-  }
-
-  &__body-warpper {
-    height: 100%;
-    overflow-y: auto;
+    border-color: $broder-color;
+    .body {
+      &__top {
+        position: relative;
+      }
+      &__container {
+        flex-grow: 1;
+        min-height: 100px;
+        height: 0;
+        background-color: #fff;
+        padding-bottom: 3px;
+      }
+      &__warpper {
+        height: 100%;
+        overflow-y: auto;
+      }
+    }
   }
 
   &__resize-icon {
@@ -527,7 +554,7 @@ export default {
     right: 2px;
     border-style: solid;
     border-width: 0 1px 1px 0;
-    border-color: #9f9f9f;
+    border-color: $broder-color;
     width: 8px;
     height: 8px;
   }
