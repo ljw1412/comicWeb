@@ -1,30 +1,38 @@
-<template>
-  <div v-if="!isClose">
+/* 窗体 */
+<template v-if="!isClose">
+  <div class="v-form-wrapper"
+    :class="{'v-form-wrapper--resizable':resizable && !splashScreenShow}"
+    :style="[styles,mouseStyles]"
+    @mousemove="onFormMousemove"
+    @mousedown="onFormMousedown">
+    <transition leave-active-class="fadeOut">
+      <div v-if="splashScreenShow"
+        class="v-form__splash"
+        :style="{ 'background-color': taskBackgroundColor }"></div>
+    </transition>
     <div v-show="visible"
-      ref="modal"
-      class="modal-view"
-      :style="[styles,mouseStyles]"
-      @mousemove="onModalMousemove"
-      @mousedown="onModalMousedown">
-      <div class="modal-view__header"
-        :style="[headerStyle,titleBarStyles]"
+      ref="vForm"
+      class="v-form">
+      <!-- 标题栏 -->
+      <div class="v-form__title-bar"
+        :style="[titleBarStyles]"
         @mousedown="onDragStart">
         <div v-if="backable"
-          class="header__back"
+          class="title-bar__back"
           @click.prevent="onBackClick">
           <Icon class="back__icon"
             type="md-arrow-back"
             color="#fff"
             size="18" />
         </div>
-        <div class="header__title">
+        <div class="title-bar__title">
           <slot name="icon">
             <Icon v-if="icon"
               :type="icon" />
           </slot>
           <span>{{title}}</span>
         </div>
-        <div class="header__handle">
+        <div class="title-bar__handle">
           <div class="handle__minimize"
             @click="onMinimizeClick"></div>
           <div class="handle__maximize"
@@ -33,30 +41,27 @@
             @click="onCloseClick"></div>
         </div>
       </div>
-      <transition leave-active-class="fadeOut">
-        <div v-if="splashScreenShow"
-          class="modal-view__splash"
-          :style="titleBarStyles"></div>
-      </transition>
-      <div v-if="!splashScreenShow"
-        class="modal-view__body">
-        <div class="body__top">
-          <slot name="bodyTop"></slot>
-        </div>
-        <div class="body__container"
-          :style="bodyStyle">
-          <div ref="body"
-            class="body__warpper">
+      <transition enter-active-class="fadeIn">
+        <div v-if="!splashScreenShow"
+          class="v-form__container">
+          <!-- 菜单栏 -->
+          <div v-if="$slots.menu"
+            class="v-form__menu-bar">
+            <slot name="menu"></slot>
+          </div>
+          <!-- 主体 -->
+          <div ref="main"
+            class="v-form__main"
+            :style="mainStyle">
             <slot></slot>
           </div>
+          <!-- 状态栏 -->
+          <div v-if="$slots.status"
+            class="from__status-bar">
+            <slot name="status"></slot>
+          </div>
         </div>
-      </div>
-      <div v-if="$slots.footer && !splashScreenShow"
-        class="modal-view__footer">
-        <slot name="footer"></slot>
-      </div>
-      <div v-if="resizable && !splashScreenShow"
-        class="modal-view__resize-icon"></div>
+      </transition>
     </div>
   </div>
 </template>
@@ -67,22 +72,22 @@ import viewIndex from './ViewIndex'
 import { mapState, mapGetters } from 'vuex'
 export default {
   props: {
-    name: { type: String, default: 'ModalView' },
+    name: { type: String, default: 'FormView' },
     value: { type: Boolean, default: true },
     icon: String,
     title: String,
-    // modal的层级
+    // form的层级
     zIndex: { type: Number, default: 100 },
     // 浏览器有效的宽高
     windowWidth: Number,
     windowHeight: Number,
-    // modal最小的宽高
+    // form最小的宽高
     minWidth: { type: Number, default: 300 },
     minHeight: { type: Number, default: 400 },
-    // modal 初始化时的宽高
+    // form 初始化时的宽高
     width: { type: Number, default: 300 },
     height: { type: Number, default: 400 },
-    // modal 初始化时的位置
+    // form 初始化时的位置
     x: { type: Number, default: 0 },
     y: { type: Number, default: 0 },
     // 是否可以调节大小
@@ -90,9 +95,9 @@ export default {
     // 可以返回上一级
     backable: Boolean,
     // body的样式
-    bodyStyle: Object,
+    mainStyle: { type: Object, default: () => ({}) },
     // 头部的样式
-    headerStyle: Object,
+    titleBarStyle: { type: Object, default: () => ({}) },
     close: Boolean,
     // 是否需要启动页
     splashScreen: Boolean
@@ -117,7 +122,10 @@ export default {
       return { cursor: this.resizeData.cursor }
     },
     titleBarStyles() {
-      return { 'background-color': this.taskBackgroundColor }
+      return Object.assign(
+        { 'background-color': this.taskBackgroundColor },
+        this.titleBarStyle
+      )
     }
   },
 
@@ -143,26 +151,26 @@ export default {
         height: this.height
       },
       rect: {},
-      splashScreenShow: false
+      splashScreenShow: this.splashScreen
     }
   },
 
   methods: {
     // 增加弹窗层级
-    increaseModalIndex() {
+    increaseFormIndex() {
       viewIndex.indexIncrease()
       this.view.index = viewIndex.getIndex()
     },
 
-    getModalRect() {
-      const modal = this.$refs.modal
-      const rect = modal.getBoundingClientRect()
+    getFormRect() {
+      const form = this.$refs.vForm
+      const rect = form.getBoundingClientRect()
       // this.view.width = rect.width
       // this.view.height = rect.height
       return rect
     },
     checkEdgeArea(event) {
-      const rect = this.getModalRect()
+      const rect = this.getFormRect()
 
       const x = event.layerX
       const y = event.layerY
@@ -175,7 +183,7 @@ export default {
       return direction
     },
     // 当鼠标在视图上移动时,如果在边缘修改鼠标样式
-    onModalMousemove(event) {
+    onFormMousemove(event) {
       if (!this.resizable) return false
       const direction = this.checkEdgeArea(event)
       if (['left', 'right'].includes(direction)) {
@@ -192,8 +200,8 @@ export default {
       this.resizeData.cursor = ''
     },
     // 当鼠标按下时，如果是边缘开始缩放拖拽
-    onModalMousedown(event) {
-      this.increaseModalIndex()
+    onFormMousedown(event) {
+      this.increaseFormIndex()
       if (!this.resizable || event.button) return false
       this.resizeData.direction = this.checkEdgeArea(event)
       if (!this.resizeData.direction) return
@@ -204,7 +212,7 @@ export default {
     },
 
     onResizing(event) {
-      const rect = this.getModalRect()
+      const rect = this.getFormRect()
       switch (this.resizeData.direction) {
         case 'bottom':
           this.view.height = event.y - rect.top
@@ -246,7 +254,7 @@ export default {
       this.resizeData.resizing = false
       off(window, 'mousemove', this.onResizing)
       off(window, 'mouseup', this.onResizeEnd)
-      this.$emit('resize', this.getModalRect())
+      this.$emit('resize', this.getFormRect())
     },
 
     // 拖拽时检查位置的合理性
@@ -257,7 +265,7 @@ export default {
       if (this.dragData.y < 0) {
         this.dragData.y = 0
       }
-      const rect = this.getModalRect()
+      const rect = this.getFormRect()
 
       const validWidth =
         window.innerWidth ||
@@ -277,7 +285,7 @@ export default {
     // 当头部被点击时，开始拖拽
     onDragStart(event) {
       if (event.button) return false
-      const rect = this.getModalRect()
+      const rect = this.getFormRect()
       // 头部操作区不可以拖拽
       if (
         (this.backable && event.clientX - rect.x < 35) ||
@@ -293,7 +301,7 @@ export default {
 
       this.dragData.dragging = true
 
-      // this.increaseModalIndex()
+      // this.increaseFormIndex()
       // 将鼠标拖动事件和抬起事件监听于全局
       on(window, 'mousemove', this.onDragging)
       on(window, 'mouseup', this.onDragEnd)
@@ -372,7 +380,7 @@ export default {
     },
     visible(val) {
       if (val) {
-        this.increaseModalIndex()
+        this.increaseFormIndex()
       }
     },
     windowWidth(val) {
@@ -387,12 +395,8 @@ export default {
     }
   },
 
-  created() {
-    this.splashScreenShow = this.splashScreen
-  },
-
   mounted() {
-    this.rect = this.getModalRect()
+    this.rect = this.getFormRect()
     if (this.splashScreenShow) {
       setTimeout(() => {
         this.splashScreenShow = false
@@ -404,25 +408,55 @@ export default {
 
 <style lang="scss" scoped>
 $broder-color: #9f9f9f;
-.modal-view {
+
+* {
+  user-select: none;
+}
+
+.v-form-wrapper {
   position: absolute;
   width: 100px;
   box-sizing: border-box;
   box-shadow: 0 10px 50px rgba($color: #000000, $alpha: 0.7);
+
+  &--resizable {
+    &::after {
+      content: ' ';
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+      border-style: solid;
+      border-width: 0 1px 1px 0;
+      border-color: $broder-color;
+      width: 8px;
+      height: 8px;
+    }
+  }
+}
+
+.v-form {
+  position: relative;
+  height: 100%;
   display: flex;
   flex-direction: column;
 
-  &__header {
+  &__splash {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    transition-duration: 1.2s;
+  }
+
+  &__title-bar {
     position: relative;
+    display: flex;
     flex-shrink: 0;
+    height: 30px;
     box-sizing: border-box;
     transition-duration: 1.2s;
-    height: 30px;
-    display: flex;
-    * {
-      user-select: none;
-    }
-    .header {
+    .title-bar {
       &__back {
         background-color: blue;
         flex-shrink: 0;
@@ -508,9 +542,11 @@ $broder-color: #9f9f9f;
               height: 1px;
               background-color: #fff;
             }
+
             &::before {
               transform: translate(-50%, -50%) rotate(45deg);
             }
+
             &::after {
               transform: translate(-50%, -50%) rotate(-45deg);
             }
@@ -520,46 +556,22 @@ $broder-color: #9f9f9f;
     }
   }
 
-  &__splash {
-    height: 100%;
-    background: #ccc;
-  }
-
-  &__body {
+  &__container {
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
-    height: 100%;
-    border-width: 0 1px 1px 1px;
-    border-style: solid;
-    border-color: $broder-color;
-
-    .body {
-      &__top {
-        position: relative;
-      }
-      &__container {
-        flex-grow: 1;
-        min-height: 100px;
-        height: 0;
-        background-color: #fff;
-        padding-bottom: 3px;
-      }
-      &__warpper {
-        height: 100%;
-        overflow-y: auto;
-      }
-    }
+    animation-delay: 0.2s;
   }
 
-  &__resize-icon {
-    position: absolute;
-    bottom: 2px;
-    right: 2px;
-    border-style: solid;
-    border-width: 0 1px 1px 0;
-    border-color: $broder-color;
-    width: 8px;
-    height: 8px;
+  &__menu-bar,
+  &__main,
+  &__status-bar {
+    position: relative;
+  }
+
+  &__main {
+    flex-grow: 1;
+    flex-shrink: 0;
   }
 }
 </style>
