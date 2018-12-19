@@ -1,7 +1,7 @@
 <template>
-  <modal-view v-model="visible"
+  <v-form v-model="visible"
     name="TaskDetail"
-    class="detail-modal"
+    class="detail-form"
     resizable
     icon=""
     :close="isClose"
@@ -14,7 +14,7 @@
     :x="x"
     :y="y"
     :splashScreen="splashScreen"
-    @resize="onModalResize">
+    @resize="onFormResize">
     <transition slot="bodyTop"
       name="fade">
       <div v-if="isDisplayTopDetail"
@@ -77,21 +77,21 @@
         </div>
       </div>
     </div>
-  </modal-view>
+  </v-form>
 </template>
 
 <script>
-import ModalView from '../../../components/modalView'
-import customModal from '../mixins/customModal.js'
+import VForm from '@/components/vForm'
+import customForm from '../../../mixins/customForm.js'
 import { mapState } from 'vuex'
-import { scrollTop, getScrollBarSize } from '../../../utils/assist.js'
-import { on, off } from '../../../utils/dom.js'
+import { scrollTop, getScrollBarSize } from '@/utils/assist.js'
+import { on, off } from '@/utils/dom.js'
 
 export default {
-  mixins: [customModal],
+  mixins: [customForm],
 
   components: {
-    ModalView
+    VForm
   },
 
   computed: {
@@ -183,7 +183,7 @@ export default {
       }
     },
 
-    onModalResize(e) {
+    onFormResize(e) {
       this.self.width = e.width
     }
   },

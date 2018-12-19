@@ -561,6 +561,7 @@ $broder-color: #9f9f9f;
     display: flex;
     flex-direction: column;
     animation-delay: 0.2s;
+    padding-bottom: 3px;
   }
 
   &__menu-bar,
@@ -572,6 +573,8 @@ $broder-color: #9f9f9f;
   &__main {
     flex-grow: 1;
     flex-shrink: 0;
+    height: 0;
+    overflow-y: auto;
   }
 }
 </style>

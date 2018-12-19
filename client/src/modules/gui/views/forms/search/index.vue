@@ -1,7 +1,7 @@
 <template>
-  <modal-view v-model="visible"
+  <v-form v-model="visible"
     name="TaskSearch"
-    class="search-modal"
+    class="search-form"
     resizable
     icon="ios-search"
     :close="isClose"
@@ -14,8 +14,8 @@
     :x="x"
     :y="y"
     :splashScreen="splashScreen"
-    @resize="onModalResize">
-    <div slot="bodyTop"
+    @resize="onFormResize">
+    <div slot="menu"
       class="search__input">
       <i-input class="search__input"
         search
@@ -41,19 +41,19 @@
         :description="item.description"
         @click.native="onComicItemClick(item)"></comic-item>
     </div>
-  </modal-view>
+  </v-form>
 </template>
 
 <script>
-import ModalView from '../../../components/modalView'
-import ComicItem from '../components/comicItem'
-import customModal from '../mixins/customModal.js'
+import VForm from '@/components/vForm'
+import ComicItem from './components/comicItem'
+import customForm from '../../../mixins/customForm.js'
 
 export default {
-  mixins: [customModal],
+  mixins: [customForm],
 
   components: {
-    ModalView,
+    VForm,
     ComicItem
   },
 
@@ -92,7 +92,7 @@ export default {
       this.newTask('TaskDetail', item)
     },
 
-    onModalResize(e) {
+    onFormResize(e) {
       console.log(e)
     }
   },
@@ -117,11 +117,9 @@ export default {
     background-color: #fff;
   }
   &__result {
-    overflow-y: auto;
-    height: 100%;
-    margin-right: 2px;
     display: flex;
     flex-wrap: wrap;
+    padding: 0 3px;
   }
 }
 </style>

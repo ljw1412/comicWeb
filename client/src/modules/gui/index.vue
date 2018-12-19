@@ -9,13 +9,13 @@
       :y="contextmenu.y"></contextmenu>
     <task-layer ref="taskLayer"
       @close="onTaskClose">
-      <v-form resizable
-        splashScreen></v-form>
-      <!-- <search-modal></search-modal>
-      <detail-modal v-for="(item,index) of taskDetailList"
+      <!-- <v-form resizable
+        splashScreen></v-form> -->
+      <!-- <search-form></search-form> -->
+      <!-- <detail-form v-for="(item,index) of taskDetailList"
         :key="index"
-        :data="item.config"></detail-modal>
-      <setting-modal splashScreen></setting-modal> -->
+        :data="item.config"></detail-form> -->
+      <setting-form></setting-form>
     </task-layer>
     <action-view></action-view>
   </div>
@@ -24,12 +24,11 @@
 <script>
 import Contextmenu from '../../components/menu/contextmenu'
 import ActionView from './views/actionView'
-import VForm from '../../components/vForm'
-import ModalView from '../../components/modalView'
 import TaskLayer from './views/taskLayer'
-import SearchModal from './views/searchModal'
-import DetailModal from './views/detailModal'
-import SettingModal from './views/settingModal'
+import VForm from '../../components/vForm'
+import SearchForm from './views/forms/search'
+import DetailForm from './views/forms/detail'
+import SettingForm from './views/forms/setting'
 
 import { on, off } from '../../utils/dom.js'
 import { mapState, mapMutations } from 'vuex'
@@ -38,14 +37,13 @@ import themeColor from '../../utils/themeColor.js'
 
 export default {
   components: {
-    VForm,
-    ModalView,
     Contextmenu,
     ActionView,
     TaskLayer,
-    SearchModal,
-    DetailModal,
-    SettingModal
+    VForm,
+    SearchForm,
+    DetailForm,
+    SettingForm
   },
 
   computed: {
