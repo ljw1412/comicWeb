@@ -1,16 +1,12 @@
 <template>
   <div class="gui">
-    <div class="desktop"
-      @contextmenu.prevent="onContextmenu"
-      :style="desktopStyle"></div>
+    <desktop :style="desktopStyle"></desktop>
     <contextmenu v-show="contextmenu.isShow"
       ref="contextmenu"
       :x="contextmenu.x"
       :y="contextmenu.y"></contextmenu>
     <task-layer ref="taskLayer"
       @close="onTaskClose">
-      <!-- <v-form resizable
-        splashScreen></v-form> -->
       <!-- <search-form></search-form> -->
       <!-- <detail-form v-for="(item,index) of taskDetailList"
         :key="index"
@@ -23,6 +19,7 @@
 
 <script>
 import Contextmenu from '../../components/menu/contextmenu'
+import Desktop from './views/desktop'
 import ActionView from './views/actionView'
 import TaskLayer from './views/taskLayer'
 import VForm from '../../components/vForm'
@@ -38,6 +35,7 @@ import themeColor from '../../utils/themeColor.js'
 export default {
   components: {
     Contextmenu,
+    Desktop,
     ActionView,
     TaskLayer,
     VForm,
@@ -152,12 +150,6 @@ export default {
   height: 100%;
   max-height: 100%;
   overflow: hidden;
-  .desktop {
-    height: 100%;
-    width: 100%;
-    background-size: cover;
-    background-repeat: no-repeat;
-  }
 }
 </style>
 
