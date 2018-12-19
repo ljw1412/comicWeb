@@ -8,7 +8,11 @@
     <transition leave-active-class="fadeOut">
       <div v-if="splashScreenShow"
         class="v-form__splash"
-        :style="{ 'background-color': taskBackgroundColor }"></div>
+        :style="{ 'background-color': taskBackgroundColor }">
+        <Icon v-if="icon"
+          class="splash__icon"
+          :type="icon" />
+      </div>
     </transition>
     <div v-show="visible"
       ref="vForm"
@@ -447,6 +451,14 @@ $broder-color: #9f9f9f;
     top: 0;
     left: 0;
     transition-duration: 1.2s;
+    .splash__icon {
+      color: #fff;
+      font-size: 140px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
   }
 
   &__title-bar {

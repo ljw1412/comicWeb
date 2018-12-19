@@ -27,12 +27,25 @@ export default {
     VForm
   },
 
+  props: {
+    // modal最小的宽高
+    minWidth: { type: Number, default: 600 },
+    minHeight: { type: Number, default: 400 },
+    // modal 初始化时的宽高
+    width: { type: Number, default: 600 },
+    height: { type: Number, default: 400 }
+  },
+
+  computed: {},
+
   data() {
-    return { title: '设置' }
+    return {
+      title: '设置'
+    }
   },
 
   methods: {
-    onFormResize(e) {}
+    onModalResize(e) {}
   },
 
   beforeCreate() {
