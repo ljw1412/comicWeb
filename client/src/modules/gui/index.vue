@@ -1,10 +1,6 @@
 <template>
   <div class="gui">
     <desktop :style="desktopStyle"></desktop>
-    <contextmenu v-show="contextmenu.isShow"
-      ref="contextmenu"
-      :x="contextmenu.x"
-      :y="contextmenu.y"></contextmenu>
     <task-layer ref="taskLayer"
       @close="onTaskClose">
       <!-- <search-form></search-form> -->
@@ -18,7 +14,6 @@
 </template>
 
 <script>
-import Contextmenu from '../../components/menu/contextmenu'
 import Desktop from './views/desktop'
 import ActionView from './views/actionView'
 import TaskLayer from './views/taskLayer'
@@ -34,7 +29,6 @@ import themeColor from '../../utils/themeColor.js'
 
 export default {
   components: {
-    Contextmenu,
     Desktop,
     ActionView,
     TaskLayer,
@@ -66,11 +60,6 @@ export default {
       view: {
         width: 0,
         height: 0
-      },
-      contextmenu: {
-        x: 0,
-        y: 0,
-        isShow: true
       }
     }
   },
@@ -112,8 +101,15 @@ export default {
       img.crossOrigin = 'Anonymous'
       img.src = this.desktop.imageUrl
       img.onload = () => {
+        // 主题色获取后调教
         themeColor(img).then(data => {
-          const primaryColor = Color.rgb(data[0])
+          let primaryColor = Color.rgb(data[0])
+          if (primaryColor.isLight()) {
+            primaryColor = primaryColor.darken(1)
+          }
+          if (primaryColor.isDark()) {
+            primaryColor = primaryColor.lighten(1)
+          }
           this.SET_THEME_COLOR(primaryColor.hex())
         })
       }

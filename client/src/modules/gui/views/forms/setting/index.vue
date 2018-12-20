@@ -45,7 +45,7 @@ export default {
   },
 
   methods: {
-    onModalResize(e) {}
+    onFormResize(e) {}
   },
 
   beforeCreate() {

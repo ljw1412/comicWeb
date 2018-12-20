@@ -1,11 +1,42 @@
 <template>
   <div class="desktop"
     @contextmenu.prevent="onContextmenu">
+    <contextmenu v-show="contextmenu.isShow"
+      ref="contextmenu"
+      :x="contextmenu.x"
+      :y="contextmenu.y"></contextmenu>
+
   </div>
 </template>
 
 <script>
-export default {}
+import Contextmenu from '../../../../components/menu/contextmenu'
+
+export default {
+  components: {
+    Contextmenu
+  },
+
+  data() {
+    return {
+      contextmenu: {
+        x: 0,
+        y: 0,
+        isShow: true
+      }
+    }
+  },
+
+  methods: {
+    onContextmenu(e) {
+      console.log(e)
+
+      this.contextmenu.x = e.x
+      this.contextmenu.y = e.y
+      console.log(this.$refs.taskLayer)
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
