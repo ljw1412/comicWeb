@@ -5,16 +5,24 @@
       ref="contextmenu"
       :x="contextmenu.x"
       :y="contextmenu.y"></contextmenu>
-
+    <div class="desktop__shortcut">
+      <shortcut v-for="(item,index) of shortcutList"
+        :key="index"
+        :index="index"
+        :icon="item.icon"
+        :name="item.name"></shortcut>
+    </div>
   </div>
 </template>
 
 <script>
 import Contextmenu from '../../../../components/menu/contextmenu'
+import Shortcut from './components/shortcut'
 
 export default {
   components: {
-    Contextmenu
+    Contextmenu,
+    Shortcut
   },
 
   data() {
@@ -22,8 +30,34 @@ export default {
       contextmenu: {
         x: 0,
         y: 0,
-        isShow: true
-      }
+        isShow: false
+      },
+      shortcutList: [
+        {
+          icon: 'http://localhost:3000/image/bg/windows10.jpeg',
+          name: '测试中文字啊啊湿答答SD大傻叼'
+        },
+        {
+          icon: 'http://localhost:3000/image/bg/windows10.jpeg',
+          name: '测试中文字啊啊湿答答SD大傻叼'
+        },
+        {
+          icon: 'http://localhost:3000/image/bg/windows10.jpeg',
+          name: '测试中文字啊啊湿答答SD大傻叼'
+        },
+        {
+          icon: 'http://localhost:3000/image/bg/windows10.jpeg',
+          name: '测试中文字啊啊湿答答SD大傻叼'
+        },
+        {
+          icon: 'http://localhost:3000/image/bg/windows10.jpeg',
+          name: '测试中文字啊啊湿答答SD大傻叼'
+        },
+        {
+          icon: 'http://localhost:3000/image/bg/windows10.jpeg',
+          name: '测试中文字啊啊湿答答SD大傻叼'
+        }
+      ]
     }
   },
 
@@ -40,10 +74,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+* {
+  user-select: none;
+}
 .desktop {
   height: 100%;
   width: 100%;
   background-size: cover;
   background-repeat: no-repeat;
+  &__shortcut {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+  }
 }
 </style>

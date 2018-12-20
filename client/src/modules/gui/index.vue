@@ -7,7 +7,7 @@
       <!-- <detail-form v-for="(item,index) of taskDetailList"
         :key="index"
         :data="item.config"></detail-form> -->
-      <setting-form></setting-form>
+      <!-- <setting-form></setting-form> -->
     </task-layer>
     <action-view></action-view>
   </div>
