@@ -65,14 +65,12 @@ export default {
   },
 
   methods: {
-    ...mapMutations('gui', ['UPDATE_TASK', 'SET_THEME_COLOR', 'SET_WALLPAPER']),
-    onContextmenu(e) {
-      console.log(e)
-
-      this.contextmenu.x = e.x
-      this.contextmenu.y = e.y
-      console.log(this.$refs.taskLayer)
-    },
+    ...mapMutations('gui', [
+      'UPDATE_TASK',
+      'SET_THEME_COLOR',
+      'SET_WALLPAPER',
+      'SET_WINDOW_SIZE'
+    ]),
 
     resizeListener() {
       this.view.width =
@@ -83,6 +81,7 @@ export default {
         window.innerHeight ||
         document.documentElement.clientHeight ||
         document.body.clientHeight
+      this.SET_WINDOW_SIZE(this.view)
     },
 
     addResizeListener() {

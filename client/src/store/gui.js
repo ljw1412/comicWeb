@@ -1,6 +1,10 @@
 const namespaced = true
 
 const state = {
+  windowSize: {
+    width: 0,
+    height: 0
+  },
   // 任务树
   taskTree: {
     TaskDetail: { tasks: [] }
@@ -76,6 +80,9 @@ const mutations = {
     }
     desktop.usePure = usePure
     desktop.imageUrl = imageUrl
+  },
+  SET_WINDOW_SIZE({ windowSize }, size) {
+    Object.assign(windowSize, size)
   }
 }
 

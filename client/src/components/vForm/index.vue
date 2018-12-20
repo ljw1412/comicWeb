@@ -109,7 +109,7 @@ export default {
 
   computed: {
     ...mapGetters('gui', ['taskBackgroundColor']),
-    ...mapState('gui', ['taskbar', 'desktop']),
+    ...mapState('gui', ['taskbar', 'desktop', 'windowSize']),
     styles() {
       return {
         zIndex: this.view.index + this.zIndex,
@@ -394,6 +394,13 @@ export default {
     },
     windowHeight(val) {
       if (val) {
+        this.checkVaildPostion()
+      }
+    },
+    // 检查当 window大小变换时窗体的位置合法性
+    windowSize: {
+      deep: true,
+      handler(val) {
         this.checkVaildPostion()
       }
     }
