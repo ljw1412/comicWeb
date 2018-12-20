@@ -1,0 +1,16 @@
+{
+  "name": "zhai",
+  "version": "1.0.0",
+  "main": "main.js",
+  "repository": "https://github.com/ljw1412/comicWeb.git",
+  "author": "ljw1412 <506644791@qq.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev:server": "./server/node_modules/.bin/nodemon server/bin/www",
+    "dev:client": "cd client ; yarn run dev",
+    "dev": "concurrently -n server,client \"yarn run dev:server\" \"yarn run dev:client\" -c white.bgGreen.bold,white.bgBlue.bold"
+  },
+  "devDependencies": {
+    "concurrently": "^4.1.0"
+  }
+}
