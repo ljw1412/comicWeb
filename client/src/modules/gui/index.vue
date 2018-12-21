@@ -103,12 +103,12 @@ export default {
         // 主题色获取后调教
         themeColor(img).then(data => {
           let primaryColor = Color.rgb(data[0])
-          if (primaryColor.isLight()) {
-            primaryColor = primaryColor.darken(1)
-          }
-          if (primaryColor.isDark()) {
-            primaryColor = primaryColor.lighten(1)
-          }
+          // if (primaryColor.isLight()) {
+          //   primaryColor = primaryColor.darken(1)
+          // }
+          // if (primaryColor.isDark()) {
+          //   primaryColor = primaryColor.lighten(1)
+          // }
           this.SET_THEME_COLOR(primaryColor.hex())
         })
       }
