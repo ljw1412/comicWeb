@@ -7,7 +7,7 @@
         <sidebar :list="featureList"></sidebar>
       </div>
       <div class="admin__router-view">
-        <router-view/>
+        <router-view />
       </div>
     </div>
     <skin-picker :visible.sync="isSkinShow"></skin-picker>
@@ -47,6 +47,12 @@ export default {
           componentName: 'progress',
           icon: 'ios-bulb-outline',
           activedIcon: 'ios-bulb'
+        },
+        {
+          label: '爬虫开关',
+          componentName: 'crawler',
+          icon: 'ios-color-wand-outline',
+          activedIcon: 'ios-color-wand'
         }
       ]
     }

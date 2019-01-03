@@ -14,12 +14,23 @@ axios.defaults.headers.post['Content-Type'] =
 axios.defaults.timeout = 10000
 axios.defaults.withCredentials = true
 
+// dispose request parameters
+function disposeParam(method, param) {
+  switch (method) {
+    case 'get':
+      return { params: param }
+    case 'post':
+      return qs.stringify(param)
+  }
+  return param
+}
+
 const callApi = ({ method = 'get', api, param, axiosOptions = {} } = {}) => {
   const $ = axios.create(axiosOptions)
   if (!methodList.includes(method.toLowerCase())) {
     method = methodList[0]
   }
-  param = qs.stringify(param)
+  param = disposeParam(method, param)
   return $[method](api, param)
     .then(data => {
       return Promise.resolve(data.data)

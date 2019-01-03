@@ -64,11 +64,22 @@ router.post('/download', async (ctx, next) => {
   ctx.body = { error: true, errorMsg: '入参有误' }
 })
 
+// 无头浏览器测试页面
 const { test } = require('../src/browser')
 router.post('/test', async (ctx, next) => {
   console.log(ctx.request.body)
   const { url } = ctx.request.body
   ctx.body = await test(url)
+})
+
+const startSpider = require('../src/comic/mangaBox')
+// 爬虫页面
+router.get('/crawler', async ctx => {
+  const { website } = ctx.request.query
+
+  await startSpider(website).then(data => {
+    ctx.body = data
+  })
 })
 
 module.exports = router
