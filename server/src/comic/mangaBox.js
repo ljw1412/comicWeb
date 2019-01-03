@@ -56,14 +56,19 @@ async function getImageList(url) {
   const sourceCode = await browsePage(url)
   const $ = cheerio.load(sourceCode)
   let imageStr = $('script:contains(portrait_img)').html()
-  imageStr = imageStr
+  const imageList = imageStr
     .replace(/[ \n\r]/g, '')
     .replace(/,]/g, ']')
     .match(/\[.*?\]/g)
-  if (imageStr) {
-    return imageStr.map(item => JSON.parse(item))
-  }
-  return []
+  const result = {}
+  imageList.forEach(item => {
+    if (item.includes('/sp/')) {
+      result.portrait = JSON.parse(item)
+    } else {
+      result.landscape = JSON.parse(item)
+    }
+  })
+  return result
 }
 
 const startSpider = async website => {
