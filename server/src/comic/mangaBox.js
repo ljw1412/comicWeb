@@ -1,6 +1,10 @@
 const fetch = require('node-fetch')
-const { Headers } = require('node-fetch')
+const async = require('async')
+const path = require('path')
 const cheerio = require('cheerio')
+const util = require('util')
+const { mkdirsSync, writeFile } = require('../utils/fileUtil')
+
 const homeUrl = 'https://www.mangabox.me'
 
 async function browsePage(url) {
@@ -26,6 +30,7 @@ async function getComicList() {
     .get()
 }
 
+// 获得漫画信息
 async function getComicInfo(url) {
   const sourceCode = await browsePage(url)
   const $ = cheerio.load(sourceCode)
@@ -36,8 +41,12 @@ async function getComicInfo(url) {
   info['@graph'].forEach(item => {
     if (item['@type'] === 'Book') {
       comic.name = item.name
-      comic.author = item.author.map(element => element.name).join()
-      comic.descroption = item.descroption
+      if (item.author instanceof Array) {
+        comic.author = item.author.map(element => element.name).join()
+      } else if (item.author instanceof Object) {
+        comic.author = item.author.name
+      }
+      comic.description = item.description
       comic.cover = item.image
       comic.datePublished = item.datePublished
       comic.url = item.url
@@ -49,6 +58,37 @@ async function getComicInfo(url) {
     }
   })
   return comic
+}
+
+// 并发获得漫画信息
+const mapLimit = util.promisify(async.mapLimit)
+async function getComicInfoAsync(comicList, website) {
+  const result = await mapLimit(comicList, 3, async url => {
+    let message = '',
+      isSuccess = false,
+      comic = {}
+    try {
+      const comicInfo = await getComicInfo(url)
+      const temp = url.match(/reader\/(\w+)\/episodes/)
+      if (temp && temp.length > 1) {
+        const comicId = temp[1]
+        comic = comicInfo
+        console.log(comicId)
+        const filePath = path.join('download', website, comicId)
+        mkdirsSync(path.dirname(filePath))
+        await writeFile(filePath, JSON.stringify(comicInfo))
+      } else {
+        const filePath = path.join('download', website, 'error.log')
+        await writeFile(filePath, url, { flag: 'a+' })
+      }
+      isSuccess = true
+    } catch (error) {
+      console.error(error)
+      message = error.message
+    }
+    return { url, isSuccess, message, comic }
+  })
+  return result
 }
 
 // 获得具体章节下的图片
@@ -71,13 +111,32 @@ async function getImageList(url) {
   return result
 }
 
+async function getImageListAsync(chapterList) {
+  const result = await mapLimit(chapterList, 3, async item => {
+    const imageList = await getImageList(homeUrl + item.url)
+    item.imageList = imageList
+    return imageList
+  }).catch(err => console.log(err))
+  return result
+}
+
 const startSpider = async website => {
   const comicList = await getComicList()
   if (comicList.length) {
+    const comicInfoList = await getComicInfoAsync(
+      comicList.slice(0, 1),
+      website
+    )
+    for (let i = 0; i < comicInfoList.length; i++) {
+      await getImageListAsync(comicInfoList[i].comic.list)
+    }
+
+    return comicInfoList
   }
-  const comicInfo = await getComicInfo(comicList[1])
-  const comicImageList = await getImageList(homeUrl + comicInfo.list[0].url)
-  return comicImageList
+
+  // const comicImageList = await getImageList(homeUrl + comicInfo.list[0].url)
+  // return comicImageList
+  return []
 }
 
 module.exports = startSpider

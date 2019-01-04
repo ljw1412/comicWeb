@@ -25,8 +25,8 @@ function disposeParam(method, param) {
   return param
 }
 
-const callApi = ({ method = 'get', api, param, axiosOptions = {} } = {}) => {
-  const $ = axios.create(axiosOptions)
+const callApi = ({ method = 'get', api, param, config = {} } = {}) => {
+  const $ = axios.create(config)
   if (!methodList.includes(method.toLowerCase())) {
     method = methodList[0]
   }
@@ -45,12 +45,12 @@ const callApi = ({ method = 'get', api, param, axiosOptions = {} } = {}) => {
     })
 }
 
-const post = ({ api, param, axiosOptions = {} }) => {
-  return callApi({ method: 'post', api, param, axiosOptions })
+const post = ({ api, param, config = {} }) => {
+  return callApi({ method: 'post', api, param, config })
 }
 
-const get = ({ api, param, axiosOptions = {} }) => {
-  return callApi({ api, param, axiosOptions })
+const get = ({ api, param, config = {} }) => {
+  return callApi({ api, param, config })
 }
 
 export default callApi

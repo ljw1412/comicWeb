@@ -27,7 +27,7 @@ async function writeFile(file, data, options) {
     .catch(err => err)
 }
 
-const fsReadFile = util.promisify(fs.readFile)
+const readFile = util.promisify(fs.readFile)
 
 // 递归创建目录 异步方法
 function mkdirs(dirname, callback) {
@@ -61,7 +61,7 @@ const mkdirsSync = dirname => {
 module.exports = {
   mkdirsSync,
   readDir,
-  fsReadFile,
+  readFile,
   writeFile,
   unzipFile
 }

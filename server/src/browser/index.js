@@ -1,6 +1,6 @@
 const puppeteer = require('puppeteer')
 // const wget = require('node-wget')
-const { mkdirsSync, fsReadFile } = require('../utils/fileUtil')
+const { mkdirsSync, readFile } = require('../utils/fileUtil')
 const pth = require('path')
 const fs = require('fs')
 
@@ -76,7 +76,7 @@ screenshot = async url => {
   mkdirsSync(pth.dirname(path))
 
   await page.screenshot({ path, quality: 50, fullPage: true, type })
-  return fsReadFile(path)
+  return readFile(path)
 }
 
 async function close() {

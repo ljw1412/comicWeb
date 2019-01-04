@@ -8,3 +8,4 @@
 4. jsonwebtoken token生成库
 5. node-fetch 网络请求库
 6. puppeteer 控制 headless Chrome
+7. async 并发控制

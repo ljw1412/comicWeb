@@ -43,6 +43,9 @@ export default {
         api: '/comic/crawler',
         param: {
           website: item.value
+        },
+        config: {
+          timeout: 60000
         }
       })
     }
