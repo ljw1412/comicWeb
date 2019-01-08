@@ -13,9 +13,13 @@
 </template>
 
 <script>
+import io from 'socket.io-client'
 export default {
   data() {
     return {
+      socket: io('http://localhost:3000', {
+        transports: ['websocket']
+      }),
       websiteList: [
         {
           name: 'mangaBox',
@@ -48,7 +52,26 @@ export default {
           timeout: 60000
         }
       })
+    },
+
+    initSocket() {
+      this.socket.on('connect', () => {
+        console.log('message send')
+        this.socket.emit('message', 'init')
+      })
+      this.socket.on('message', data => {
+        setTimeout(() => {
+          this.socket.emit('message', 'bbbb')
+        }, 1000)
+      })
+      this.socket.on('reconnect_attempt', () => {
+        this.socket.io.opts.transports = ['polling', 'websocket']
+      })
     }
+  },
+
+  mounted() {
+    this.initSocket()
   }
 }
 </script>
