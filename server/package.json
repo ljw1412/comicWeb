@@ -25,6 +25,7 @@
     "koa-onerror": "^1.2.1",
     "koa-router": "^7.1.1",
     "koa-static": "^3.0.0",
+    "moment": "^2.23.0",
     "node-fetch": "^2.2.0",
     "puppeteer": "^1.10.0",
     "socket.io": "^2.2.0"

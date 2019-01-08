@@ -8,6 +8,8 @@
         <span>{{item.name}}</span>
         <i-button @click="reStartCrawler(item)">{{getRunState(item.state)}}</i-button>
       </div>
+      <div ref="logBox"
+        class="crawler__log"></div>
     </div>
   </div>
 </template>
@@ -20,6 +22,7 @@ export default {
       socket: io('http://localhost:3000', {
         transports: ['websocket']
       }),
+      logBox: undefined,
       websiteList: [
         {
           name: 'mangaBox',
@@ -60,9 +63,12 @@ export default {
         this.socket.emit('message', 'init')
       })
       this.socket.on('message', data => {
+        this.logBox.prepend(`<p>[${data.date}] ${data.message}</p>`)
+        // this.logBox.scrollTop(this.logBox[0].scrollHeight)
+
         setTimeout(() => {
           this.socket.emit('message', 'bbbb')
-        }, 1000)
+        }, 300)
       })
       this.socket.on('reconnect_attempt', () => {
         this.socket.io.opts.transports = ['polling', 'websocket']
@@ -71,10 +77,20 @@ export default {
   },
 
   mounted() {
+    this.logBox = $(this.$refs.logBox)
     this.initSocket()
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.crawler {
+  &__log {
+    height: 400px;
+    overflow-y: auto;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    padding: 10px;
+  }
+}
 </style>

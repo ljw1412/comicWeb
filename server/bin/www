@@ -24,18 +24,8 @@ var server = http.createServer(app.callback())
 /**
  * socket binding HTTP server.
  */
-var io = require('socket.io')(server)
-
-io.on('connection', socket => {
-  console.log('a user conected')
-  socket.on('message', msg => {
-    console.log('message:', msg)
-    socket.emit('message', 'aaa')
-  })
-  socket.on('disconnect', function() {
-    console.log('user disconnected')
-  })
-})
+var SocketServer = require('../socket')
+new SocketServer(server).init()
 
 /**
  * Listen on provided port, on all network interfaces.
