@@ -57,14 +57,23 @@ export default {
       })
     },
 
+    printLog(log) {
+      const p = $(`<p>[${log.date}] ${log.message}</p>`)
+      Object.keys(this.logBox.data()).forEach(key => {
+        p.attr('data-' + key, this.logBox.data(key))
+      })
+      this.logBox.prepend(p)
+
+      // this.logBox.scrollTop(this.logBox[0].scrollHeight)
+    },
+
     initSocket() {
       this.socket.on('connect', () => {
         console.log('message send')
         this.socket.emit('message', 'init')
       })
       this.socket.on('message', data => {
-        this.logBox.prepend(`<p>[${data.date}] ${data.message}</p>`)
-        // this.logBox.scrollTop(this.logBox[0].scrollHeight)
+        this.printLog(data)
 
         setTimeout(() => {
           this.socket.emit('message', 'bbbb')
