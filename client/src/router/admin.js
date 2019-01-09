@@ -3,7 +3,7 @@ import Dashboard from '@/modules/admin/dashboard'
 import Progress from '@/modules/admin/progress'
 import Crawler from '@/modules/admin/crawler'
 
-module = {
+const module = {
   path: '/admin',
   name: 'admin',
   component: Admin

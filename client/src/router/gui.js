@@ -1,6 +1,6 @@
 import GUI from '@/modules/gui'
 
-module = {
+const module = {
   path: '/gui',
   name: 'gui',
   component: GUI

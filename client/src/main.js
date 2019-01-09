@@ -2,7 +2,6 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import VueLazyload from 'vue-lazyload'
-import Vuex from 'vuex'
 import App from './App'
 import router from './router'
 import vuexStore from './store'
@@ -41,8 +40,7 @@ const vue = new Vue({
   el: '#app',
   router,
   store: vuexStore,
-  components: { App },
-  template: '<App/>'
+  render: h => h(App)
 })
 window.vue = vue
 

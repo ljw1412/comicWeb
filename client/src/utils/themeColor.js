@@ -66,7 +66,8 @@ function cutRange(colorRange, colorSide, cutValue) {
 }
 
 // 找到出现次数为中位数的颜色
-function getMedianColor(colorCountMap, total) {
+// function getMedianColor(colorCountMap, total) {
+function getMedianColor(colorCountMap) {
   var arr = []
   for (var key in colorCountMap) {
     arr.push({
@@ -77,7 +78,7 @@ function getMedianColor(colorCountMap, total) {
 
   var sortArr = __quickSort(arr)
   var medianCount = 0
-  var medianColor = 0
+  // var medianColor = 0
   var medianIndex = Math.floor(sortArr.length / 2)
 
   for (var i = 0; i <= medianIndex; i++) {
@@ -177,10 +178,10 @@ function themeColor(img, callback) {
     ctx = canvas.getContext('2d'),
     width = 0,
     height = 0,
-    imageData = null,
-    length = 0,
-    blockSize = 1,
-    cubeArr = []
+    imageData = null
+  // length = 0,
+  // blockSize = 1,
+  // cubeArr = []
 
   width = canvas.width = img.width
   height = canvas.height = img.height

@@ -1,6 +1,6 @@
 import Login from '@/modules/login'
 
-module = {
+const module = {
   path: '/login',
   name: 'login',
   component: Login

@@ -17,10 +17,10 @@
 import Desktop from './views/desktop'
 import ActionView from './views/actionView'
 import TaskLayer from './views/taskLayer'
-import VForm from '../../components/vForm'
-import SearchForm from './views/forms/search'
-import DetailForm from './views/forms/detail'
-import SettingForm from './views/forms/setting'
+// import VForm from '../../components/vForm'
+// import SearchForm from './views/forms/search'
+// import DetailForm from './views/forms/detail'
+// import SettingForm from './views/forms/setting'
 
 import { on, off } from '../../utils/dom.js'
 import { mapState, mapMutations } from 'vuex'
@@ -31,11 +31,11 @@ export default {
   components: {
     Desktop,
     ActionView,
-    TaskLayer,
-    VForm,
-    SearchForm,
-    DetailForm,
-    SettingForm
+    TaskLayer
+    // VForm,
+    // SearchForm,
+    // DetailForm,
+    // SettingForm
   },
 
   computed: {
@@ -93,7 +93,9 @@ export default {
       off(window, 'resize', this.resizeListener)
     },
 
-    onTaskClose(componentName) {},
+    onTaskClose(componentName) {
+      console.log('close', componentName)
+    },
 
     getThemeColor() {
       const img = new Image()
@@ -119,7 +121,7 @@ export default {
     taskTree(val) {
       console.log(val)
     },
-    'desktop.imageUrl'(val) {
+    'desktop.imageUrl'() {
       this.getThemeColor()
     }
   },

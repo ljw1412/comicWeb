@@ -45,7 +45,9 @@ export default {
   },
 
   methods: {
-    onFormResize(e) {}
+    onFormResize(e) {
+      console.log(this.title, e)
+    }
   },
 
   beforeCreate() {

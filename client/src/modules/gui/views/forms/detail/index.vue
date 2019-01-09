@@ -203,7 +203,7 @@ export default {
         }
       }
     },
-    isReverseOrder(val) {
+    isReverseOrder() {
       this.comic.chapters.forEach(item => {
         item.list = item.list.reverse()
       })

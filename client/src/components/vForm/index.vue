@@ -1,6 +1,7 @@
 /* 窗体 */
-<template v-if="!isClose">
-  <div class="v-form-wrapper"
+<template>
+  <div v-if="!isClose"
+    class="v-form-wrapper"
     :class="{'v-form-wrapper--resizable':resizable && !splashScreenShow}"
     :style="[styles,mouseStyles]"
     @mousemove="onFormMousemove"

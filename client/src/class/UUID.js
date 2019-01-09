@@ -1,7 +1,7 @@
 const str = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz=+'
 const chars = str.split('')
 export default class UUID {
-  constructor(length = 16) {}
+  constructor() {}
 
   static random(length = 16) {
     let uuid = ''
