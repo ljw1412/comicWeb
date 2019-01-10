@@ -6,8 +6,8 @@
   "author": "ljw1412 <506644791@qq.com>",
   "license": "MIT",
   "scripts": {
-    "dev:server": "./server/node_modules/.bin/nodemon server/bin/www",
-    "dev:client": "cd client ; yarn run dev",
+    "dev:server": "cd server; yarn run dev",
+    "dev:client": "cd client; yarn serve",
     "dev": "concurrently -n server,client \"yarn run dev:server\" \"yarn run dev:client\" -c white.bgGreen.bold,white.bgBlue.bold"
   },
   "devDependencies": {

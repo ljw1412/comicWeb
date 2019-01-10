@@ -8,10 +8,11 @@ module.exports = {
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'prettier/prettier': 0,
-    'no-unused-vars': 0
+    'no-unused-vars': 0,
+    'vue/use-v-on-exact': 0
   },
   parserOptions: {
     parser: 'babel-eslint'
   },
-  globals: { Store: true }
+  globals: { Store: true, $: true }
 }
