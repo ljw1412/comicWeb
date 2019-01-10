@@ -5,7 +5,8 @@
       <div>VInput - input(value:'{{input.value1}}')</div>
       <v-input v-model="input.value1"
         theme="windows"
-        size="mini"
+        size="medium"
+        prefixIcon="ios-alarm"
         @input="onInput"
         @change="onInputChange"
         @enter="onInputEnter"

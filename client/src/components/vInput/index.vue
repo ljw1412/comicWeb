@@ -1,7 +1,15 @@
 <template>
-  <div :class="wrapClasses">
+  <div :class="wrapClasses"
+    @mouseenter="hovering = true"
+    @mouseleave="hovering = false">
     <template v-if="!isTextarea">
-      <div class=""></div>
+      <div class="v-input__prefix"
+        v-if="$slots.prefix || prefixIcon">
+        <slot name="prefix">
+          <Icon v-if="prefixIcon"
+            :type="prefixIcon"></Icon>
+        </slot>
+      </div>
       <input ref="input"
         :class="inputClasses"
         :type="type"
@@ -79,6 +87,8 @@ export default {
       type: Boolean,
       default: false
     },
+    suffixIcon: String,
+    prefixIcon: String,
     search: {
       type: Boolean,
       default: false
@@ -103,7 +113,11 @@ export default {
         'v-input',
         {
           [`v-input--${this.currentTheme}`]: this.currentTheme,
-          [`v-input--${this.currentSize}`]: !this.isTextarea && this.currentSize
+          [`v-input--${this.currentSize}`]:
+            !this.isTextarea && this.currentSize,
+          'v-input--prefix': this.$slots.prefix || this.prefixIcon,
+          'v-input--suffix':
+            this.$slots.suffix || this.suffixIcon || this.clearable
         }
       ]
     },
@@ -116,6 +130,7 @@ export default {
   data() {
     return {
       currentValue: this.value,
+      hovering: false,
       // 正在拼写
       isOnComposition: false
     }
@@ -186,6 +201,30 @@ export default {
   display: inline-block;
   font-size: 14px;
   width: 100%;
+
+  &__prefix,
+  &__suffix {
+    line-height: 1;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: all 0.3s;
+    text-align: center;
+    // height: 100%;
+    color: #c0c4cc;
+  }
+
+  &__prefix {
+    left: 3px;
+    transition: all 0.3s;
+  }
+
+  &__suffix {
+    right: 3px;
+    transition: all 0.3s;
+    pointer-events: none;
+  }
+
   &__inner {
     -webkit-appearance: none;
     background-color: #fff;
@@ -231,6 +270,10 @@ export default {
   &--medium {
     font-size: 14px;
     .v-input {
+      &__prefix,
+      &__suffix {
+        font-size: 16px;
+      }
       &__inner {
         height: 32px;
         line-height: 32px;
@@ -243,6 +286,14 @@ export default {
     .v-input {
       &__inner {
         border: 1px solid #c6c6c6;
+      }
+    }
+  }
+
+  &--prefix {
+    .v-input {
+      &__inner {
+        padding-left: 22px;
       }
     }
   }
