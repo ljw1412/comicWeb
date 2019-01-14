@@ -1,5 +1,6 @@
 <template>
   <div :class="wrapClasses"
+    :style="wrapStyles"
     @mouseenter="hovering = true"
     @mouseleave="hovering = false">
     <template v-if="!isTextarea">
@@ -62,6 +63,7 @@ export default {
     disabled: Boolean,
     radius: Boolean,
     size: String,
+    width: String,
     theme: {
       type: String,
       default: ''
@@ -121,7 +123,11 @@ export default {
         }
       ]
     },
-
+    wrapStyles() {
+      return {
+        width: this.width
+      }
+    },
     inputClasses() {
       return ['v-input__inner', { 'v-input__inner--radius': this.radius }]
     }

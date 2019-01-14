@@ -6,23 +6,19 @@
       :x="contextmenu.x"
       :y="contextmenu.y"></contextmenu>
     <div class="desktop__shortcut">
-      <shortcut v-for="(item,index) of shortcutList"
-        :key="index"
-        :index="index"
-        :icon="item.icon"
-        :name="item.name"></shortcut>
+      <shortcut-grid v-model="shortcutList"></shortcut-grid>
     </div>
   </div>
 </template>
 
 <script>
 import Contextmenu from '../../../../components/menu/contextmenu'
-import Shortcut from './components/shortcut'
+import ShortcutGrid from './components/shortcutGrid'
 
 export default {
   components: {
     Contextmenu,
-    Shortcut
+    ShortcutGrid
   },
 
   data() {
@@ -34,27 +30,30 @@ export default {
       },
       shortcutList: [
         {
-          icon: 'http://localhost:3000/image/bg/windows10.jpeg',
+          icon: 'md-notifications-outline',
+          name: '测试中文字啊啊湿答答SD大傻叼',
+          color: '#0F0'
+        },
+        {
+          icon: 'md-notifications-outline',
+          name: '测试中文字啊啊湿答答SD大傻叼',
+          color: '#F00'
+        },
+        {
+          icon: 'md-notifications-outline',
+          name: '测试中文字啊啊湿答答SD大傻叼',
+          color: '#00F'
+        },
+        {
+          src: 'http://localhost:3000/image/bg/windows10.jpeg',
           name: '测试中文字啊啊湿答答SD大傻叼'
         },
         {
-          icon: 'http://localhost:3000/image/bg/windows10.jpeg',
+          src: 'http://localhost:3000/image/bg/windows10.jpeg',
           name: '测试中文字啊啊湿答答SD大傻叼'
         },
         {
-          icon: 'http://localhost:3000/image/bg/windows10.jpeg',
-          name: '测试中文字啊啊湿答答SD大傻叼'
-        },
-        {
-          icon: 'http://localhost:3000/image/bg/windows10.jpeg',
-          name: '测试中文字啊啊湿答答SD大傻叼'
-        },
-        {
-          icon: 'http://localhost:3000/image/bg/windows10.jpeg',
-          name: '测试中文字啊啊湿答答SD大傻叼'
-        },
-        {
-          icon: 'http://localhost:3000/image/bg/windows10.jpeg',
+          src: 'http://localhost:3000/image/bg/windows10.jpeg',
           name: '测试中文字啊啊湿答答SD大傻叼'
         }
       ]
@@ -68,6 +67,10 @@ export default {
       this.contextmenu.x = e.x
       this.contextmenu.y = e.y
       console.log(this.$refs.taskLayer)
+    },
+
+    onShortcutMove(event, originalEvent) {
+      console.log(event, originalEvent)
     }
   }
 }

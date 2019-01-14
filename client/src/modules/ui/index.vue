@@ -4,6 +4,7 @@
       <div class="v-icon v-icon-ios-add-circle-outline"></div>
       <div>VInput - input(value:'{{input.value1}}')</div>
       <v-input v-model="input.value1"
+        width="300px"
         theme="windows"
         size="medium"
         prefixIcon="ios-alarm"

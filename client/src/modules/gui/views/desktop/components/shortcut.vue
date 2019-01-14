@@ -1,11 +1,17 @@
 /* 快捷方式 */
 <template>
-  <div class="shortcut"
-    :style="styles">
-    <div class="shortcut__icon">
-      <img :src="icon" />
+  <div class="shortcut__wrapper"
+    :style="wrapStyles">
+    <div class="shortcut">
+      <div class="shortcut__icon">
+        <img v-if="src"
+          :src="src" />
+        <Icon v-else
+          :type="icon"
+          :color="color"></Icon>
+      </div>
+      <div class="shortcut__name">{{name}}</div>
     </div>
-    <div class="shortcut__name">{{name}}</div>
   </div>
 </template>
 
@@ -15,7 +21,11 @@ export default {
   props: {
     index: Number,
     icon: String,
-    name: String
+    // 仅icon情况下有效
+    color: String,
+    src: String,
+    name: String,
+    free: Boolean
   },
 
   computed: {
@@ -33,10 +43,10 @@ export default {
       return this.index % this.maxRow
     },
 
-    styles() {
+    wrapStyles() {
       return {
         top: this.row * 90 + 'px',
-        left: this.column * 60 + 'px'
+        left: this.column * 70 + 'px'
       }
     }
   },
@@ -51,13 +61,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.shortcut {
+.shortcut__wrapper {
   position: absolute;
-  display: inline-block;
-  width: 60px;
+  width: 70px;
   height: 90px;
+  transition-duration: 0.5s;
+}
+
+.shortcut {
+  display: inline-block;
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+  }
+  &:focus {
+    background: #000;
+  }
   &__icon {
-    border: 1px solid #fff;
     height: 40px;
     width: 40px;
     margin: 5px auto 0;
@@ -66,8 +85,12 @@ export default {
       height: 100%;
       padding: 5px;
     }
+    .ivu-icon {
+      font-size: 38px;
+    }
   }
   &__name {
+    text-align: center;
     font-size: 12px;
     color: #fff;
     text-shadow: 0 0 5px rgba($color: #000000, $alpha: 0.7);
