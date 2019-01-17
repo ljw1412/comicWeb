@@ -5,9 +5,13 @@
       <div>VInput - input(value:'{{input.value1}}')</div>
       <v-input v-model="input.value1"
         width="300px"
-        theme="windows"
+        theme="mac"
         size="medium"
         prefixIcon="ios-alarm"
+        suffixIcon="ios-alarm"
+        clearable
+        search
+        radius
         @input="onInput"
         @change="onInputChange"
         @enter="onInputEnter"
@@ -15,11 +19,16 @@
         @keypress="onInputKeypress"
         @keyup="onInputKeyup"
         @focus="onInputFocus"
-        @blur="onInputBlur"></v-input>
+        @blur="onInputBlur"
+        @search="onSearch"></v-input>
       <div>VInput - textarea(value:'{{input.value2}}')</div>
       <v-input v-model="input.value2"
+        width="300px"
         type="textarea"
         theme="mac"
+        :rows="5"
+        resize
+        radius
         @input="onInput"
         @change="onInputChange"
         @enter="onInputEnter"
@@ -76,6 +85,10 @@ export default {
 
     onInputBlur(e) {
       console.log('onInputBlur', e)
+    },
+
+    onSearch(e) {
+      console.log('onSearch', e)
     }
   }
 }

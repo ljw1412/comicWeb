@@ -11,11 +11,31 @@
             :type="prefixIcon"></Icon>
         </slot>
       </div>
+      <div class="v-input__suffix"
+        v-if="search || $slots.suffix || suffixIcon || showClear">
+        <template v-if="!search">
+          <slot v-if="!showClear"
+            name="suffix">
+            <Icon v-if="suffixIcon"
+              :type="suffixIcon" />
+          </slot>
+          <Icon v-else
+            class="suffix__clear v-input__fixed-icon"
+            type="ios-close-circle"
+            @click="clear" />
+        </template>
+        <Icon v-else
+          class="suffix__search v-input__fixed-icon"
+          type="ios-search"
+          @click="searchClick" />
+      </div>
       <input ref="input"
         :class="inputClasses"
         :type="type"
         :value="currentValue"
+        :maxlength="maxlength"
         :disabled="disabled"
+        :readonly="readonly"
         :placeholder="placeholder"
         @keyup.enter="handleEnter"
         @keyup="handleKeyup"
@@ -31,8 +51,12 @@
     </template>
     <textarea v-else
       ref="textarea"
+      :class="textareaClasses"
       :value="currentValue"
+      :rows="rows"
+      :maxlength="maxlength"
       :disabled="disabled"
+      :readonly="readonly"
       :placeholder="placeholder"
       @keyup.enter="handleEnter"
       @keyup="handleKeyup"
@@ -64,6 +88,7 @@ export default {
     radius: Boolean,
     size: String,
     width: String,
+    maxlength: Number,
     theme: {
       type: String,
       default: ''
@@ -88,6 +113,18 @@ export default {
     clearable: {
       type: Boolean,
       default: false
+    },
+    readonly: {
+      type: Boolean,
+      default: false
+    },
+    resize: {
+      type: Boolean,
+      default: false
+    },
+    rows: {
+      type: Number,
+      default: 2
     },
     suffixIcon: String,
     prefixIcon: String,
@@ -123,13 +160,39 @@ export default {
         }
       ]
     },
+
     wrapStyles() {
       return {
         width: this.width
       }
     },
+
     inputClasses() {
-      return ['v-input__inner', { 'v-input__inner--radius': this.radius }]
+      return [
+        'v-input__inner-input',
+        { 'v-input__inner-input--radius': this.radius }
+      ]
+    },
+
+    textareaClasses() {
+      return [
+        'v-input__textarea',
+        {
+          'v-input__textarea--disabled': this.disabled,
+          'v-input__textarea--resize': this.resize,
+          'v-input__textarea--radius': this.radius
+        }
+      ]
+    },
+
+    showClear() {
+      return (
+        this.clearable &&
+        !this.disabled &&
+        !this.readonly &&
+        this.currentValue !== '' &&
+        (this.focused || this.hovering)
+      )
     }
   },
 
@@ -137,12 +200,21 @@ export default {
     return {
       currentValue: this.value,
       hovering: false,
+      focused: false,
       // 正在拼写
       isOnComposition: false
     }
   },
 
   methods: {
+    focus() {
+      ;(this.$refs.input || this.$refs.textarea).focus()
+    },
+
+    blur() {
+      ;(this.$refs.input || this.$refs.textarea).blur()
+    },
+
     setCurrentValue(value) {
       if (value === this.currentValue) return
       this.currentValue = value
@@ -170,10 +242,12 @@ export default {
     },
 
     handleFocus(event) {
+      this.focused = true
       this.$emit('focus', event)
     },
 
     handleBlur(event) {
+      this.focused = false
       this.$emit('blur', event)
     },
 
@@ -196,12 +270,28 @@ export default {
 
     handleChange(event) {
       this.$emit('change', event.target.value)
+    },
+
+    clear() {
+      this.$emit('input', '')
+      this.$emit('change', '')
+      this.$emit('clear')
+      this.setCurrentValue('')
+      this.focus()
+    },
+
+    searchClick() {
+      this.$emit('search', this.currentValue)
     }
   }
 }
 </script>
 
 <style lang="scss">
+$border-color--normal: #d2d2d2;
+$border-color--foucs-windows: #818387;
+$border-color--foucs-mac: #7eb9fc;
+$font-color: #606266;
 .v-input {
   position: relative;
   display: inline-block;
@@ -216,26 +306,35 @@ export default {
     transform: translateY(-50%);
     transition: all 0.3s;
     text-align: center;
+    z-index: 9;
     // height: 100%;
     color: #c0c4cc;
   }
 
   &__prefix {
-    left: 3px;
+    left: 4px;
     transition: all 0.3s;
+    pointer-events: all;
   }
 
   &__suffix {
-    right: 3px;
+    right: 5px;
     transition: all 0.3s;
-    pointer-events: none;
+    pointer-events: all;
   }
 
-  &__inner {
+  &__fixed-icon {
+    cursor: pointer;
+    &:hover {
+      color: #909399;
+    }
+  }
+
+  &__inner-input {
     -webkit-appearance: none;
     background-color: #fff;
     background-image: none;
-    border: 1px solid #dcdfe6;
+    border: 1px solid $border-color--normal;
     box-sizing: border-box;
     color: #606266;
     display: inline-block;
@@ -254,7 +353,7 @@ export default {
   &--mini {
     font-size: 12px;
     .v-input {
-      &__inner {
+      &__inner-input {
         height: 20px;
         line-height: 20px;
         padding: 0 2px;
@@ -265,7 +364,7 @@ export default {
   &--small {
     .v-input {
       font-size: 13px;
-      &__inner {
+      &__inner-input {
         height: 26px;
         line-height: 26px;
         padding: 0 4px;
@@ -280,7 +379,7 @@ export default {
       &__suffix {
         font-size: 16px;
       }
-      &__inner {
+      &__inner-input {
         height: 32px;
         line-height: 32px;
         padding: 0 6px;
@@ -288,26 +387,54 @@ export default {
     }
   }
 
-  &--windows {
+  &--prefix {
     .v-input {
-      &__inner {
-        border: 1px solid #c6c6c6;
+      &__inner-input {
+        padding-left: 22px;
       }
     }
   }
 
-  &--prefix {
+  &--suffix {
     .v-input {
-      &__inner {
-        padding-left: 22px;
+      &__inner-input {
+        padding-right: 22px;
+      }
+    }
+  }
+
+  &__textarea {
+    width: 100%;
+    border: 1px solid $border-color--normal;
+    padding: 5px;
+    resize: none;
+    &--resize {
+      resize: vertical;
+    }
+    &--radius {
+      border-radius: 4px;
+    }
+  }
+
+  &--windows {
+    .v-input {
+      &__inner-input,
+      &__textarea {
+        border: 1px solid $border-color--normal;
+        &:focus {
+          outline: none;
+          border-color: $border-color--foucs-windows;
+          box-shadow: none;
+        }
       }
     }
   }
 
   &--mac {
     .v-input {
-      &__inner {
-        border: 1px solid #d2d2d2;
+      &__inner-input,
+      &__textarea {
+        border: 1px solid $border-color--normal;
         &:focus {
           outline: none;
           border: 1px solid #7eb9fc;
