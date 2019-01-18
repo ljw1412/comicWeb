@@ -2,13 +2,15 @@
 <template>
   <div class="shortcut__wrapper"
     :style="wrapStyles">
-    <div class="shortcut">
+    <div class="shortcut"
+      @dblclick="onDblclick">
       <div class="shortcut__icon">
         <img v-if="src"
           :src="src" />
         <Icon v-else
+          class="icon-shadow"
           :type="icon"
-          :color="color"></Icon>
+          :color="color" />
       </div>
       <div class="shortcut__name">{{name}}</div>
     </div>
@@ -56,6 +58,12 @@ export default {
       top: 0,
       left: 0
     }
+  },
+
+  methods: {
+    onDblclick(e) {
+      this.$emit('dblclick')
+    }
   }
 }
 </script>
@@ -66,16 +74,20 @@ export default {
   width: 70px;
   height: 90px;
   transition-duration: 0.5s;
+  text-align: center;
 }
 
 .shortcut {
   display: inline-block;
+
   &:hover {
     background-color: rgba(255, 255, 255, 0.3);
   }
+
   &:focus {
     background: #000;
   }
+
   &__icon {
     height: 40px;
     width: 40px;
@@ -89,6 +101,7 @@ export default {
       font-size: 38px;
     }
   }
+
   &__name {
     text-align: center;
     font-size: 12px;
@@ -98,6 +111,12 @@ export default {
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
     overflow: hidden;
+  }
+
+  .icon-shadow {
+    &::before {
+      text-shadow: 0 0 5px rgba($color: #000000, $alpha: 0.7);
+    }
   }
 }
 </style>

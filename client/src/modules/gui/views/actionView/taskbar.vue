@@ -92,6 +92,7 @@ export default {
     },
 
     backgroudImageStyles() {
+      if (!this.taskbar.blur) return {}
       return {
         'background-image': `url('${this.desktop.imageUrl}')`,
         filter: `blur(${this.taskbar.blur}px)`

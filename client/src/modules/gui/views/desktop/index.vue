@@ -30,9 +30,10 @@ export default {
       },
       shortcutList: [
         {
-          icon: 'md-notifications-outline',
-          name: '测试中文字啊啊湿答答SD大傻叼',
-          color: '#0F0'
+          icon: 'md-search',
+          name: '漫画搜索',
+          color: '#FFF',
+          launch: 'TaskSearch'
         },
         {
           icon: 'md-notifications-outline',
@@ -43,18 +44,6 @@ export default {
           icon: 'md-notifications-outline',
           name: '测试中文字啊啊湿答答SD大傻叼',
           color: '#00F'
-        },
-        {
-          src: 'http://localhost:3000/image/bg/windows10.jpeg',
-          name: '测试中文字啊啊湿答答SD大傻叼'
-        },
-        {
-          src: 'http://localhost:3000/image/bg/windows10.jpeg',
-          name: '测试中文字啊啊湿答答SD大傻叼'
-        },
-        {
-          src: 'http://localhost:3000/image/bg/windows10.jpeg',
-          name: '测试中文字啊啊湿答答SD大傻叼'
         }
       ]
     }

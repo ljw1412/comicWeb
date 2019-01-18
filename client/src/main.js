@@ -43,6 +43,6 @@ const vue = new Vue({
   store: vuexStore,
   render: h => h(App)
 })
-window.vue = vue
+// window.vue = vue
 
 export default vue

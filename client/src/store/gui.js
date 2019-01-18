@@ -1,3 +1,6 @@
+import vue from '../main.js'
+import { UUID } from '../class'
+
 const namespaced = true
 
 const state = {
@@ -7,7 +10,8 @@ const state = {
   },
   // 任务树
   taskTree: {
-    TaskDetail: { tasks: [] }
+    TaskDetail: { tasks: [] },
+    TaskSearch: { tasks: [] }
   },
   // 桌面
   desktop: {
@@ -40,28 +44,34 @@ const getters = {
   }
 }
 
-function checkTaskTree(taskTree, taskName, config) {
-  if (!taskTree[taskName]) {
-    Object.assign(taskTree, { [taskName]: {} })
-  }
-  if (!taskTree[taskName].tasks) {
-    Object.assign(taskTree[taskName], { tasks: [], config })
+function checkTaskTree(taskTree, taskName, config = { unique: false }) {
+  try {
+    if (!taskTree[taskName]) {
+      vue.$set(taskTree, taskName, { tasks: [], config })
+    } else if (!taskTree[taskName].config) {
+      taskTree[taskName].config = config
+    }
+    return taskTree[taskName].config.unique
+  } catch (error) {
+    console.error(error)
+    return false
   }
 }
 
 const mutations = {
   // 新建进程
-  NEW_TASK({ taskTree }, { taskName, taskConfig }) {
-    checkTaskTree(taskTree, taskName)
-    taskTree[taskName].tasks.push({ name: taskName, config: taskConfig })
+  NEW_TASK({ taskTree }, { taskName, data }) {
+    if (checkTaskTree(taskTree, taskName)) return
+    const id = UUID.random()
+    taskTree[taskName].tasks.push({ name: taskName, data, id })
   },
   // 更新进程(必须先新建)
   UPDATE_TASK({ taskTree }, { config = { name: '???', unique: false }, task }) {
     checkTaskTree(taskTree, config.name, config)
-    const blankTask = taskTree[config.name].tasks.find(item => !item.id)
+    const blankTask = taskTree[config.name].tasks.find(item => !item.isBuilt)
 
     if (blankTask) {
-      Object.assign(blankTask, task)
+      Object.assign(blankTask, task, { isBuilt: true })
     }
   },
   // 修改进程显示/隐藏

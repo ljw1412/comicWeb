@@ -1,4 +1,3 @@
-import { UUID } from '../../../class'
 import { mapMutations } from 'vuex'
 
 export default {
@@ -22,23 +21,23 @@ export default {
   data() {
     return {
       visible: true,
-      isClose: false
+      isClose: false,
+      unique: true
     }
   },
 
   methods: {
     ...mapMutations('gui', ['UPDATE_TASK', 'NEW_TASK']),
-    newTask(taskName, taskConfig) {
-      this.NEW_TASK({ taskName, taskConfig })
+    newTask(taskName, data) {
+      this.NEW_TASK({ taskName, data })
     }
   },
 
   created() {
-    this.taskId = UUID.random()
     this.UPDATE_TASK({
-      config: { name: this.name, unique: true },
+      config: { name: this.name, unique: this.unique },
       task: {
-        id: this.taskId,
+        isBulit: false,
         component: this,
         name: this.name,
         isDisplay: true,

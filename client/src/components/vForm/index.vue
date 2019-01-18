@@ -1,6 +1,7 @@
 /* 窗体 */
 <template>
   <div v-if="!isClose"
+    v-show="visible"
     class="v-form-wrapper"
     :class="{'v-form-wrapper--resizable':resizable && !splashScreenShow}"
     :style="[styles,mouseStyles]"
@@ -15,8 +16,7 @@
           :type="icon" />
       </div>
     </transition>
-    <div v-show="visible"
-      ref="vForm"
+    <div ref="vForm"
       class="v-form">
       <!-- 标题栏 -->
       <div class="v-form__title-bar"
