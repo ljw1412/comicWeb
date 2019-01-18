@@ -1,7 +1,12 @@
 <template>
   <div class="taskbar">
-    <div class="taskbar__background"
-      :style="{'background-color':taskBackgroundColor,opacity}"></div>
+    <div class="taskbar__background">
+      <div v-if="taskbar.blur"
+        class="background__image"
+        :style="backgroudImageStyles"></div>
+      <div class="background__color"
+        :style="backgroudStyles"></div>
+    </div>
     <!-- 菜单栏 -->
     <div class="taskbar__menu">菜单</div>
     <!-- 任务栏 -->
@@ -58,9 +63,11 @@ export default {
   computed: {
     ...mapState('gui', ['taskTree', 'taskbar', 'desktop']),
     ...mapGetters('gui', ['taskBackgroundColor']),
+
     notificationsIcon() {
       return this.messageCount ? 'md-notifications' : 'md-notifications-outline'
     },
+
     taskList() {
       return Object.keys(this.taskTree)
         .filter(
@@ -72,8 +79,23 @@ export default {
           list: this.taskTree[item].tasks
         }))
     },
+
     opacity() {
       return this.taskbar.opacity
+    },
+
+    backgroudStyles() {
+      return {
+        'background-color': this.taskBackgroundColor,
+        opacity: this.opacity
+      }
+    },
+
+    backgroudImageStyles() {
+      return {
+        'background-image': `url('${this.desktop.imageUrl}')`,
+        filter: `blur(${this.taskbar.blur}px)`
+      }
     }
   },
 
@@ -114,9 +136,11 @@ export default {
     background: rgba(0, 0, 0, 0.1);
   }
 }
+
 * {
   user-select: none;
 }
+
 .taskbar {
   position: absolute;
   z-index: 99999;
@@ -132,15 +156,36 @@ export default {
     z-index: -1;
     width: 100%;
     height: 100%;
-    transition-duration: 1.2s;
     box-sizing: border-box;
     box-shadow: 0 0 5px rgba($color: #fff, $alpha: 0.2);
+    overflow: hidden;
+    .background {
+      // 背景图复制，用于任务栏模糊效果
+      &__image {
+        position: absolute;
+        z-index: -1;
+        width: 100%;
+        height: 100px;
+        top: -30px;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-attachment: fixed;
+        filter: blur(2px);
+      }
+      &__color {
+        width: 100%;
+        height: 100%;
+        transition-duration: 1.2s;
+      }
+    }
   }
+
   &__menu {
     flex-shrink: 0;
     width: 50px;
     @include interact;
   }
+
   &__tasks {
     flex-grow: 1;
     display: flex;
@@ -150,11 +195,13 @@ export default {
       }
     }
   }
+
   &__status {
     color: #fff;
     display: flex;
     align-items: center;
   }
+
   &__date-time {
     font-family: 'Microsoft YaHei';
     color: #fff;
@@ -163,6 +210,7 @@ export default {
     padding: 0 5px;
     @include interact;
   }
+
   &__notifications {
     padding: 9px 5px;
     height: 100%;
@@ -173,6 +221,7 @@ export default {
       font-size: 10px;
     }
   }
+
   &__back-home {
     border-left: 1px solid rgba($color: #fff, $alpha: 0.2);
     width: 10px;

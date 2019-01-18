@@ -25,7 +25,9 @@ const state = {
     // 背景色
     bgColor: '',
     // 透明度
-    opacity: 0.8
+    opacity: 0.8,
+    // 模糊属性存在显示问题，暂不使用
+    blur: 0
   }
 }
 
