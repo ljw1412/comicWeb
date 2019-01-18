@@ -114,7 +114,6 @@ export default {
   data() {
     return {
       title: '详情页',
-      unique: false,
       bodyDOM: null,
       // 是否展开介绍
       isDisplayDescription: false,

@@ -61,6 +61,7 @@ export default {
     return {
       title: '搜索',
       list: [],
+      unique: true,
       currentComic: {},
       website: '',
       websiteList: [{ id: 0, value: 'dmzj', label: '动漫之家' }]

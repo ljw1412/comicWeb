@@ -10,8 +10,8 @@ const state = {
   },
   // 任务树
   taskTree: {
-    TaskDetail: { tasks: [] },
-    TaskSearch: { tasks: [] }
+    // TaskDetail: { tasks: [] },
+    // TaskSearch: { tasks: [] }
   },
   // 桌面
   desktop: {
@@ -48,8 +48,9 @@ function checkTaskTree(taskTree, taskName, config = { unique: false }) {
   try {
     if (!taskTree[taskName]) {
       vue.$set(taskTree, taskName, { tasks: [], config })
-    } else if (!taskTree[taskName].config) {
-      taskTree[taskName].config = config
+    }
+    if (config.name) {
+      Object.assign(taskTree[taskName], { config })
     }
     return taskTree[taskName].config.unique
   } catch (error) {

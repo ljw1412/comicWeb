@@ -21,8 +21,7 @@ export default {
   data() {
     return {
       visible: true,
-      isClose: false,
-      unique: true
+      isClose: false
     }
   },
 
@@ -35,9 +34,9 @@ export default {
 
   created() {
     this.UPDATE_TASK({
-      config: { name: this.name, unique: this.unique },
+      config: { name: this.name, unique: !!this.unique },
       task: {
-        isBulit: false,
+        isBuilt: false,
         component: this,
         name: this.name,
         isDisplay: true,
