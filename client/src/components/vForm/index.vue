@@ -346,34 +346,34 @@ export default {
     onCloseClick() {
       this.$eventBus.$emit('close', this.name)
       this.parentEmit('close', this.name)
-    },
-
-    // 向父级递归直到找到TaskLayer
-    findTaskLayer(current) {
-      if (
-        typeof current.$parent === 'object' &&
-        current.$parent.name === 'TaskLayer'
-      ) {
-        return current.$parent
-      } else if (current.$parent === undefined) {
-        return undefined
-      } else {
-        return this.findTaskLayer(current.$parent)
-      }
-    },
-
-    /**
-     * 如果找到存在父级是 TaskLayer，那么事件就由 TaskLayer 发出。
-     * 否则由自己发出。
-     */
-    parentEmit(event, obj) {
-      const taskLayer = this.findTaskLayer(this)
-      if (taskLayer) {
-        taskLayer.$emit(event, obj)
-        return
-      }
-      this.$emit(event, obj)
     }
+
+    // // 向父级递归直到找到TaskLayer
+    // findTaskLayer(current) {
+    //   if (
+    //     typeof current.$parent === 'object' &&
+    //     current.$parent.name === 'TaskLayer'
+    //   ) {
+    //     return current.$parent
+    //   } else if (current.$parent === undefined) {
+    //     return undefined
+    //   } else {
+    //     return this.findTaskLayer(current.$parent)
+    //   }
+    // },
+
+    // /**
+    //  * 如果找到存在父级是 TaskLayer，那么事件就由 TaskLayer 发出。
+    //  * 否则由自己发出。
+    //  */
+    // parentEmit(event, obj) {
+    //   const taskLayer = this.findTaskLayer(this)
+    //   if (taskLayer) {
+    //     taskLayer.$emit(event, obj)
+    //     return
+    //   }
+    //   this.$emit(event, obj)
+    // }
   },
 
   watch: {

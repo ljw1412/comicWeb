@@ -13,16 +13,17 @@
       </div>
       <div class="v-input__suffix"
         v-if="search || $slots.suffix || suffixIcon || showClear">
+        <Icon v-if="showClear"
+          class="suffix__clear v-input__fixed-icon"
+          :class="{'suffix__clear--search':search}"
+          type="ios-close-circle"
+          @click="clear" />
         <template v-if="!search">
           <slot v-if="!showClear"
             name="suffix">
             <Icon v-if="suffixIcon"
               :type="suffixIcon" />
           </slot>
-          <Icon v-else
-            class="suffix__clear v-input__fixed-icon"
-            type="ios-close-circle"
-            @click="clear" />
         </template>
         <Icon v-else
           class="suffix__search v-input__fixed-icon"
@@ -292,35 +293,39 @@ $border-color--normal: #d2d2d2;
 $border-color--foucs-windows: #818387;
 $border-color--foucs-mac: #7eb9fc;
 $font-color: #606266;
+@mixin icon {
+  line-height: 1;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: all 0.3s;
+  text-align: center;
+  z-index: 9;
+  // height: 100%;
+  color: #c0c4cc;
+}
+
 .v-input {
   position: relative;
   display: inline-block;
   font-size: 14px;
   width: 100%;
 
-  &__prefix,
-  &__suffix {
-    line-height: 1;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    transition: all 0.3s;
-    text-align: center;
-    z-index: 9;
-    // height: 100%;
-    color: #c0c4cc;
-  }
-
   &__prefix {
+    @include icon;
     left: 4px;
     transition: all 0.3s;
     pointer-events: all;
   }
 
   &__suffix {
+    @include icon;
     right: 5px;
     transition: all 0.3s;
     pointer-events: all;
+    .suffix__clear--search {
+      margin-right: 2px;
+    }
   }
 
   &__fixed-icon {
@@ -339,8 +344,8 @@ $font-color: #606266;
     color: #606266;
     display: inline-block;
     font-size: inherit;
-    height: 40px;
-    line-height: 40px;
+    height: 32px;
+    line-height: 32px;
     outline: none;
     padding: 0 6px;
     transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
@@ -362,8 +367,8 @@ $font-color: #606266;
   }
 
   &--small {
+    font-size: 13px;
     .v-input {
-      font-size: 13px;
       &__inner-input {
         height: 26px;
         line-height: 26px;

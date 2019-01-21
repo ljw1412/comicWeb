@@ -16,21 +16,22 @@
     :splashScreen="splashScreen"
     @resize="onFormResize">
     <div slot="menu"
-      class="search__input">
-      <i-input class="search__input"
-        search
+      class="search__menu">
+      <i-select v-model="website"
+        size="small"
+        placeholder="请选择站点"
+        style="width: 120px">
+        <i-option v-for="website of websiteList"
+          :key="website.id"
+          :value="website.value"
+          :label="website.label"></i-option>
+      </i-select>
+      <v-input search
+        theme="windows"
+        size="small"
         placeholder="请输入关键词..."
-        @on-search="onSearch">
-        <i-select v-model="website"
-          slot="prepend"
-          placeholder="请选择站点"
-          style="width: 120px">
-          <i-option v-for="website of websiteList"
-            :key="website.id"
-            :value="website.value"
-            :label="website.label"></i-option>
-        </i-select>
-      </i-input>
+        @search="onSearch">
+      </v-input>
     </div>
     <div class="search__result">
       <comic-item v-for="item of list"
@@ -48,12 +49,14 @@
 import VForm from '@/components/vForm'
 import ComicItem from './components/comicItem'
 import customForm from '../../../mixins/customForm.js'
+import VInput from '../../../../../components/vInput'
 
 export default {
   mixins: [customForm],
 
   components: {
     VForm,
+    VInput,
     ComicItem
   },
 
@@ -113,9 +116,8 @@ export default {
   user-select: none;
 }
 .search {
-  &__input {
-    padding-bottom: 1px;
-    background-color: #fff;
+  &__menu {
+    display: flex;
   }
   &__result {
     display: flex;
