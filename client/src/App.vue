@@ -22,11 +22,11 @@ body,
   overflow: hidden;
 }
 
-::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-  background-color: rgba(0, 0, 0, 0);
-}
+// ::-webkit-scrollbar {
+//   width: 0;
+//   height: 0;
+//   background-color: rgba(0, 0, 0, 0);
+// }
 
 /*滚动条里面轨道*/
 /* ::-webkit-scrollbar-track {

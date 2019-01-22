@@ -55,11 +55,11 @@
             <slot name="menu"></slot>
           </div>
           <!-- 主体 -->
-          <div ref="main"
+          <v-scroll-view ref="main"
             class="v-form__main"
-            :style="mainStyle">
+            :innerStyle="mainStyle">
             <slot></slot>
-          </div>
+          </v-scroll-view>
           <!-- 状态栏 -->
           <div v-if="$slots.status"
             class="from__status-bar">
@@ -72,10 +72,15 @@
 </template>
 
 <script>
+import VScrollView from '@/components/vScrollView'
 import { on, off } from '../../utils/dom'
 import viewIndex from './ViewIndex'
 import { mapState, mapGetters } from 'vuex'
 export default {
+  components: {
+    VScrollView
+  },
+
   props: {
     name: { type: String, default: 'FormView' },
     value: { type: Boolean, default: true },
@@ -582,6 +587,7 @@ $broder-color: #9f9f9f;
     flex-direction: column;
     animation-delay: 0.2s;
     padding-bottom: 3px;
+    height: 100%;
   }
 
   &__menu-bar,
@@ -591,10 +597,7 @@ $broder-color: #9f9f9f;
   }
 
   &__main {
-    flex-grow: 1;
-    flex-shrink: 0;
-    height: 0;
-    overflow-y: auto;
+    height: 100%;
   }
 }
 </style>

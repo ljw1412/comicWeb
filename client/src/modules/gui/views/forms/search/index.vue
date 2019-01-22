@@ -47,9 +47,9 @@
 
 <script>
 import VForm from '@/components/vForm'
+import VInput from '@/components/vInput'
 import ComicItem from './components/comicItem'
 import customForm from '../../../mixins/customForm.js'
-import VInput from '../../../../../components/vInput'
 
 export default {
   mixins: [customForm],

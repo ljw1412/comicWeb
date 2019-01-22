@@ -14,6 +14,7 @@
     :x="x"
     :y="y"
     :splashScreen="splashScreen"
+    :mainStyle="{width:'100%'}"
     @resize="onFormResize">
     <transition slot="bodyTop"
       name="fade">
@@ -233,6 +234,7 @@ $line-color: #ddd;
 .detail {
   position: relative;
   overflow-x: hidden;
+  width: 100%;
   &__fixed-view {
     z-index: 19;
     position: absolute;

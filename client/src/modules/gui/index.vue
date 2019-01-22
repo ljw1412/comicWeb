@@ -150,11 +150,16 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .gui {
   height: 100%;
   max-height: 100%;
   overflow: hidden;
+  ::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    background-color: rgba(0, 0, 0, 0);
+  }
 }
 </style>
 

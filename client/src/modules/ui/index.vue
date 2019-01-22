@@ -5,13 +5,12 @@
       <div>VInput - input(value:'{{input.value1}}')</div>
       <v-input v-model="input.value1"
         width="300px"
-        theme="mac"
+        theme="windows"
         size="medium"
         prefixIcon="ios-alarm"
         suffixIcon="ios-alarm"
         clearable
         search
-        radius
         @input="onInput"
         @change="onInputChange"
         @enter="onInputEnter"
@@ -38,14 +37,25 @@
         @focus="onInputFocus"
         @blur="onInputBlur"></v-input>
     </div>
+    <div>VScrollView</div>
+    <v-scroll-view style="height:200px;width: 300px;">
+      <div v-for="index of 100"
+        :key="index">
+        <span v-for="j of 100"
+          :key="j">{{index*j}}</span>
+      </div>
+    </v-scroll-view>
   </div>
 </template>
 
 <script>
 import VInput from '@/components/vInput'
+import VScrollView from '@/components/vScrollView'
+
 export default {
   components: {
-    VInput
+    VInput,
+    VScrollView
   },
 
   data() {
