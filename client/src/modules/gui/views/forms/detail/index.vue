@@ -1,5 +1,6 @@
 <template>
   <v-form v-model="visible"
+    ref="form"
     name="TaskDetail"
     class="detail-form"
     resizable

@@ -14,21 +14,21 @@
     <div v-if="isBarYShow"
       ref="barY"
       class="scroll-bar scroll-bar--vertical"
-      @mousedown="handleBarYMousedown($event,'y')">
+      @mousedown="handleBarMousedown($event,'y')">
       <div ref="thumbY"
         class="scroll-bar__thumb"
         :style="thumbYStyles"
-        @mousedown.stop="handleThumbYDragStart($event,'y')"></div>
+        @mousedown.stop="handleThumbDragStart($event,'y')"></div>
     </div>
 
     <div v-if="isBarXShow"
       ref="barX"
       class="scroll-bar scroll-bar--horizontal"
-      @mousedown="handleBarYMousedown($event,'x')">
+      @mousedown="handleBarMousedown($event,'x')">
       <div ref="thumbX"
         class="scroll-bar__thumb"
         :style="thumbXStyles"
-        @mousedown.stop="handleThumbYDragStart($event,'x')"></div>
+        @mousedown.stop="handleThumbDragStart($event,'x')"></div>
     </div>
   </div>
 </template>
@@ -130,7 +130,7 @@ export default {
   },
 
   methods: {
-    handleBarYMousedown(e, thumb) {
+    handleBarMousedown(e, thumb) {
       if (thumb === 'y') {
         const scrollTop =
           (e.offsetY - this.thumbYHeight / 2) / this.verticalScale
@@ -143,35 +143,35 @@ export default {
     },
 
     // 滚动条按下时
-    handleThumbYDragStart(e, thumb) {
+    handleThumbDragStart(e, thumb) {
       this.handleThumb = thumb
       this.thumbYScrollTop = e.clientY
       this.thumbXScrollLeft = e.clientX
 
-      on(window, 'mousemove', this.handleThumbYDrag)
-      on(window, 'mouseup', this.handleThumbYDragEnd)
+      on(window, 'mousemove', this.handleThumbDrag)
+      on(window, 'mouseup', this.handleThumbDragEnd)
       document.onselectstart = () => false
     },
 
     // 滚动条移动时
-    handleThumbYDrag(e) {
+    handleThumbDrag(e) {
       if (this.handleThumb === 'y') {
         const scrollTop =
           (e.clientY - this.thumbYScrollTop) / this.verticalScale
-        $(this.$refs.view).scrollTop(scrollTop + this.scrollTop)
+        this.setScrollTop(scrollTop + this.scrollTop)
         this.thumbYScrollTop = e.clientY
       } else {
         const scrollLeft =
           (e.clientX - this.thumbXScrollLeft) / this.horizontalScale
-        $(this.$refs.view).scrollLeft(scrollLeft + this.scrollLeft)
+        this.setScrollLeft(scrollLeft + this.scrollLeft)
         this.thumbXScrollLeft = e.clientX
       }
     },
 
     // 滚动条移动结束
-    handleThumbYDragEnd(e) {
-      off(window, 'mousemove', this.handleThumbYDrag)
-      off(window, 'mouseup', this.handleThumbYDragEnd)
+    handleThumbDragEnd(e) {
+      off(window, 'mousemove', this.handleThumbDrag)
+      off(window, 'mouseup', this.handleThumbDragEnd)
       document.onselectstart = null
       this.handleThumb = ''
     },
@@ -196,6 +196,14 @@ export default {
       this.innerHeight = this.$refs.view.scrollHeight
       this.wrapperWidth = this.$refs.view.clientWidth
       this.innerWidth = this.$refs.view.scrollWidth
+    },
+
+    setScrollTop(scrollTop) {
+      $(this.$refs.view).scrollTop(scrollTop)
+    },
+
+    setScrollLeft(scrollLeft) {
+      $(this.$refs.view).scrollLeft(scrollLeft)
     }
   },
 

@@ -155,10 +155,32 @@ export default {
   height: 100%;
   max-height: 100%;
   overflow: hidden;
+
+  /* 滚动条整体 */
   ::-webkit-scrollbar {
+    // width: 6px;
+    // height: 6px;
     width: 0;
     height: 0;
-    background-color: rgba(0, 0, 0, 0);
+    background-color: transparent;
+  }
+
+  /* 滚动条滑块 */
+  ::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 100px;
+    transition: background-color 0.12s ease-out;
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+  }
+
+  /* 滚动条轨道 */
+  ::-webkit-scrollbar-track {
+    background-color: transparent;
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.1);
+    }
   }
 }
 </style>
