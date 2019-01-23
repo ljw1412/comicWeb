@@ -77,6 +77,8 @@ import { on, off } from '../../utils/dom'
 import viewIndex from './ViewIndex'
 import { mapState, mapGetters } from 'vuex'
 export default {
+  name: 'VForm',
+
   components: {
     VScrollView
   },
@@ -423,18 +425,18 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 $broder-color: #9f9f9f;
-
-* {
-  user-select: none;
-}
 
 .v-form-wrapper {
   position: absolute;
   width: 100px;
   box-sizing: border-box;
   box-shadow: 0 10px 50px rgba($color: #000000, $alpha: 0.7);
+
+  * {
+    user-select: none;
+  }
 
   &--resizable {
     &::after {

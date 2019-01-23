@@ -72,10 +72,13 @@
         class="detail__chapter-group">
         <div class="chapter-group__title">{{item.title}}</div>
         <div class="chapter-group__chapters">
-          <div v-for="chapter of item.list"
-            :key="chapter.chapterId"
-            class="chapters__item"
-            :style="{width:chapterWidth}">{{chapter.chapterName}}</div>
+          <v-grid width="100%"
+            :gutter="5">
+            <v-grid-item v-for="chapter of item.list"
+              :key="chapter.chapterId">
+              <div class="chapters__item">{{chapter.chapterName}}</div>
+            </v-grid-item>
+          </v-grid>
         </div>
       </div>
     </div>
@@ -84,6 +87,7 @@
 
 <script>
 import VForm from '@/components/vForm'
+import { VGrid, VGridItem } from '@/components/vGrid'
 import customForm from '../../../mixins/customForm.js'
 import { mapState } from 'vuex'
 import { scrollTop, getScrollBarSize } from '@/utils/assist.js'
@@ -93,7 +97,9 @@ export default {
   mixins: [customForm],
 
   components: {
-    VForm
+    VForm,
+    VGrid,
+    VGridItem
   },
 
   computed: {
@@ -405,7 +411,7 @@ $line-color: #ddd;
           position: relative;
           background: #fff;
           border: 1px solid $line-color;
-          width: 25%;
+          // width: 25%;
           margin: -0.5px;
           padding: 4px 0;
           overflow: hidden;

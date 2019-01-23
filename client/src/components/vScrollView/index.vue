@@ -1,5 +1,6 @@
 <template>
-  <div class="scroll-view__wrapper">
+  <div class="scroll-view__wrapper"
+    :class="wrapClasses">
     <div ref="view"
       class="scroll-view"
       :style="viewStyles">
@@ -42,11 +43,20 @@ import {
 } from '../../utils/resize-event.js'
 
 export default {
+  name: 'VScrollView',
+
   props: {
-    innerStyle: { type: Object, default: () => ({}) }
+    innerStyle: { type: Object, default: () => ({}) },
+    // hover 悬浮界面时显示，不悬浮是半透明
+    // always 总是显示
+    showMode: { type: String, default: () => 'hover' }
   },
 
   computed: {
+    wrapClasses() {
+      return `scroll-view__wrapper--${this.showMode}`
+    },
+
     viewStyles() {
       return {
         width: `calc(100% + ${this.scrollbarWidth}px)`,
@@ -209,7 +219,6 @@ export default {
 
   mounted() {
     this.addListener()
-    this.initBar()
     this.scrollbarWidth = scrollbarWidth(this.$refs.view)
   },
 
@@ -228,7 +237,8 @@ export default {
   &__wrapper {
     position: relative;
     overflow: hidden;
-    &:hover .scroll-bar {
+    &--always .scroll-bar,
+    &--hover:hover .scroll-bar {
       opacity: 1;
     }
   }
