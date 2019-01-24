@@ -1,13 +1,14 @@
 <template>
   <div class="scroll-view__wrapper"
-    :class="wrapClasses">
+    :class="wrapClasses"
+    :style="wrapStyles">
     <div ref="view"
       class="scroll-view"
       :style="viewStyles">
       <div ref="content"
         class="scroll-view__inner"
         :class="contentClasses"
-        :style="[innerStyle]">
+        :style="innerStyle">
         <slot></slot>
       </div>
     </div>
@@ -15,6 +16,7 @@
     <div v-if="isBarYShow"
       ref="barY"
       class="scroll-bar scroll-bar--vertical"
+      :style="{right}"
       @mousedown="handleBarMousedown($event,'y')">
       <div ref="thumbY"
         class="scroll-bar__thumb"
@@ -25,6 +27,7 @@
     <div v-if="isBarXShow"
       ref="barX"
       class="scroll-bar scroll-bar--horizontal"
+      :style="{bottom}"
       @mousedown="handleBarMousedown($event,'x')">
       <div ref="thumbX"
         class="scroll-bar__thumb"
@@ -46,15 +49,29 @@ export default {
   name: 'VScrollView',
 
   props: {
-    innerStyle: { type: Object, default: () => ({}) },
+    innerStyle: { type: [Object, String], default: () => ({}) },
     // hover 悬浮界面时显示，不悬浮是半透明
     // always 总是显示
-    showMode: { type: String, default: () => 'hover' }
+    showMode: { type: String, default: () => 'hover' },
+    // 垂直导航栏距离右边的距离
+    right: String,
+    // 水平导航栏距离底部的距离
+    bottom: String,
+
+    width: String,
+    height: String
   },
 
   computed: {
     wrapClasses() {
       return `scroll-view__wrapper--${this.showMode}`
+    },
+
+    wrapStyles() {
+      return {
+        width: this.width,
+        height: this.height
+      }
     },
 
     viewStyles() {
@@ -250,14 +267,6 @@ export default {
 
   &__inner {
     display: inline-block;
-
-    // &--scroll-x {
-    //   padding-bottom: 5px;
-    // }
-
-    // &--scroll-y {
-    //   padding-right: 5px;
-    // }
   }
 }
 
@@ -265,7 +274,7 @@ export default {
   position: absolute;
   right: 2px;
   bottom: 2px;
-  z-index: 1;
+  z-index: 99999;
   border-radius: 4px;
   opacity: 0.4;
   transition: opacity 0.12s ease-out;
