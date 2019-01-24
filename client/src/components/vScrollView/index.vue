@@ -193,22 +193,19 @@ export default {
 
     addListener() {
       on(this.$refs.view, 'scroll', this.handleScroll)
-      addResizeListener(this.$refs.content, this.getInnerSize)
-      addResizeListener(this.$refs.view, this.getWrapperSize)
+      addResizeListener(this.$refs.content, this.getViewSize)
+      addResizeListener(this.$refs.view, this.getViewSize)
     },
 
     removeListener() {
       off(this.$refs.view, 'scroll', this.handleScroll)
-      removeResizeListener(this.$refs.content, this.getInnerSize)
-      removeResizeListener(this.$refs.view, this.getWrapperSize)
+      removeResizeListener(this.$refs.content, this.getViewSize)
+      removeResizeListener(this.$refs.view, this.getViewSize)
     },
 
-    getWrapperSize() {
+    getViewSize() {
       this.wrapperHeight = this.$refs.view.clientHeight
       this.wrapperWidth = this.$refs.view.clientWidth
-    },
-
-    getInnerSize() {
       this.innerHeight = this.$refs.view.scrollHeight
       this.innerWidth = this.$refs.view.scrollWidth
     },
