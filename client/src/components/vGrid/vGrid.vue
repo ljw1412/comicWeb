@@ -78,11 +78,22 @@ export default {
 
     initGrid() {
       this.gridWidth = this.$refs.grid.offsetWidth
+    },
+
+    updateItem() {
+      this.$slots.default.forEach(item => {
+        item.elm.style.width = this.mItemWidth
+        item.elm.style.padding = this.mGutter
+      })
     }
   },
 
   mounted() {
     this.addListener()
+    // 如果没有配置 以默认属性更新子元素的样式
+    if (!this.column && !this.itemWidth) {
+      this.updateItem()
+    }
   },
 
   beforeDestroy() {
@@ -90,16 +101,8 @@ export default {
   },
 
   watch: {
-    mItemWidth: {
-      immediate: true,
-      handler(val) {
-        console.log(val)
-
-        this.$slots.default.forEach(item => {
-          item.elm.style.width = val
-          item.elm.style.padding = this.mGutter
-        })
-      }
+    mItemWidth(val) {
+      this.updateItem()
     }
   }
 }

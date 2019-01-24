@@ -73,6 +73,7 @@
         <div class="chapter-group__title">{{item.title}}</div>
         <div class="chapter-group__chapters">
           <v-grid width="100%"
+            item-width="60"
             :gutter="5">
             <v-grid-item v-for="chapter of item.list"
               :key="chapter.chapterId">
