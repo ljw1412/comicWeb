@@ -227,12 +227,20 @@ export default {
       this.innerWidth = this.$refs.view.scrollWidth
     },
 
-    setScrollTop(scrollTop) {
-      $(this.$refs.view).scrollTop(scrollTop)
+    setScrollTop(scrollTop, animate) {
+      if (animate) {
+        $(this.$refs.view).animate({ scrollTop }, 200)
+      } else {
+        $(this.$refs.view).scrollTop(scrollTop)
+      }
     },
 
-    setScrollLeft(scrollLeft) {
-      $(this.$refs.view).scrollLeft(scrollLeft)
+    setScrollLeft(scrollLeft, animate) {
+      if (animate) {
+        $(this.$refs.view).animate({ scrollLeft }, 200)
+      } else {
+        $(this.$refs.view).scrollLeft(scrollLeft)
+      }
     }
   },
 

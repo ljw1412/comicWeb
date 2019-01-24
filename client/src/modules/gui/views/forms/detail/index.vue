@@ -17,28 +17,33 @@
     :splashScreen="splashScreen"
     :mainStyle="{width:'100%'}"
     @resize="onFormResize">
-    <transition slot="bodyTop"
+    <transition slot="menu"
       name="fade">
-      <div v-if="isDisplayTopDetail"
-        class="detail__fixed-view">
-        <div class="fixed-view__info">
-          <span class="info__title">{{comic.name}} </span>
-          <span class="info__status"
-            :class="isfinish?'finish':'serialize'">{{comic.status}}</span>
+      <div class="detail__action-bar">
+        <div :style="{opacity : actionBar.opacity}">
+          <div class="action-bar__bg"></div>
+          <div class="action-bar__info">
+            <span class="info__title">{{comic.name}} </span>
+            <span class="info__status"
+              :class="isfinish?'finish':'serialize'">{{comic.status}}</span>
+          </div>
+        </div>
+        <div class="action-bar__action">
+          <i-icon class="action__icon"
+            type="ios-download-outline" />
         </div>
       </div>
     </transition>
     <div class="detail">
       <div ref="cover"
-        class="detail__cover"
-        v-lazy:background-image="comic.cover">
+        class="detail__cover">
+        <div class="cover__bg"
+          v-lazy:background-image="comic.cover"></div>
         <div class="cover__base-info">
           <div>
             <span class="base-info__name">{{comic.name}}</span>
             <span class="base-info__status"
-              :class="isfinish?'finish':'serialize'">
-              {{comic.status}}
-            </span>
+              :class="isfinish ? 'finish' : 'serialize'">{{comic.status}}</span>
           </div>
           <div class="base-info__authors">
             <span v-for="(item,index) of comic.authors"
@@ -107,12 +112,18 @@ export default {
     comicId() {
       return this.comic.id
     },
+
     isfinish() {
       return this.comic.status.includes('完')
     },
+
     chapterWidth() {
       const columnCount = Math.floor(this.self.width / 65)
       return 100 / columnCount + '%'
+    },
+
+    scrollTop() {
+      return this.bodyDOM ? this.bodyDOM.scrollTop : 0
     }
   },
 
@@ -126,8 +137,10 @@ export default {
       bodyDOM: null,
       // 是否展开介绍
       isDisplayDescription: false,
-      // 是否显示顶部悬浮标题
-      isDisplayTopDetail: false,
+      // 顶部操作栏
+      actionBar: {
+        opacity: 0
+      },
       // 是否为倒序
       isReverseOrder: true,
       comic: {
@@ -167,13 +180,12 @@ export default {
 
     onMoreDescriptionClick() {
       this.isDisplayDescription = !this.isDisplayDescription
+
       if (this.isDisplayDescription) {
         this.$nextTick(() => {
-          scrollTop(
-            this.bodyDOM,
-            this.bodyDOM.scrollTop,
+          this.$refs.form.$children[0].setScrollTop(
             this.$refs.operate.offsetTop + 15,
-            2000
+            true
           )
         })
       }
@@ -181,15 +193,6 @@ export default {
 
     onOrderClick(isReverse) {
       this.isReverseOrder = isReverse
-    },
-
-    // 当页面滚动时
-    onScroll(e) {
-      if (this.bodyDOM.scrollTop > this.$refs.operate.offsetTop + 10) {
-        this.isDisplayTopDetail = true
-      } else {
-        this.isDisplayTopDetail = false
-      }
     },
 
     onFormResize(e) {
@@ -212,10 +215,24 @@ export default {
         }
       }
     },
+
     isReverseOrder() {
       this.comic.chapters.forEach(item => {
         item.list = item.list.reverse()
       })
+    },
+
+    scrollTop(val) {
+      if (val > this.$refs.operate.offsetTop + 10) {
+        this.actionBar.opacity = 1
+        this.actionBar.isDisplayShadow = true
+      } else if (val > 10) {
+        this.actionBar.opacity =
+          (val - 10) / (this.$refs.operate.offsetTop + 10)
+        this.actionBar.isDisplayShadow = false
+      } else {
+        this.actionBar.opacity = 0
+      }
     }
   },
 
@@ -224,13 +241,10 @@ export default {
   },
 
   mounted() {
-    this.bodyDOM = this.$children[0].$refs.body
-    on(this.bodyDOM, 'scroll', this.onScroll)
+    this.bodyDOM = this.$children[0].$refs.main
   },
 
-  beforeDestroy() {
-    off(this.bodyDOM, 'scroll', this.onScroll)
-  }
+  beforeDestroy() {}
 }
 </script>
 
@@ -243,26 +257,46 @@ $line-color: #ddd;
   position: relative;
   overflow-x: hidden;
   width: 100%;
-  &__fixed-view {
+  &__action-bar {
     z-index: 19;
     position: absolute;
+    padding: 0 10px;
     top: 0;
     left: 0;
     right: 0;
     height: 40px;
-    background: #fff;
     box-sizing: border-box;
-    box-shadow: 0 2px 8px $line-color;
     animation-duration: 0.3s;
-    .fixed-view__info {
-      padding: 0 15px;
-      line-height: 40px;
-      .info {
-        &__title {
-          font-size: 16px;
+    // box-shadow: 0 2px 8px $line-color;
+    .action-bar {
+      &__info {
+        line-height: 40px;
+        .info {
+          &__title {
+            font-size: 16px;
+          }
+          &__status {
+            font-size: 14px;
+          }
         }
-        &__status {
-          font-size: 14px;
+      }
+      &__bg {
+        position: absolute;
+        z-index: -1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: #fff;
+      }
+      &__action {
+        position: absolute;
+        right: 10px;
+        top: 0;
+        bottom: 0;
+        .action__icon {
+          font-size: 26px;
+          line-height: 40px;
         }
       }
     }
@@ -272,10 +306,7 @@ $line-color: #ddd;
     width: 200%;
     margin-left: -50%;
     min-height: 150px;
-    background-repeat: no-repeat;
-    background-size: 50%;
     border-radius: 0 0 50% 50%;
-    background-position: center;
     overflow: hidden;
     &::after {
       position: absolute;
@@ -288,26 +319,38 @@ $line-color: #ddd;
         rgba($color: #333, $alpha: 0.9)
       );
     }
-    .cover__base-info {
-      z-index: 9;
-      position: absolute;
-      bottom: 15px;
-      left: 25%;
-      margin-left: 15px;
-      color: #fff;
-      .base-info {
-        &__name {
-          font-size: 14px;
-        }
-        &__status {
-          padding: 1px 3px;
-          border: 1px solid #fff;
-          border-radius: 3px;
-          font-size: 12px;
-          line-height: 12px;
-        }
-        &__authors {
-          font-size: 12px;
+    .cover {
+      &__bg {
+        width: 100%;
+        height: 160px;
+        margin-top: -10px;
+        background-repeat: no-repeat;
+        background-size: 50%;
+        background-position: center;
+        filter: blur(2px);
+      }
+      &__base-info {
+        z-index: 9;
+        position: absolute;
+        bottom: 15px;
+        left: 25%;
+        margin-left: 15px;
+        color: #fff;
+        .base-info {
+          &__name {
+            font-size: 14px;
+          }
+          &__status {
+            margin-left: 2px;
+            padding: 1px 3px;
+            border: 1px solid #fff;
+            border-radius: 3px;
+            font-size: 12px;
+            line-height: 12px;
+          }
+          &__authors {
+            font-size: 12px;
+          }
         }
       }
     }
