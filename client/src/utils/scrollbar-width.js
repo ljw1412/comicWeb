@@ -2,9 +2,9 @@ import Vue from 'vue'
 
 let scrollBarWidth = []
 
-export default function(dom) {
+export default function(name = 'default', dom) {
   if (Vue.prototype.$isServer) return 0
-  if (scrollBarWidth[dom] !== undefined) return scrollBarWidth[dom]
+  if (scrollBarWidth[name] !== undefined) return scrollBarWidth[name]
 
   if (!dom) dom = document.body
 
@@ -25,7 +25,7 @@ export default function(dom) {
 
   const widthWithScroll = inner.offsetWidth
   outer.parentNode.removeChild(outer)
-  scrollBarWidth[dom] = widthNoScroll - widthWithScroll
+  scrollBarWidth[name] = widthNoScroll - widthWithScroll
 
-  return scrollBarWidth[dom]
+  return scrollBarWidth[name]
 }

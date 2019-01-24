@@ -193,18 +193,23 @@ export default {
 
     addListener() {
       on(this.$refs.view, 'scroll', this.handleScroll)
-      addResizeListener(this.$refs.content, this.initBar)
+      addResizeListener(this.$refs.content, this.getInnerSize)
+      addResizeListener(this.$refs.view, this.getWrapperSize)
     },
 
     removeListener() {
       off(this.$refs.view, 'scroll', this.handleScroll)
-      removeResizeListener(this.$refs.content, this.initBar)
+      removeResizeListener(this.$refs.content, this.getInnerSize)
+      removeResizeListener(this.$refs.view, this.getWrapperSize)
     },
 
-    initBar() {
+    getWrapperSize() {
       this.wrapperHeight = this.$refs.view.clientHeight
-      this.innerHeight = this.$refs.view.scrollHeight
       this.wrapperWidth = this.$refs.view.clientWidth
+    },
+
+    getInnerSize() {
+      this.innerHeight = this.$refs.view.scrollHeight
       this.innerWidth = this.$refs.view.scrollWidth
     },
 
@@ -219,7 +224,10 @@ export default {
 
   mounted() {
     this.addListener()
-    this.scrollbarWidth = scrollbarWidth(this.$refs.view)
+    this.scrollbarWidth = scrollbarWidth(
+      this.$route.name || this.$route.path,
+      this.$refs.view
+    )
   },
 
   beforeDestroy() {
