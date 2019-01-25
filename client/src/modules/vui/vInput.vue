@@ -1,6 +1,6 @@
 <template>
   <div class="ui-component-input">
-    <vui-title>VInput</vui-title>
+    <h1>VInput</h1>
     <h3>VInput - input(value:'{{value1}}')</h3>
     <v-input v-model="value1"
       width="300px"
@@ -39,10 +39,9 @@
 </template>
 
 <script>
-import VuiTitle from './base/title'
 import VInput from '@/components/vInput'
 export default {
-  components: { VuiTitle, VInput },
+  components: { VInput },
 
   data() {
     return {

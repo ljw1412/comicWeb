@@ -41,6 +41,15 @@ export default {
               label: 'Input 输入框'
             }
           ]
+        },
+        {
+          groupName: '自定义',
+          itemList: [
+            {
+              name: 'vreader',
+              label: 'VReader 阅读器'
+            }
+          ]
         }
       ]
     }

@@ -1,6 +1,6 @@
 <template>
   <div class="ui-component-scroll-view">
-    <vui-title>VScrollView</vui-title>
+    <h1>VScrollView</h1>
     <i-tabs style="width:100%">
       <i-tab-pane label="预览">
         <example>
@@ -55,11 +55,10 @@
 </template>
 
 <script>
-import VuiTitle from './base/title'
 import Example from './base/example'
 import VScrollView from '@/components/vScrollView'
 export default {
-  components: { VuiTitle, Example, VScrollView },
+  components: { Example, VScrollView },
 
   data() {
     return {

@@ -1,6 +1,6 @@
 <template>
   <div class="ui-component-grid">
-    <vui-title> VGrid </vui-title>
+    <h1> VGrid </h1>
     <v-grid item-width="100"
       align="center"
       :width="`${width}px`"
@@ -18,11 +18,9 @@
 </template>
 
 <script>
-import VuiTitle from './base/title'
 import { VGrid, VGridItem } from '@/components/vGrid'
 export default {
   components: {
-    VuiTitle,
     VGrid,
     VGridItem
   },
