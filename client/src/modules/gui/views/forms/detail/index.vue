@@ -38,8 +38,10 @@
       <div ref="cover"
         class="detail__cover">
         <div class="cover__bg"
-          v-lazy:background-image="comic.cover"></div>
-        <div class="cover__base-info">
+          v-lazy:background-image="comic.cover"
+          :style="{filter: `blur(${coverBlur}px)`}"></div>
+        <div class="cover__base-info"
+          :style="{opacity : 1 - actionBar.opacity * 2}">
           <div>
             <span class="base-info__name">{{comic.name}}</span>
             <span class="base-info__status"
@@ -119,9 +121,8 @@ export default {
       return this.comic.status.includes('完')
     },
 
-    chapterWidth() {
-      const columnCount = Math.floor(this.self.width / 65)
-      return 100 / columnCount + '%'
+    coverBlur() {
+      return this.actionBar.opacity * 5
     },
 
     scrollTop() {
@@ -331,7 +332,6 @@ $line-color: #ddd;
         background-repeat: no-repeat;
         background-size: 50%;
         background-position: center;
-        filter: blur(2px);
       }
       &__base-info {
         z-index: 9;
