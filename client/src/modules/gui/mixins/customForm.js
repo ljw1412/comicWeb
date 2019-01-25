@@ -34,11 +34,11 @@ export default {
 
   created() {
     this.UPDATE_TASK({
-      config: { name: this.name, unique: !!this.unique },
+      config: { name: this.$options.name, unique: !!this.unique },
       task: {
         isBuilt: false,
         component: this,
-        name: this.name,
+        name: this.$options.name,
         isDisplay: true,
         isClose: false
       }

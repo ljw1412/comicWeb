@@ -9,6 +9,8 @@
 
 <script>
 export default {
+  name: 'TaskLayer',
+
   created() {
     this.name = 'TaskLayer'
   }

@@ -52,6 +52,8 @@ import ComicItem from './components/comicItem'
 import customForm from '../../../mixins/customForm.js'
 
 export default {
+  name: 'TaskSearch',
+
   mixins: [customForm],
 
   components: {
@@ -99,10 +101,6 @@ export default {
     onFormResize(e) {
       console.log(e)
     }
-  },
-
-  beforeCreate() {
-    this.name = 'TaskSearch'
   },
 
   created() {

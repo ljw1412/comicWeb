@@ -1,6 +1,6 @@
 <script>
 export default {
-  name: 'pageTitle',
+  name: 'PageTitle',
   render: function(createElement) {
     return createElement('div', { class: { 'page-title': true } }, [
       createElement('h' + this.level, this.title || this.$slots.default),

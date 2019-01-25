@@ -16,6 +16,8 @@ import Contextmenu from '../../../../components/menu/contextmenu'
 import ShortcutGrid from './components/shortcutGrid'
 
 export default {
+  name: 'Desktop',
+
   components: {
     Contextmenu,
     ShortcutGrid

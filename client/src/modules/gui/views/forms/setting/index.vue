@@ -21,6 +21,8 @@
 import VForm from '@/components/vForm'
 import customForm from '../../../mixins/customForm.js'
 export default {
+  name: 'TaskSetting',
+
   mixins: [customForm],
 
   components: {
@@ -48,10 +50,6 @@ export default {
     onFormResize(e) {
       console.log(this.title, e)
     }
-  },
-
-  beforeCreate() {
-    this.name = 'TaskSetting'
   }
 }
 </script>

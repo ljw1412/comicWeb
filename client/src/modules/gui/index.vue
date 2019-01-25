@@ -29,6 +29,8 @@ import Color from 'color'
 import themeColor from '../../utils/themeColor.js'
 
 export default {
+  name: 'Gui',
+
   components: {
     Desktop,
     ActionView,

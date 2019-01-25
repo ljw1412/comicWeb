@@ -96,10 +96,12 @@ import VForm from '@/components/vForm'
 import { VGrid, VGridItem } from '@/components/vGrid'
 import customForm from '../../../mixins/customForm.js'
 import { mapState } from 'vuex'
-import { scrollTop, getScrollBarSize } from '@/utils/assist.js'
+import { findComponentDownward } from '@/utils/assist.js'
 import { on, off } from '@/utils/dom.js'
 
 export default {
+  name: 'TaskDetail',
+
   mixins: [customForm],
 
   components: {
@@ -175,6 +177,11 @@ export default {
           types: this.comic.types,
           chapters: this.comic.chapters
         } = data)
+        if (!this.isReverseOrder && Array.isArray(this.comic.chapters)) {
+          this.comic.chapters.forEach(item => {
+            item.list = item.list.reverse()
+          })
+        }
       })
     },
 
@@ -183,16 +190,16 @@ export default {
 
       if (this.isDisplayDescription) {
         this.$nextTick(() => {
-          this.$refs.form.$children[0].setScrollTop(
-            this.$refs.operate.offsetTop + 15,
-            true
-          )
+          const vScrollView = findComponentDownward(this, 'VScrollView')
+          vScrollView &&
+            vScrollView.setScrollTop(this.$refs.operate.offsetTop + 15, true)
         })
       }
     },
 
     onOrderClick(isReverse) {
       this.isReverseOrder = isReverse
+      Store.set('isReverseOrder', isReverse)
     },
 
     onFormResize(e) {
@@ -236,12 +243,9 @@ export default {
     }
   },
 
-  beforeCreate() {
-    this.name = 'TaskDetail'
-  },
-
   mounted() {
     this.bodyDOM = this.$children[0].$refs.main
+    this.isReverseOrder = Store.get('isReverseOrder', true)
   },
 
   beforeDestroy() {}
