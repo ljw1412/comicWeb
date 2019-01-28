@@ -22,9 +22,9 @@ router.post('/search', async (ctx, next) => {
 router.post('/details', async (ctx, next) => {
   const params = ctx.request.body
   console.log('details:', params)
-  if (params.website && params.id) {
+  if (params.website && params.comicId) {
     if (params.website === 'dmzj') {
-      const result = await dmzj.details(params.id)
+      const result = await dmzj.details(params.comicId)
       ctx.body = result
     } else {
       ctx.body = { error: true, errorMsg: '暂时不支持这个站点' }
@@ -37,10 +37,10 @@ router.post('/details', async (ctx, next) => {
 router.post('/chapter', async (ctx, next) => {
   console.log('chapter:', ctx.request.body)
   const params = ctx.request.body
-  if (params.website && params.id && params.chapterId) {
+  if (params.website && params.comicId && params.chapterId) {
     if (params.website === 'dmzj') {
-      const list = await dmzj.chapter(params)
-      ctx.body = { list }
+      const result = await dmzj.chapter(params)
+      ctx.body = result
     } else {
       ctx.body = { error: true, errorMsg: '暂时不支持这个站点' }
     }

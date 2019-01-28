@@ -2,17 +2,22 @@ const fetch = require('node-fetch')
 const fs = require('fs')
 const path = require('path')
 const URL = require('url')
-
 const refererFetch = require('../utils/refererFetch')
-const {
-  mkdirsSync,
-  writeFile,
-  unzipFile,
-  readDir
-} = require('../utils/fileUtil')
+const FileUtil = require('../utils/fileUtil')
+const ObjectUtil = require('../utils/objectUtil')
 
-const searchUrl = 'https://sacg.dmzj.com/comicsum/search.php?s=*'
-const chapterUrl = 'http://v2.api.dmzj.com/comic/*.json'
+const headers = {
+  'User-Agent':
+    'Mozilla/5.0 (Linux; U; Android 8.0.0; zh-cn;  MI8 Build/JRO03L) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30 XiaoMi/MiuiBrowser/1.0'
+}
+const query = '?channel=Android&version=2.6.004'
+const searchUrl = 'https://sacg.dmzj.com/comicsum/search.php?s={keyword}'
+const detailUrl = 'http://v2.api.dmzj.com/comic/{comicId}.json' + query
+const chapterUrl =
+  'http://v2.api.dmzj.com/chapter/{comicId}/{chapterId}.json' + query
+
+const { baseServerUrl } = require('../config')
+const imageBaseUrl = `//${baseServerUrl}/image?website=dmzj&url=`
 
 const webName = '(动漫之家)'
 
@@ -20,8 +25,9 @@ function log(...args) {
   console.log('\x1B[33m', webName, ...args)
 }
 
+// 搜索
 const search = async keyword => {
-  const url = searchUrl.replace(/\*/, encodeURIComponent(keyword))
+  const url = searchUrl.replace(/\{keyword\}/, encodeURIComponent(keyword))
   log('搜索:', url)
   let result
   await fetch(url)
@@ -35,9 +41,7 @@ const search = async keyword => {
         id: item.id,
         name: item.name,
         status: item.status.includes('完') ? '已完结' : '连载中',
-        cover:
-          '//localhost:3000/image?website=dmzj&url=' +
-          item.cover.replace(/^\/\//, 'https://'),
+        cover: imageBaseUrl + item.cover.replace(/^\/\//, 'https://'),
         authors: item.authors,
         lastUpdateChapterName: item.last_update_chapter_name,
         lastUpdateChapterId: item.last_update_chapter_id,
@@ -50,21 +54,20 @@ const search = async keyword => {
   return result
 }
 
-const details = async id => {
-  const url = chapterUrl.replace(/\*/, id)
+// 漫画详情
+const details = async comicId => {
+  const url = detailUrl.replace(/\{comicId\}/, comicId)
   log('详情获取:', url)
   let result
-  await fetch(url)
+  await fetch(url, { method: 'GET', headers })
     .then(res => res.json())
     .then(data => {
       result = {
-        id: data.id,
+        comicId: data.id,
         // 是否竖排版
         isVertical: data.direction != '1',
         title: data.title,
-        cover:
-          '//localhost:3000/image?website=dmzj&url=' +
-          data.cover.replace(/^\/\//, 'https://'),
+        cover: imageBaseUrl + data.cover.replace(/^\/\//, 'https://'),
         firstLetter: data.first_letter,
         description: data.description,
         lastUpdateTime: data.last_updatetime,
@@ -87,11 +90,31 @@ const details = async id => {
   return result
 }
 
-const chapter = async ({ website, id, chapterId }) => {
-  const list = await getLocalImageList({ website, id, chapterId })
+// 漫画章节，获得当前章节的信息
+const chapter = async ({ website, comicId, chapterId }) => {
+  const list = await getLocalImageList(website, comicId, chapterId)
   if (list.length) return list
+
+  const url = chapterUrl
+    .replace(/\{comicId\}/, comicId)
+    .replace(/\{chapterId\}/, chapterId)
+  log('详情获取:', url)
+  const json = await fetch(url, {
+    method: 'GET',
+    headers
+  })
+    .then(res => res.json())
+    .then(json => ObjectUtil.keyToHump(json))
+    .then(json => {
+      json.imageList = json.pageUrl.map(url => imageBaseUrl + url)
+      delete json.pageUrl
+      return json
+    })
+    .catch(error => console.error(error))
+  return json
 }
 
+// 漫画下载
 const download = async ({ website, url, type }) => {
   const baseDir = path.join('download', website)
   let pathName = URL.parse(url).pathname
@@ -103,7 +126,7 @@ const download = async ({ website, url, type }) => {
   // 文件所要保存的文件夹的相对路径
   const dirName = path.dirname(filePath)
   // 创建文件夹
-  mkdirsSync(dirName)
+  FileUtil.mkdirsSync(dirName)
 
   let referer
   if (website === 'dmzj') {
@@ -121,10 +144,10 @@ const download = async ({ website, url, type }) => {
     })
     .then(data => {
       console.log('正在写入文件流:' + filePath)
-      return writeFile(filePath, Buffer.from(data))
+      return FileUtil.writeFile(filePath, Buffer.from(data))
     })
     .then(zipFile => {
-      return unzipFile(zipFile)
+      return FileUtil.unzipFile(zipFile)
     })
     .then(() => {
       success = true
@@ -134,10 +157,12 @@ const download = async ({ website, url, type }) => {
   return success
 }
 
-const getLocalImageList = async ({ website, id, chapterId }) => {
+const getLocalImageList = async (website, comicId, chapterId) => {
+  // TODO 数据库查询是否下载过, 下面的文件夹为暂时写死
+  return []
   const chapterPath = path.join('.', 'download/dmzj/b/42084/67136')
   let result = []
-  await readDir(chapterPath)
+  await FileUtil.readDir(chapterPath)
     .then(data => {
       data.sort((a, b) => {
         return a.length == b.length ? a.localeCompare(b) : a.length - b.length
