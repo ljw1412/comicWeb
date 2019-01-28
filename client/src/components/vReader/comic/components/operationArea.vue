@@ -96,13 +96,13 @@ export default {
     color: #606266;
     font-size: 2em;
     &.area1 {
-      background-color: rgba($color: #f56c6c, $alpha: 0.3);
+      background-color: rgba($color: #f56c6c, $alpha: 0.6);
     }
     &.area2 {
-      background-color: rgba($color: #e6a23c, $alpha: 0.3);
+      background-color: rgba($color: #e6a23c, $alpha: 0.6);
     }
     &.area3 {
-      background-color: rgba($color: #67c23a, $alpha: 0.3);
+      background-color: rgba($color: #67c23a, $alpha: 0.6);
     }
     span {
       position: absolute;
@@ -116,7 +116,7 @@ export default {
     flex-direction: column;
     .operation-area {
       height: 33.33333%;
-      width: 100%;
+      // width: 100%;
       // 文字水平排列
       writing-mode: horizontal-tb;
     }
@@ -124,7 +124,7 @@ export default {
   &--horizontal {
     flex-direction: row;
     .operation-area {
-      height: 100%;
+      // height: 100%;
       width: 33.3333333%;
       // 文字垂直排列
       writing-mode: vertical-lr;

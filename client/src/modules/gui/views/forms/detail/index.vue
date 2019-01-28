@@ -167,7 +167,10 @@ export default {
     reFindDetail() {
       this.$post({
         api: '/comic/details',
-        param: { website: this.comic.website, id: this.comic.id }
+        param: {
+          website: this.comic.website,
+          comicId: this.comic.id
+        }
       }).then(data => {
         ;({
           status: this.comic.status,
