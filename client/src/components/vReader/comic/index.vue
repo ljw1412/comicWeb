@@ -1,7 +1,8 @@
 <template>
   <div class="v-reader v-comic-reader"
     :data-page-number="index + 1">
-    <operation-area @area-click="handleAreaClick"
+    <operation-area ref="operationArea"
+      @area-click="handleAreaClick"
       @area1-click="previousPage"
       @area2-click="showTools"
       @area3-click="nextPage"></operation-area>
@@ -62,6 +63,10 @@ export default {
   methods: {
     handleAreaClick(e) {
       console.log(e)
+    },
+
+    displayGuide() {
+      this.$refs.operationArea.displayGuide()
     },
 
     previousPage() {

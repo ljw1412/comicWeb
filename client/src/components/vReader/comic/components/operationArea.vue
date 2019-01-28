@@ -59,6 +59,7 @@ export default {
       if (this.disabled) return
       if (this.isDisplayGuide) {
         this.isDisplayGuide = false
+        Store.set('vReaderDisplayGuide', false)
         return
       }
       const area = this.$refs.area.getBoundingClientRect()
@@ -76,6 +77,10 @@ export default {
     displayGuide() {
       this.isDisplayGuide = true
     }
+  },
+
+  mounted() {
+    this.isDisplayGuide = Store.get('vReaderDisplayGuide', true)
   }
 }
 </script>
