@@ -1,11 +1,20 @@
 <template>
   <div class="v-reader v-comic-reader"
     :data-page-number="index + 1">
+    <!-- 操作区块 -->
     <operation-area ref="operationArea"
       @area-click="handleAreaClick"
       @area1-click="previousPage"
       @area2-click="showTools"
       @area3-click="nextPage"></operation-area>
+    <!-- 功能区块 -->
+    <action-area :visible="isDisplayActionArea"
+      :comic-title="comicTitle"
+      :chapter-title="chapterTitle"
+      :page-index="index + 1"
+      :page-count="count"
+      @page-change="handlePageChange"></action-area>
+    <!-- 图片 -->
     <div class="v-comic-reader__image"
       :style="{'background-image':`url(${currentImageUrl})`}"></div>
   </div>
@@ -13,16 +22,24 @@
 
 <script>
 import OperationArea from './components/operationArea'
+import ActionArea from './components/actionArea'
+
 export default {
+  components: {
+    OperationArea,
+    ActionArea
+  },
+
   props: {
     imageList: Array,
     website: String,
-    comicId: String,
-    chapterId: String
+    comicTitle: String,
+    comicId: [Number, String],
+    chapterId: [Number, String]
   },
 
   computed: {
-    total() {
+    count() {
       return this.mImageList.length
     },
 
@@ -31,11 +48,11 @@ export default {
     },
 
     isLastImage() {
-      return this.index >= this.total - 1
+      return this.index >= this.count - 1
     },
 
     currentImageUrl() {
-      return this.total > 0 ? this.mImageList[this.index] : ''
+      return this.count > 0 ? this.mImageList[this.index] : ''
     },
 
     needLoadImageList() {
@@ -52,24 +69,23 @@ export default {
       // 章节的图片列表
       mImageList: [],
       // 已经加载的图片列表
-      loadedImageList: []
+      loadedImageList: [],
+      // 功能区块是否显示
+      isDisplayActionArea: false,
+      chapterTitle: ''
     }
   },
 
-  components: {
-    OperationArea
-  },
-
   methods: {
-    handleAreaClick(e) {
-      console.log(e)
-    },
+    handleAreaClick(info) {},
 
     displayGuide() {
+      this.isDisplayActionArea = false
       this.$refs.operationArea.displayGuide()
     },
 
     previousPage() {
+      this.isDisplayActionArea = false
       if (this.isFirstImage) {
         console.log('前面没有了')
         return
@@ -78,10 +94,11 @@ export default {
     },
 
     showTools() {
-      console.log('Area2Click')
+      this.isDisplayActionArea = !this.isDisplayActionArea
     },
 
     nextPage() {
+      this.isDisplayActionArea = false
       if (this.isLastImage) {
         console.log('最后一页了')
         return
@@ -99,6 +116,10 @@ export default {
       })
     },
 
+    handlePageChange(index) {
+      this.index = index
+    },
+
     reFindChapter() {
       this.$post({
         api: '/comic/chapter',
@@ -109,6 +130,7 @@ export default {
         }
       }).then(data => {
         this.mImageList = data.imageList
+        this.chapterTitle = data.title
       })
     }
   },
@@ -133,6 +155,7 @@ export default {
 .v-reader {
   position: relative;
   height: 100%;
+  border: 1px solid #ccc;
 }
 
 .v-comic-reader {

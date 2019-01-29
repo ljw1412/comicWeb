@@ -67,7 +67,6 @@ export default {
       title: '搜索',
       list: [],
       unique: true,
-      currentComic: {},
       website: '',
       websiteList: [{ id: 0, value: 'dmzj', label: '动漫之家' }]
     }
@@ -94,7 +93,6 @@ export default {
 
     onComicItemClick(item) {
       item.website = this.website
-      this.currentComic = item
       this.newTask('TaskDetail', item)
     },
 

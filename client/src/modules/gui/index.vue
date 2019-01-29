@@ -8,6 +8,9 @@
       <detail-form v-for="item of taskDetailList"
         :key="item.id"
         :data="item.data"></detail-form>
+      <reader-form v-for="item of taskReaderList"
+        :key="item.id"
+        :data="item.data"></reader-form>
       <!-- <setting-form></setting-form> -->
     </task-layer>
     <action-view></action-view>
@@ -18,9 +21,9 @@
 import Desktop from './views/desktop'
 import ActionView from './views/actionView'
 import TaskLayer from './views/taskLayer'
-// import VForm from '../../components/vForm'
 import SearchForm from './views/forms/search'
 import DetailForm from './views/forms/detail'
+import ReaderForm from './views/forms/reader'
 // import SettingForm from './views/forms/setting'
 
 import { on, off } from '../../utils/dom.js'
@@ -35,9 +38,9 @@ export default {
     Desktop,
     ActionView,
     TaskLayer,
-    // VForm,
     SearchForm,
-    DetailForm
+    DetailForm,
+    ReaderForm
     // SettingForm
   },
 
@@ -53,6 +56,12 @@ export default {
     taskDetailList() {
       return this.taskTree['TaskDetail']
         ? this.taskTree['TaskDetail'].tasks
+        : []
+    },
+
+    taskReaderList() {
+      return this.taskTree['TaskReader']
+        ? this.taskTree['TaskReader'].tasks
         : []
     },
 

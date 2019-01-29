@@ -5,8 +5,8 @@
     class="v-form-wrapper"
     :class="{'v-form-wrapper--resizable':resizable && !splashScreenShow}"
     :style="[styles,mouseStyles]"
-    @mousemove="onFormMousemove"
-    @mousedown="onFormMousedown">
+    @mousemove.capture="onFormMousemove"
+    @mousedown.capture="onFormMousedown">
     <transition leave-active-class="fadeOut">
       <div v-if="splashScreenShow"
         class="v-form__splash"
@@ -55,11 +55,18 @@
             <slot name="menu"></slot>
           </div>
           <!-- 主体 -->
-          <v-scroll-view ref="main"
+          <v-scroll-view v-if="$slots.default"
+            ref="main"
             class="v-form__main"
             :innerStyle="mainStyle">
             <slot></slot>
           </v-scroll-view>
+          <div v-if="$slots.full"
+            ref="full"
+            class="v-form__full"
+            :style="mainStyle">
+            <slot name="full"></slot>
+          </div>
           <!-- 状态栏 -->
           <div v-if="$slots.status"
             class="from__status-bar">
@@ -126,8 +133,7 @@ export default {
         minWidth: `${this.minWidth}px`,
         minHeight: `${this.minHeight}px`,
         left: `${this.dragData.x}px`,
-        top: `${this.dragData.y}px`,
-        'background-color': '#fff'
+        top: `${this.dragData.y}px`
       }
     },
     mouseStyles() {
@@ -431,9 +437,9 @@ $broder-color: #9f9f9f;
 .v-form-wrapper {
   position: absolute;
   width: 100px;
-  box-sizing: border-box;
-  box-shadow: 0 10px 50px rgba($color: #000000, $alpha: 0.7);
-
+  box-sizing: content-box;
+  padding-right: 3px;
+  padding-bottom: 3px;
   * {
     user-select: none;
   }
@@ -442,8 +448,8 @@ $broder-color: #9f9f9f;
     &::after {
       content: ' ';
       position: absolute;
-      bottom: 2px;
-      right: 2px;
+      bottom: 4px;
+      right: 4px;
       border-style: solid;
       border-width: 0 1px 1px 0;
       border-color: $broder-color;
@@ -458,6 +464,8 @@ $broder-color: #9f9f9f;
   height: 100%;
   display: flex;
   flex-direction: column;
+  background-color: #fff;
+  box-shadow: 0 10px 50px rgba($color: #000000, $alpha: 0.7);
 
   &__splash {
     position: absolute;
@@ -588,18 +596,24 @@ $broder-color: #9f9f9f;
     display: flex;
     flex-direction: column;
     animation-delay: 0.2s;
-    padding-bottom: 3px;
     height: 100%;
   }
 
   &__menu-bar,
   &__main,
-  &__status-bar {
+  &__status-bar,
+  &__full {
     position: relative;
   }
 
   &__main {
     height: 100%;
+  }
+
+  &__full {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
   }
 }
 </style>

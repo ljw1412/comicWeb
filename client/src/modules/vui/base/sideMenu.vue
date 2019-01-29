@@ -28,6 +28,10 @@ export default {
               label: 'ScrollView 滚动布局'
             },
             {
+              name: 'vmarquee',
+              label: 'Marquee 走马灯文字'
+            },
+            {
               name: 'vgrid',
               label: 'Grid 网格布局'
             }

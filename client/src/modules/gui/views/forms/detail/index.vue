@@ -1,7 +1,6 @@
 <template>
   <v-form v-model="visible"
     ref="form"
-    name="TaskDetail"
     class="detail-form"
     resizable
     icon=""
@@ -84,7 +83,8 @@
             :gutter="5">
             <v-grid-item v-for="chapter of item.list"
               :key="chapter.chapterId">
-              <div class="chapters__item">{{chapter.chapterName}}</div>
+              <div class="chapters__item"
+                @click="onChapterClick(chapter)">{{chapter.chapterName}}</div>
             </v-grid-item>
           </v-grid>
         </div>
@@ -208,6 +208,18 @@ export default {
 
     onFormResize(e) {
       this.self.width = e.width
+    },
+
+    onChapterClick(chapter) {
+      const data = Object.assign(
+        {
+          website: this.comic.website,
+          comicId: this.comic.id,
+          comicTitle: this.comic.name
+        },
+        chapter
+      )
+      this.newTask('TaskReader', data)
     }
   },
 
