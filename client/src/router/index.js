@@ -5,6 +5,12 @@ import gui from './gui'
 import admin from './admin'
 import LoginPage from '@/modules/login'
 
+const index = {
+  path: '/',
+  name: 'index',
+  redirect: { name: 'vui' }
+}
+
 const login = {
   path: '/login',
   name: 'login',
@@ -14,5 +20,5 @@ const login = {
 Vue.use(Router)
 
 export default new Router({
-  routes: [gui, admin, login, vui]
+  routes: [index, gui, admin, login, vui]
 })

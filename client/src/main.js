@@ -10,6 +10,7 @@ import callApi from './utils/api'
 import { get, post } from './utils/api'
 import Cookies from '../node_modules/js-cookie/src/js.cookie'
 import Store from 'store'
+import jQuery from 'jquery'
 
 import iView from 'iview'
 import './theme/index.less'
@@ -33,6 +34,7 @@ Vue.prototype.$get = get
 Vue.prototype.$post = post
 window.Cookies = Cookies
 window.Store = Store
+window.$ = jQuery
 
 Vue.prototype.$eventBus = Vue.prototype.$eventBus || new Vue()
 
