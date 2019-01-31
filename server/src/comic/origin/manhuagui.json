@@ -1,0 +1,50 @@
+{
+  "name": "漫画柜",
+  "origin": "https://www.manhuagui.com",
+  "imgOrigin": [
+    { "name": "自动", "url": "https://i.hamreus.com" },
+    { "name": "电信", "url": "https://eu.hamreus.com" },
+    { "name": "联通", "url": "https://us.hamreus.com" }
+  ],
+  "cookie": "",
+  "page": {
+    "search": {
+      "url": "/s/{keyword}_p{page}.html",
+      "pagination": true,
+      "command": {
+        "pageCount": "$('.pager a').last().attr('href').match(/\\/.*_p(\\w+).html/)[1]",
+        "itemList": "$('.book-result li')",
+        "comicId": "$('a.bcover').attr('href').match(/(\\d+)/)[1]",
+        "name": "$('dt a').first().text()",
+        "cover": "$('a.bcover img').attr('src').match('http[s]?:.+.(?:jpg|jpeg|png|gif|bmp)')[0]",
+        "score": "$('.book-score .score-avg strong').text()",
+        "lastUpdateChapterName": "$('.book-detail .status span a').first().text()",
+        "lastUpdateChapterId": "$('.book-detail .status span a').first().attr('href').match(/\\/(\\w+).html/)[1]",
+        "lastUpdateTime": "$('.book-detail .status span span').eq(1).text()",
+        "status": "$('.book-detail .status span span').first().text()",
+        "authors": "$('.tags').eq(2).find('span a').text()",
+        "tag": "$('.tags').eq(1).find('span').eq(2).find('a').text()",
+        "description": "$('.intro').text().replace('\\[详情\\]','')"
+      }
+    },
+    "details": {
+      "url": "/comic/{comicId}/",
+      "command": {
+        "title": "$('.book-title h1').text()",
+        "cover": "$('.hcover img').attr('src').match('http[s]{0,1}:.+.(?:jpg|jpeg|png|gif|bmp)')[0]",
+        "types": "$('.detail-list li').eq(1).find('span').eq(0).find('a').text()",
+        "authors": "$('.detail-list li').eq(1).find('span').eq(1).find('a').text()",
+        "lastUpdateTime": "$('.detail-list .status').html().match(/\\w+-\\w+-\\w+/)[0]",
+        "status": "$('.detail-list li.status span span').first().text()",
+        "description": "$('.book-detail #intro-all').text()",
+        "isBan": "$('#__VIEWSTATE').length==1"
+      },
+      "chapterCommand": {
+        "title": "$('.chapter h4').get()",
+        "chapter": "$('.chapter-list ul').map(function(){return $(this).find('li').get().reverse()})",
+        "chapterId": "$('a.status0').attr('href').match(/\\/(\\d+).html/)[1]",
+        "chapterName": "$('a.status0').attr('title')"
+      }
+    }
+  }
+}

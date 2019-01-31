@@ -14,7 +14,8 @@
     :x="x"
     :y="y"
     :splashScreen="splashScreen"
-    @resize="onFormResize">
+    @resize="onFormResize"
+    @bottom="onContentBottom">
     <div slot="menu"
       class="search__menu">
       <i-select v-model="website"
@@ -35,7 +36,7 @@
     </div>
     <div class="search__result">
       <comic-item v-for="item of list"
-        :key="item.id"
+        :key="item.comicId"
         class="result__item"
         :name="item.name"
         :cover="item.cover"
@@ -68,26 +69,40 @@ export default {
       list: [],
       unique: true,
       website: '',
-      websiteList: [{ id: 0, value: 'dmzj', label: '动漫之家' }]
+      websiteList: [{ id: 0, value: 'dmzj', label: '动漫之家' }],
+      page: 1,
+      pageCount: 0
     }
   },
 
   methods: {
+    reGetOrigin() {
+      this.$get({
+        api: '/getOrigin',
+        param: { type: 'comic' }
+      }).then(data => {
+        this.websiteList = data
+        this.website = this.websiteList[0].value
+      })
+    },
+
     search(keyword) {
       this.$callApi({
         method: 'post',
         api: '/comic/search',
         param: {
           website: this.website,
-          keyword
+          keyword,
+          page: this.page
         }
       }).then(data => {
-        this.list = data
+        this.list = data.list
       })
     },
 
     onSearch(value) {
       if (!value.trim()) return
+      this.list = []
       this.search(value)
     },
 
@@ -98,11 +113,13 @@ export default {
 
     onFormResize(e) {
       console.log(e)
-    }
+    },
+
+    onContentBottom() {}
   },
 
   created() {
-    this.website = this.websiteList[0].value
+    this.reGetOrigin()
   }
 }
 </script>

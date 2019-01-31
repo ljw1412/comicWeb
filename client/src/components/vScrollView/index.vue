@@ -206,6 +206,14 @@ export default {
     handleScroll(e) {
       this.scrollTop = this.$refs.view.scrollTop
       this.scrollLeft = this.$refs.view.scrollLeft
+      // 触底事件
+      if (this.scrollTop + this.wrapperHeight + 1 > this.innerHeight) {
+        this.$emit('bottom')
+      }
+      // 触右事件
+      if (this.scrollLeft + this.wrapperWidth + 1 > this.innerWidth) {
+        this.$emit('right')
+      }
     },
 
     addListener() {

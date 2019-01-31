@@ -1,37 +1,47 @@
 const dmzj = require('../src/comic/dmzj')
+const common = require('../src/comic/common')
 const router = require('koa-router')()
+
+const origin = require('../config/origin').filter(item => item.type === 'comic')
+const commonOrigin = origin
+  .filter(item => item.module === 'common')
+  .map(item => item.value)
+const permissionOrigin = origin.map(item => item.value)
 
 router.prefix('/comic')
 
 router.post('/search', async (ctx, next) => {
-  const params = ctx.request.body
-  console.log('search:', params)
-
-  if (params.website && params.keyword) {
-    if (params.website === 'dmzj') {
-      const result = await dmzj.search(params.keyword)
-      ctx.body = result
-    } else {
-      ctx.body = { error: true, errorMsg: '暂时不支持这个站点' }
-    }
-    return
+  const { website, keyword, page } = ctx.request.body
+  console.log('search:', { website, keyword })
+  if (!website || !keyword) return ctx.throw(500, '入参有误')
+  if (!permissionOrigin.includes(website))
+    return ctx.throw(500, '暂时不支持这个站点')
+  let result
+  if (website === 'dmzj') {
+    result = await dmzj.search(keyword)
+  } else if (commonOrigin.includes(website)) {
+    result = await common.search(website, keyword, page)
+  } else {
+    ctx.throw(500, '暂时不支持这个站点')
   }
-  ctx.body = { error: true, errorMsg: '入参有误' }
+  ctx.body = result
 })
 
 router.post('/details', async (ctx, next) => {
-  const params = ctx.request.body
-  console.log('details:', params)
-  if (params.website && params.comicId) {
-    if (params.website === 'dmzj') {
-      const result = await dmzj.details(params.comicId)
-      ctx.body = result
-    } else {
-      ctx.body = { error: true, errorMsg: '暂时不支持这个站点' }
-    }
-    return
+  const { website, comicId } = ctx.request.body
+  console.log('details:', { website, comicId })
+  if (!website || !comicId) return ctx.throw(500, '入参有误')
+  if (!permissionOrigin.includes(website))
+    return ctx.throw(500, '暂时不支持这个站点')
+  let result
+  if (website === 'dmzj') {
+    result = await dmzj.details(comicId)
+  } else if (commonOrigin.includes(website)) {
+    result = await common.details(website, comicId)
+  } else {
+    ctx.throw(500, '暂时不支持这个站点')
   }
-  ctx.body = { error: true, errorMsg: '入参有误' }
+  ctx.body = result
 })
 
 router.post('/chapter', async (ctx, next) => {

@@ -58,7 +58,9 @@
           <v-scroll-view v-if="$slots.default"
             ref="main"
             class="v-form__main"
-            :innerStyle="mainStyle">
+            :innerStyle="mainStyle"
+            @bottom="onBottom"
+            @right="onRight">
             <slot></slot>
           </v-scroll-view>
           <div v-if="$slots.full"
@@ -359,6 +361,14 @@ export default {
     onCloseClick() {
       this.$eventBus.$emit('close', this.name)
       this.parentEmit('close', this.name)
+    },
+
+    onBottom() {
+      this.$emit('bottom')
+    },
+
+    onRight() {
+      this.$emit('right')
     }
 
     // // 向父级递归直到找到TaskLayer

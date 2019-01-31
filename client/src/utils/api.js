@@ -36,11 +36,11 @@ const callApi = ({ method = 'get', api, param, config = {} } = {}) => {
       return Promise.resolve(data.data)
     })
     .catch(error => {
-      vue.$Message.error({
-        content: `[${api}]接口调用失败`,
-        duration: 3,
-        closable: true
-      })
+      // vue.$Message.error({
+      //   content: `[${api}]接口调用失败`,
+      //   duration: 3,
+      //   closable: true
+      // })
       return Promise.reject(error)
     })
 }

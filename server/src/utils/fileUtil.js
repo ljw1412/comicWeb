@@ -58,6 +58,8 @@ const mkdirsSync = dirname => {
   }
 }
 
+const downloadFile = () => {}
+
 module.exports = {
   mkdirsSync,
   readDir,

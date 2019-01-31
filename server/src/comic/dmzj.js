@@ -1,3 +1,4 @@
+/* 动漫之家 */
 const fetch = require('node-fetch')
 const fs = require('fs')
 const path = require('path')
@@ -16,7 +17,7 @@ const detailUrl = 'http://v2.api.dmzj.com/comic/{comicId}.json' + query
 const chapterUrl =
   'http://v2.api.dmzj.com/chapter/{comicId}/{chapterId}.json' + query
 
-const { baseServerUrl } = require('../config')
+const { baseServerUrl } = require('../../config/server')
 const imageBaseUrl = `//${baseServerUrl}/image?website=dmzj&url=`
 
 const webName = '(动漫之家)'
@@ -29,7 +30,8 @@ function log(...args) {
 const search = async keyword => {
   const url = searchUrl.replace(/\{keyword\}/, encodeURIComponent(keyword))
   log('搜索:', url)
-  let result
+  // pagination 是否分页
+  let result = { pagination: false }
   await fetch(url)
     .then(res => res.text())
     .then(js => {
@@ -37,8 +39,8 @@ const search = async keyword => {
       return (data = g_search_data)
     })
     .then(data => {
-      result = data.map(item => ({
-        id: item.id,
+      result.list = data.map(item => ({
+        comicId: item.id,
         name: item.name,
         status: item.status.includes('完') ? '已完结' : '连载中',
         cover: imageBaseUrl + item.cover.replace(/^\/\//, 'https://'),
@@ -49,6 +51,7 @@ const search = async keyword => {
         description: item.description,
         isHidden: item.hidden === '1'
       }))
+      result.count = data.length
     })
     .catch(error => console.error(error))
   return result

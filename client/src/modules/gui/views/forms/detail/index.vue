@@ -232,7 +232,7 @@ export default {
           this.comic.website = val.website
           this.comic.cover = val.cover
           this.comic.name = val.name
-          this.comic.id = val.id
+          this.comic.id = val.comicId
           this.comic.status = val.status
           this.reFindDetail()
         }
