@@ -18,7 +18,7 @@ function log(webName, ...args) {
 }
 
 function commandItemExec(dom, command) {
-  const $ = cheerio.load(dom)
+  let $ = cheerio.load(dom)
   const object = {}
   Object.keys(command).forEach(key => {
     try {
@@ -35,18 +35,21 @@ function commandListExec(domList, command) {
   try {
     return domList.map((i, el) => commandItemExec(el, command)).get()
   } catch (error) {
+    console.log('commandListExec', error)
     return []
   }
 }
 
 async function getDom(url) {
-  const html = await fetch(url, headers).then(res => res.text())
+  const html = await fetch(url, headers)
+    .then(res => res.text())
+    .catch(err => console.error(err))
   return cheerio.load(html)
 }
 
 // 解析搜索页
 async function parseSearchPage(url, command) {
-  const $ = await getDom(url)
+  let $ = await getDom(url)
   const itemList = eval(command.itemList)
   delete command.itemList
   let pageCount = 0
@@ -59,9 +62,9 @@ async function parseSearchPage(url, command) {
 
 // 解析详情页中的章节信息
 function parseDetailsChapter($, chapterCommand) {
-  const chapterTitleList = eval(chapterCommand.title)
+  const chapterTitleList = eval(chapterCommand.title) || []
   delete chapterCommand.title
-  const chapterList = eval(chapterCommand.chapter)
+  const chapterList = eval(chapterCommand.chapter) || []
   delete chapterCommand.chapter
   const chapters = chapterList.map(item => {
     return commandListExec(item, chapterCommand)
@@ -74,7 +77,7 @@ function parseDetailsChapter($, chapterCommand) {
 
 // 解析详情页
 async function parseDetails(url, command, chapterCommand) {
-  const $ = await getDom(url)
+  let $ = await getDom(url)
   const comic = commandItemExec($.html(), command)
   const chapters = parseDetailsChapter($, chapterCommand)
   comic.chapters = chapters
