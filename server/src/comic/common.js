@@ -47,14 +47,18 @@ async function getDom(url) {
   return cheerio.load(html)
 }
 
+function requireRule(website) {
+  return ObjectUtil.deepCopy(require(`./origin/${website}.json`))
+}
+
 // 解析搜索页
 async function parseSearchPage(url, command) {
-  let $ = await getDom(url)
+  const $ = await getDom(url)
   const itemList = eval(command.itemList)
   delete command.itemList
   let pageCount = 0
   try {
-    pageCount = eval(command.pageCount)
+    pageCount = eval(command.pageCount) || 0
   } catch (error) {}
   delete command.pageCount
   return { list: commandListExec(itemList, command), pageCount }
@@ -77,7 +81,7 @@ function parseDetailsChapter($, chapterCommand) {
 
 // 解析详情页
 async function parseDetails(url, command, chapterCommand) {
-  let $ = await getDom(url)
+  const $ = await getDom(url)
   const comic = commandItemExec($.html(), command)
   const chapters = parseDetailsChapter($, chapterCommand)
   comic.chapters = chapters
@@ -87,7 +91,7 @@ async function parseDetails(url, command, chapterCommand) {
 module.exports = {
   search: async (website, keyword, page) => {
     const result = {}
-    const rule = require(`./origin/${website}.json`)
+    const rule = requireRule(website)
     const searchRule = rule.page.search
     const searchUrl =
       rule.origin +
@@ -95,10 +99,12 @@ module.exports = {
     log(rule.name, '搜索:', searchUrl)
     // 页面是否分页
     result.pagination = searchRule.pagination
+    console.log(searchRule.command)
+
     return parseSearchPage(searchUrl, searchRule.command)
   },
   details: (website, comicId) => {
-    const rule = require(`./origin/${website}.json`)
+    const rule = requireRule(website)
     const detailsRule = rule.page.details
     const detailsUrl =
       rule.origin + detailsRule.url.replace('{comicId}', comicId)
