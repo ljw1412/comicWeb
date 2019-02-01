@@ -44,6 +44,7 @@ async function getDom(url) {
   return cheerio.load(html)
 }
 
+// 解析搜索页
 async function parseSearchPage(url, command) {
   const $ = await getDom(url)
   const itemList = eval(command.itemList)
@@ -56,18 +57,26 @@ async function parseSearchPage(url, command) {
   return { list: commandListExec(itemList, command), pageCount }
 }
 
-async function parseDetails(url, command, chapterCommand) {
-  const $ = await getDom(url)
-  const comic = commandItemExec($.html(), command)
+// 解析详情页中的章节信息
+function parseDetailsChapter($, chapterCommand) {
   const chapterTitleList = eval(chapterCommand.title)
   delete chapterCommand.title
   const chapterList = eval(chapterCommand.chapter)
-  console.log(chapterList)
-
   delete chapterCommand.chapter
-  const chapters = commandListExec(chapterList, chapterCommand)
-  console.log(chapters)
+  const chapters = chapterList.map(item => {
+    return commandListExec(item, chapterCommand)
+  })
+  return chapters.map((item, index) => ({
+    title: chapterTitleList[index] || '',
+    list: item
+  }))
+}
 
+// 解析详情页
+async function parseDetails(url, command, chapterCommand) {
+  const $ = await getDom(url)
+  const comic = commandItemExec($.html(), command)
+  const chapters = parseDetailsChapter($, chapterCommand)
   comic.chapters = chapters
   return comic
 }

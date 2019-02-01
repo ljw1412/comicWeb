@@ -40,8 +40,8 @@
         "isBan": "$('#__VIEWSTATE').length==1"
       },
       "chapterCommand": {
-        "title": "$('.chapter h4').get()",
-        "chapter": "$('.chapter-list ul').map(function(){return $(this).find('li').get().reverse()})",
+        "title": "$('.chapter h4').map(function(){return $(this).text()}).get()",
+        "chapter": "$('.chapter-list').map(function(){return $(this).find('ul')}).get().map(item=>$(item.map(function(){return $(this).find('li').get().reverse()})))",
         "chapterId": "$('a.status0').attr('href').match(/\\/(\\d+).html/)[1]",
         "chapterName": "$('a.status0').attr('title')"
       }
