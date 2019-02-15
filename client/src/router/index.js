@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import vui from './vui'
 import gui from './gui'
 import admin from './admin'
+import main from './main'
 import LoginPage from '@/modules/login'
 
 const index = {
@@ -20,5 +21,5 @@ const login = {
 Vue.use(Router)
 
 export default new Router({
-  routes: [index, gui, admin, login, vui]
+  routes: [index, main, gui, admin, login, vui]
 })

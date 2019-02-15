@@ -14,6 +14,7 @@
       <v-comic-reader ref="VComicReader"
         website="dmzj"
         comicId="5"
+        comicTitle="火影忍者"
         chapterId="62621"></v-comic-reader>
     </div>
   </div>
