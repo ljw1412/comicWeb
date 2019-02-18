@@ -1,6 +1,8 @@
 <template>
   <div class="vui">
-    <div class="header">header</div>
+    <div class="header">
+      <div class="header__logo">VUI</div>
+    </div>
     <div class="main">
       <v-scroll-view class="menu"
         right="17px">
@@ -37,10 +39,19 @@ export default {
   display: flex;
   flex-direction: column;
   .header {
+    z-index: 100;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.4);
     flex-shrink: 0;
     height: 48px;
+    &__logo {
+      user-select: none;
+      font-size: 30px;
+      width: 100px;
+      text-align: center;
+    }
   }
   .main {
+    z-index: 0;
     flex-grow: 1;
     display: flex;
     .menu {
@@ -67,6 +78,7 @@ export default {
   h3 {
     font-size: 16px;
     font-weight: 400;
+    margin: 5px 0;
   }
 
   h4 {
