@@ -29,6 +29,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '@/theme/index.scss';
 .comic-item {
   flex-shrink: 0;
   position: relative;
@@ -38,7 +39,7 @@ export default {
   }
   &:hover {
     .cover__image {
-      border-color: #ff8c00;
+      border-color: $primary-color;
       .image__link {
         opacity: 0.1;
         background-color: #000;
@@ -46,7 +47,7 @@ export default {
     }
     .comic-item {
       &__title {
-        color: #ff8c00;
+        color: $primary-color;
         font-size: 16px;
       }
     }

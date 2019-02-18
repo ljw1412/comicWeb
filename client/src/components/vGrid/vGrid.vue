@@ -29,8 +29,10 @@ export default {
 
     // 列数 优先级高于元素宽度
     column: [String, Number],
-
-    align: String
+    // 整体位置
+    align: String,
+    // 数组数量
+    length: [Number, String]
   },
 
   computed: {
@@ -81,10 +83,12 @@ export default {
     },
 
     updateItem() {
-      this.$slots.default.forEach(item => {
-        item.elm.style.width = this.mItemWidth
-        item.elm.style.padding = this.mGutter
-      })
+      if (this.$slots.default) {
+        this.$slots.default.forEach(item => {
+          item.elm.style.width = this.mItemWidth
+          item.elm.style.padding = this.mGutter
+        })
+      }
     }
   },
 
@@ -103,6 +107,10 @@ export default {
   watch: {
     mItemWidth(val) {
       this.updateItem()
+    },
+
+    length(val) {
+      this.$nextTick(this.updateItem)
     }
   }
 }

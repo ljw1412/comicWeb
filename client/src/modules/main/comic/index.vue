@@ -1,7 +1,10 @@
 <template>
   <div class="comic">
-    <!-- <div class="comic__header"></div>
-    <div class="comic__sider"></div> -->
+
+    <website-dialog :visible="isDisplayWebsiteDialog"
+      @close="isDisplayWebsiteDialog = false"></website-dialog>
+
+    <button @click="isDisplayWebsiteDialog = true">a</button>
     <user-bar></user-bar>
     <div class="comic__body">
       <router-view />
@@ -10,10 +13,15 @@
 </template>
 
 <script>
+import WebsiteDialog from '../components/websiteDialog'
 import UserBar from '../components/userBar'
 export default {
-  components: {
-    UserBar
+  components: { WebsiteDialog, UserBar },
+
+  data() {
+    return {
+      isDisplayWebsiteDialog: false
+    }
   }
 }
 </script>
@@ -23,20 +31,6 @@ export default {
   position: relative;
   height: 100%;
   overflow: hidden;
-
-  &__header {
-    height: 60px;
-    background-color: #ccc;
-  }
-
-  &__sider {
-    position: absolute;
-    width: 250px;
-    left: 0;
-    top: 60px;
-    bottom: 0;
-    background-color: #aaa;
-  }
 
   &__body {
     height: calc(100% - 60px);

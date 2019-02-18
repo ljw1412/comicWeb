@@ -86,6 +86,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '@/theme/index.scss';
 .login-block {
   width: 240px;
   margin: 0 auto;
@@ -100,7 +101,7 @@ export default {
       cursor: pointer;
       margin-right: 10px;
       &:hover {
-        color: #ff8c00;
+        color: $primary-color;
       }
     }
   }

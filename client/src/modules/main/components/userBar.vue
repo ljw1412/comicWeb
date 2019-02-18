@@ -1,19 +1,19 @@
 <template>
-  <div class="sider-bar">
-    <div class="sider-bar__icon"
+  <div class="user-bar"
+    :class="{'user-bar--mask':isDisplayMask}">
+    <div class="user-bar__icon"
       @click="handlerIconClick">
       <Icon type="ios-contact"
         size="40"
         color="#fff" />
     </div>
-    <!-- 遮罩层 -->
-    <div class="sider-bar__mask"></div>
     <transition enter-active-class="scaleInRight"
       leave-active-class="fadeOut"
+      :duration="{ enter: 1000, leave: 500 }"
       v-on:afterEnter="cardAfterEnter"
       v-on:afterLeave="cardAfterLeave">
       <div v-if="isDisplayCard"
-        class="sider-bar__card">
+        class="user-bar__card">
         <div v-if="isDisplayCardContent"
           class="card__content">123</div>
       </div>
@@ -25,6 +25,7 @@
 export default {
   data() {
     return {
+      isDisplayMask: false,
       isDisplayCard: false,
       isDisplayCardContent: false
     }
@@ -33,6 +34,7 @@ export default {
   methods: {
     handlerIconClick() {
       this.isDisplayCard = !this.isDisplayCard
+      this.isDisplayMask = this.isDisplayCard
     },
 
     cardAfterEnter(el) {
@@ -41,20 +43,29 @@ export default {
 
     cardAfterLeave(el) {
       this.isDisplayCardContent = false
+      this.isDisplayMask = false
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.sider-bar {
+.user-bar {
+  pointer-events: none;
   position: fixed;
   left: 0;
   right: 0;
   top: 0;
   bottom: 0;
+  transition: background-color 0.5s;
+
+  &--mask {
+    background-color: rgba(0, 0, 0, 0.6);
+    pointer-events: all;
+  }
 
   &__icon {
+    pointer-events: all;
     z-index: 99;
     position: absolute;
     border-radius: 50%;

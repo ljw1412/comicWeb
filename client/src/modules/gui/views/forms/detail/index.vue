@@ -269,6 +269,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '@/theme/index.scss';
 $line-color: #ddd;
 * {
   user-select: none;
@@ -425,7 +426,7 @@ $line-color: #ddd;
         flex-grow: 1;
         padding: 5px 0;
         color: #fff;
-        background-color: #ff8c00;
+        background-color: $primary-color;
         border-radius: 5px;
       }
     }
@@ -454,7 +455,7 @@ $line-color: #ddd;
             background: $line-color;
           }
           &--active {
-            color: #ff8c00 !important;
+            color: $primary-color !important;
           }
         }
       }
@@ -483,7 +484,7 @@ $line-color: #ddd;
           word-wrap: break-word;
           text-align: center;
           &:hover {
-            background: rgba($color: #ff8c00, $alpha: 0.5);
+            background: rgba($color: $primary-color, $alpha: 0.5);
           }
         }
       }
@@ -491,15 +492,15 @@ $line-color: #ddd;
   }
 }
 .finish {
-  color: #ff8c00 !important;
-  border-color: #ff8c00 !important;
+  color: $primary-color !important;
+  border-color: $primary-color !important;
 }
 .serialize {
   color: #19be6b !important;
   border-color: #19be6b !important;
 }
 .read-here {
-  background: #ff8c00 !important;
+  background: $primary-color !important;
   color: #fff;
 }
 </style>

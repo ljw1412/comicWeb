@@ -27,6 +27,7 @@ export default {}
 </script>
 
 <style lang="scss" scoped>
+@import '@/theme/index.scss';
 .example {
   position: relative;
   border: 1px solid #eee;
@@ -74,7 +75,7 @@ export default {}
     position: absolute;
     left: 0;
     top: 50%;
-    background-color: #ff8c00;
+    background-color: $primary-color;
     transform: translateY(-50%);
     display: inline-block;
     width: 5px;
