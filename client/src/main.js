@@ -23,19 +23,18 @@ import Chart from './components/chart'
 // 设置全局语言
 moment.locale('zh-cn')
 
+Vue.config.productionTip = false
+
+// Vue相关组件绑定
 Vue.use(VueLazyload)
 Vue.use(iView)
 Vue.component(pageTitle.name, pageTitle)
 Vue.component(Chart.name, Chart)
 
-Vue.config.productionTip = false
+// Vue自定义原型
 Vue.prototype.$callApi = callApi
 Vue.prototype.$get = get
 Vue.prototype.$post = post
-window.Cookies = Cookies
-window.Store = Store
-window.$ = jQuery
-
 Vue.prototype.$eventBus = Vue.prototype.$eventBus || new Vue()
 
 /* eslint-disable no-new */
@@ -45,6 +44,11 @@ const vue = new Vue({
   store: vuexStore,
   render: h => h(App)
 })
+
 // window.vue = vue
+window.Cookies = Cookies
+// LocalStorage操作工具
+window.Store = Store
+window.$ = jQuery
 
 export default vue

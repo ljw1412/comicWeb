@@ -2,14 +2,20 @@
   <div class="example">
     <div class="example__perview">
       <div class="perview__panel">
-        <div class="perview__demo">
+        <div v-if="$slots.demo"
+          class="perview__demo">
+          <div class="subtitle">效果预览：</div>
           <slot name="demo"></slot>
         </div>
-        <div class="perview__controller">
+        <div v-if="$slots.controller"
+          class="perview__controller">
+          <div class="subtitle">参数操作：</div>
           <slot name="controller"></slot>
         </div>
       </div>
-      <div class="perview__code">
+      <div v-if="$slots.code"
+        class="perview__code">
+        <div class="subtitle">代码预览：</div>
         <slot name="code"></slot>
       </div>
     </div>
@@ -23,10 +29,9 @@ export default {}
 <style lang="scss" scoped>
 .example {
   position: relative;
-  width: 94%;
   border: 1px solid #eee;
   border-radius: 6px;
-  margin: 0 auto 20px;
+  margin-bottom: 20px;
   transition: all 0.2s ease-in-out;
   padding: 5px;
   &:hover {
@@ -49,9 +54,31 @@ export default {}
     &__controller {
       display: inline-block;
       width: 50%;
-      padding: 5px;
+      padding: 0 10px 10px;
       vertical-align: top;
     }
+    &__code {
+      border-top: 1px dashed #ccc;
+      padding: 5px;
+    }
+  }
+}
+.subtitle {
+  position: relative;
+  font-weight: bold;
+  font-size: 14px;
+  padding: 5px;
+  padding-left: 10px;
+  &::before {
+    content: ' ';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    background-color: #ff8c00;
+    transform: translateY(-50%);
+    display: inline-block;
+    width: 5px;
+    height: 14px;
   }
 }
 </style>

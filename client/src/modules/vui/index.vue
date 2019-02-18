@@ -7,7 +7,7 @@
         <side-menu></side-menu>
       </v-scroll-view>
       <v-scroll-view class="content"
-        innerStyle="width:100%;">
+        innerStyle="width: 100%; padding: 10px;">
         <router-view />
       </v-scroll-view>
     </div>
@@ -44,6 +44,7 @@ export default {
     flex-grow: 1;
     display: flex;
     .menu {
+      margin-right: -10px;
       flex-shrink: 0;
     }
     .content {
@@ -60,6 +61,7 @@ export default {
   h2 {
     font-size: 20px;
     font-weight: 400;
+    margin: 8px 0;
   }
 
   h3 {
