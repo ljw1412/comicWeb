@@ -53,10 +53,25 @@ export default {
   },
 
   methods: {
+    initWebisite() {
+      if (this.websiteList.length) {
+        const website = Store.get('website')
+        if (website) {
+          const mWebsite =
+            this.websiteList.find(item => item.value === website.value) ||
+            this.websiteList[0]
+          this.selectWebSite(mWebsite)
+        } else {
+          this.selectWebSite(this.websiteList[0])
+        }
+      }
+    },
+
     selectWebSite(website) {
       this.websiteList.forEach(item => (item.isSelected = false))
       this.mWebsite = website
       website.isSelected = true
+      Store.set('website', website)
     },
 
     reGetOrigin() {
@@ -68,9 +83,7 @@ export default {
           item.isSelected = false
         })
         this.websiteList = data
-        if (this.websiteList.length) {
-          this.selectWebSite(this.websiteList[0])
-        }
+        this.initWebisite()
       })
     },
 

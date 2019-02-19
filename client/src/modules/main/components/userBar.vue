@@ -51,6 +51,7 @@ export default {
 
 <style lang="scss" scoped>
 .user-bar {
+  z-index: 40;
   pointer-events: none;
   position: fixed;
   left: 0;
