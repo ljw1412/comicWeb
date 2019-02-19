@@ -1,6 +1,7 @@
 <template>
   <div class="gui">
-    <desktop :style="desktopStyle"></desktop>
+    <desktop :os="os"
+      :style="desktopStyle"></desktop>
     <task-layer ref="taskLayer"
       @close="onTaskClose">
       <search-form v-for="item of taskSearchList"
@@ -66,11 +67,13 @@ export default {
     },
 
     desktopStyle() {
+      const style = {}
       if (this.desktop.isPure) {
-        return { 'background-color': this.desktop.themeColor }
+        style['background-color'] = this.desktop.themeColor
       } else {
-        return { 'background-image': `url('${this.desktop.imageUrl}')` }
+        style['background-image'] = `url('${this.desktop.imageUrl}')`
       }
+      return style
     }
   },
 
@@ -85,6 +88,7 @@ export default {
 
   methods: {
     ...mapMutations('gui', [
+      'CHANGE_OS',
       'UPDATE_TASK',
       'SET_THEME_COLOR',
       'SET_WALLPAPER',
@@ -133,6 +137,11 @@ export default {
           this.SET_THEME_COLOR(primaryColor.hex())
         })
       }
+    },
+
+    // 将本地储存加载到Vuex中
+    initLocalStorage2Vuex() {
+      this.CHANGE_OS(Store.get('theme-os') || '')
     }
   },
 
@@ -146,13 +155,13 @@ export default {
   },
 
   mounted() {
+    this.initLocalStorage2Vuex()
     this.addResizeListener()
     this.$eventBus.$on('close', data => {
       console.log(data)
     })
     this.getThemeColor()
-
-    window.SET_WALLPAPER = this.SET_WALLPAPER
+    // window.SET_WALLPAPER = this.SET_WALLPAPER
   },
 
   beforeDestroy() {

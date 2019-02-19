@@ -37,6 +37,12 @@ Vue.prototype.$get = get
 Vue.prototype.$post = post
 Vue.prototype.$eventBus = Vue.prototype.$eventBus || new Vue()
 
+// window.vue = vue
+window.Cookies = Cookies
+// LocalStorage操作工具
+window.Store = Store
+window.$ = jQuery
+
 /* eslint-disable no-new */
 const vue = new Vue({
   el: '#app',
@@ -44,11 +50,5 @@ const vue = new Vue({
   store: vuexStore,
   render: h => h(App)
 })
-
-// window.vue = vue
-window.Cookies = Cookies
-// LocalStorage操作工具
-window.Store = Store
-window.$ = jQuery
 
 export default vue

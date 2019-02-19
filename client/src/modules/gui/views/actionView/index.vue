@@ -1,6 +1,7 @@
 <template>
   <div class="action-view">
     <template v-if="isMac">
+      <mac-menu-bar></mac-menu-bar>
       <dock></dock>
     </template>
     <template v-else>
@@ -32,6 +33,7 @@ import Taskbar from './windows/taskbar'
 import Notifications from './windows/notifications'
 import Calendar from './windows/calendar'
 import Dock from './mac/dock'
+import MacMenuBar from './mac/menuBar'
 import { oneOf } from '@/utils/assist'
 import moment from 'moment'
 
@@ -40,7 +42,8 @@ export default {
     Taskbar,
     Notifications,
     Calendar,
-    Dock
+    Dock,
+    MacMenuBar
   },
 
   props: { os: { type: String } },

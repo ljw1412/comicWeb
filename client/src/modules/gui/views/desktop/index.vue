@@ -5,7 +5,8 @@
       ref="contextmenu"
       :x="contextmenu.x"
       :y="contextmenu.y"></contextmenu>
-    <div class="desktop__shortcut">
+    <div class="desktop__shortcut"
+      :style="os==='mac'?'margin-top: 20px;':''">
       <shortcut-grid v-model="shortcutList"></shortcut-grid>
     </div>
   </div>
@@ -23,6 +24,8 @@ export default {
     Contextmenu,
     ShortcutGrid
   },
+
+  props: { os: { type: String } },
 
   data() {
     return {
@@ -43,6 +46,7 @@ export default {
           name: '切换mac风格',
           color: '#F00',
           handler: () => {
+            Store.set('theme-os', 'mac')
             this.CHANGE_OS('mac')
           }
         },
@@ -51,6 +55,7 @@ export default {
           name: '切换windows风格',
           color: '#00F',
           handler: () => {
+            Store.set('theme-os', 'windows')
             this.CHANGE_OS('windows')
           }
         }
