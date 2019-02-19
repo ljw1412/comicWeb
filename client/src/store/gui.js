@@ -4,6 +4,7 @@ import { UUID } from '../class'
 const namespaced = true
 
 const state = {
+  os: '',
   windowSize: {
     width: 0,
     height: 0
@@ -60,6 +61,9 @@ function checkTaskTree(taskTree, taskName, config = { unique: false }) {
 }
 
 const mutations = {
+  CHANGE_OS(state, os) {
+    state.os = os
+  },
   // 新建进程
   NEW_TASK({ taskTree }, { taskName, data }) {
     if (checkTaskTree(taskTree, taskName)) return

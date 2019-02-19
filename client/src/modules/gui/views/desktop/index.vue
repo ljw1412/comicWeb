@@ -14,6 +14,7 @@
 <script>
 import Contextmenu from '../../../../components/menu/contextmenu'
 import ShortcutGrid from './components/shortcutGrid'
+import { mapMutations } from 'vuex'
 
 export default {
   name: 'Desktop',
@@ -39,19 +40,27 @@ export default {
         },
         {
           icon: 'md-notifications-outline',
-          name: '测试中文字啊啊湿答答SD大傻叼',
-          color: '#F00'
+          name: '切换mac风格',
+          color: '#F00',
+          handler: () => {
+            this.CHANGE_OS('mac')
+          }
         },
         {
           icon: 'md-notifications-outline',
-          name: '测试中文字啊啊湿答答SD大傻叼',
-          color: '#00F'
+          name: '切换windows风格',
+          color: '#00F',
+          handler: () => {
+            this.CHANGE_OS('windows')
+          }
         }
       ]
     }
   },
 
   methods: {
+    ...mapMutations('gui', ['CHANGE_OS']),
+
     onContextmenu(e) {
       console.log(e)
 

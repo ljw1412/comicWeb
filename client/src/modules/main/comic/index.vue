@@ -1,9 +1,7 @@
 <template>
   <div class="comic">
-
     <website-dialog :visible="isDisplayWebsiteDialog"
       @close="isDisplayWebsiteDialog = false"></website-dialog>
-
     <button @click="isDisplayWebsiteDialog = true">a</button>
     <user-bar></user-bar>
     <div class="comic__body">

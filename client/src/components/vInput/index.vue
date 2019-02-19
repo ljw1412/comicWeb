@@ -90,7 +90,7 @@ export default {
     size: String,
     width: String,
     maxlength: Number,
-    theme: {
+    os: {
       type: String,
       default: ''
     },
@@ -140,8 +140,8 @@ export default {
       return this.type === 'textarea'
     },
 
-    currentTheme() {
-      return oneOf(this.theme, ['windows', 'mac']) ? this.theme : ''
+    currentOS() {
+      return oneOf(this.os, ['windows', 'mac']) ? this.os : ''
     },
 
     currentSize() {
@@ -152,7 +152,7 @@ export default {
       return [
         'v-input',
         {
-          [`v-input--${this.currentTheme}`]: this.currentTheme,
+          [`v-input--${this.currentOS}`]: this.currentOS,
           [`v-input--${this.currentSize}`]:
             !this.isTextarea && this.currentSize,
           'v-input--prefix': this.$slots.prefix || this.prefixIcon,

@@ -13,6 +13,7 @@
 
 <script>
 import { mapMutations } from 'vuex'
+import { typeOf } from '@/utils/assist.js'
 import Shortcut from './shortcut'
 export default {
   computed: {},
@@ -33,6 +34,9 @@ export default {
     },
 
     onDblclick(item) {
+      if (item.handler && typeOf(item.handler) === 'function') {
+        item.handler()
+      }
       if (item.launch) {
         this.newTask(item.launch)
       }

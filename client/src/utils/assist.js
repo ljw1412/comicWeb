@@ -102,7 +102,7 @@ export function warnProp(component, prop, correctType, wrongType) {
   ) // eslint-disable-line
 }
 
-function typeOf(obj) {
+export function typeOf(obj) {
   const toString = Object.prototype.toString
   const map = {
     '[object Boolean]': 'boolean',

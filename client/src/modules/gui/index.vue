@@ -13,7 +13,7 @@
         :data="item.data"></reader-form>
       <!-- <setting-form></setting-form> -->
     </task-layer>
-    <action-view></action-view>
+    <action-view :os="os"></action-view>
   </div>
 </template>
 
@@ -45,7 +45,7 @@ export default {
   },
 
   computed: {
-    ...mapState('gui', ['taskTree', 'desktop']),
+    ...mapState('gui', ['os', 'taskTree', 'desktop']),
 
     taskSearchList() {
       return this.taskTree['TaskSearch']

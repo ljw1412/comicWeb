@@ -1,46 +1,65 @@
 <template>
   <div class="action-view">
-    <taskbar :n-time="time"
-      :n-date="date"
-      :isNotificationsShow.sync="isNotificationsShow"
-      :isDateTimeShow.sync="isDateTimeShow"></taskbar>
-    <transition enter-active-class="slideInRight"
-      leave-active-class="slideOutRight">
-      <div v-if="isNotificationsShow"
-        class="action-view__notifications">
-        <notifications></notifications>
-      </div>
-    </transition>
-    <transition enter-active-class="fadeIn"
-      leave-active-class="fadeOut">
-      <div v-if="isDateTimeShow"
-        class="action-view__calendar">
-        <calendar :n-time="time"
-          :n-date="date"></calendar>
-      </div>
-    </transition>
+    <template v-if="isMac">
+      <dock></dock>
+    </template>
+    <template v-else>
+      <taskbar :n-time="time"
+        :n-date="date"
+        :isNotificationsShow.sync="isNotificationsShow"
+        :isDateTimeShow.sync="isDateTimeShow"></taskbar>
+      <transition enter-active-class="slideInRight"
+        leave-active-class="slideOutRight">
+        <div v-if="isNotificationsShow"
+          class="action-view__notifications">
+          <notifications></notifications>
+        </div>
+      </transition>
+      <transition enter-active-class="fadeIn"
+        leave-active-class="fadeOut">
+        <div v-if="isDateTimeShow"
+          class="action-view__calendar">
+          <calendar :n-time="time"
+            :n-date="date"></calendar>
+        </div>
+      </transition>
+    </template>
   </div>
 </template>
 
 <script>
-import Taskbar from './taskbar'
-import Notifications from './notifications'
-import Calendar from './calendar'
+import Taskbar from './windows/taskbar'
+import Notifications from './windows/notifications'
+import Calendar from './windows/calendar'
+import Dock from './mac/dock'
+import { oneOf } from '@/utils/assist'
 import moment from 'moment'
 
 export default {
   components: {
     Taskbar,
     Notifications,
-    Calendar
+    Calendar,
+    Dock
   },
+
+  props: { os: { type: String } },
 
   computed: {
     date() {
       return moment(this.now).format('YYYY-MM-DD')
     },
+
     time() {
       return moment(this.now).format('HH:mm:ss')
+    },
+
+    currentOS() {
+      return oneOf(this.os, ['windows', 'mac']) ? this.os : ''
+    },
+
+    isMac() {
+      return this.currentOS === 'mac'
     }
   },
 

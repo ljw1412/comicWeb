@@ -4,7 +4,7 @@
     <h3>VInput - input(value:'{{value1}}')</h3>
     <v-input v-model="value1"
       width="300px"
-      theme="windows"
+      os="windows"
       size="medium"
       prefixIcon="ios-alarm"
       suffixIcon="ios-alarm"
@@ -23,7 +23,7 @@
     <v-input v-model="value2"
       width="300px"
       type="textarea"
-      theme="mac"
+      os="mac"
       :rows="5"
       resize
       radius

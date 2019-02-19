@@ -60,36 +60,35 @@ export default {
     }
     .content {
       flex-grow: 1;
+      h1 {
+        font-size: 26px;
+        font-weight: 400;
+        margin: 10px 0;
+      }
+
+      h2 {
+        font-size: 20px;
+        font-weight: 400;
+        margin: 8px 0;
+      }
+
+      h3 {
+        font-size: 16px;
+        font-weight: 400;
+        margin: 5px 0;
+      }
+
+      h4 {
+        font-size: 14px;
+        font-weight: 400;
+      }
+
+      h5,
+      h6 {
+        font-size: 12px;
+        font-weight: 400;
+      }
     }
-  }
-
-  h1 {
-    font-size: 26px;
-    font-weight: 400;
-    margin: 10px 0;
-  }
-
-  h2 {
-    font-size: 20px;
-    font-weight: 400;
-    margin: 8px 0;
-  }
-
-  h3 {
-    font-size: 16px;
-    font-weight: 400;
-    margin: 5px 0;
-  }
-
-  h4 {
-    font-size: 14px;
-    font-weight: 400;
-  }
-
-  h5,
-  h6 {
-    font-size: 12px;
-    font-weight: 400;
   }
 }
 </style>
