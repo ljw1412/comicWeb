@@ -46,19 +46,24 @@ export default {
     },
 
     reStartCrawler(item) {
-      this.$get({
+      // this.$get({
+      //   api: '/comic/crawler',
+      //   param: {
+      //     website: item.value
+      //   },
+      //   config: {
+      //     timeout: 60000
+      //   }
+      // })
+      this.socket.emit('message', {
         api: '/comic/crawler',
-        param: {
-          website: item.value
-        },
-        config: {
-          timeout: 60000
-        }
+        param: { website: item.value }
       })
     },
 
     printLog(log) {
-      const p = $(`<p>[${log.date}] ${log.message}</p>`)
+      let style = log.error ? 'color:red;' : ''
+      const p = $(`<p style="${style}">[${log.date}] ${log.message}</p>`)
       Object.keys(this.logBox.data()).forEach(key => {
         p.attr('data-' + key, this.logBox.data(key))
       })
@@ -70,14 +75,10 @@ export default {
     initSocket() {
       this.socket.on('connect', () => {
         console.log('message send')
-        this.socket.emit('message', 'init')
+        this.socket.emit('message', { api: 'init' })
       })
       this.socket.on('message', data => {
         this.printLog(data)
-
-        setTimeout(() => {
-          this.socket.emit('message', 'bbbb')
-        }, 300)
       })
       this.socket.on('reconnect_attempt', () => {
         this.socket.io.opts.transports = ['polling', 'websocket']
