@@ -3,15 +3,20 @@
     <div class="search">
       <div ref="searchInput"
         class="search__input-wrapper"
-        :class="{'search__input-wrapper--isSearched':isSearched}">
+        :class="{
+          'search__input-wrapper--isSearched':isSearched,
+          'search__input-wrapper--shadow':isDisplayResult
+        }">
         <div class="search__input">
           <i-input v-model="keyword"
             search
+            :size="isSearched ? 'small':'default'"
             @on-search="search"></i-input>
         </div>
       </div>
       <div v-show="isDisplayResult"
         class="search__result">
+        <div class="result__statistics">为您找到相关漫画{{count}}</div>
         <div v-for="item of comicList"
           :key="item.comicId"
           class="result__item">{{item.name}}</div>
@@ -37,6 +42,7 @@ export default {
       isSearched: false,
       isDisplayResult: false,
       comicList: [],
+      count: 0,
       website: 'dmzj',
       page: 1
     }
@@ -78,20 +84,26 @@ export default {
 .search-wrapper {
   position: relative;
   height: 100%;
-  overflow: auto;
   .search {
     height: 100%;
+
     &__input-wrapper {
       position: fixed;
       top: 0;
       height: 100%;
       width: 100%;
       background-color: #fff;
+      border-bottom: 1px solid #ebebeb;
       transition: height 1s;
-      &--isSearched {
-        height: 80px;
+      * {
+        transition-duration: 1s;
       }
-
+      &--shadow {
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.4);
+      }
+      &--isSearched {
+        height: 40px;
+      }
       .search__input {
         position: absolute;
         width: 500px;
@@ -102,8 +114,12 @@ export default {
     }
 
     &__result {
-      margin-top: 80px;
+      margin: 40px auto 0 auto;
       background-color: #abcabc;
+      width: 1160px;
+      @media screen and (max-width: 1400px) {
+        width: 980px;
+      }
     }
   }
 }
