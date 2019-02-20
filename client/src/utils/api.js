@@ -14,6 +14,11 @@ axios.defaults.headers.post['Content-Type'] =
 axios.defaults.timeout = 10000
 axios.defaults.withCredentials = true
 
+function printError({ method, api, param, config, error }) {
+  console.error(`${method.toUpperCase()} ["${api}"] 调用失败: ${error.message}`)
+  console.log(JSON.stringify({ api, param, config }, null, 2))
+}
+
 // dispose request parameters
 function disposeParam(method, param) {
   switch (method) {
@@ -30,12 +35,13 @@ const callApi = ({ method = 'get', api, param, config = {} } = {}) => {
   if (!methodList.includes(method.toLowerCase())) {
     method = methodList[0]
   }
-  param = disposeParam(method, param)
-  return $[method](api, param)
+  const mParam = disposeParam(method, param)
+  return $[method](api, mParam)
     .then(data => {
       return Promise.resolve(data.data)
     })
     .catch(error => {
+      printError({ method, api, param, config, error })
       // vue.$Message.error({
       //   content: `[${api}]接口调用失败`,
       //   duration: 3,
