@@ -82,14 +82,4 @@ router.post('/test', async (ctx, next) => {
   ctx.body = await test(url)
 })
 
-const startSpider = require('../src/comic/mangaBox')
-// 爬虫页面
-router.get('/crawler', async ctx => {
-  const { website } = ctx.request.query
-
-  await startSpider(website).then(data => {
-    ctx.body = data
-  })
-})
-
 module.exports = router
