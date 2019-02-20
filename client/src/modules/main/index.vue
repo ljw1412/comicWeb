@@ -1,9 +1,9 @@
 <template>
-  <div class="comic">
+  <div class="main">
     <website-dialog :visible="isDisplayWebsiteDialog"
       @close="isDisplayWebsiteDialog = false"></website-dialog>
     <user-bar></user-bar>
-    <div class="comic__body">
+    <div class="main__body">
       <!-- <button @click="isDisplayWebsiteDialog = true">a</button> -->
       <router-view />
     </div>
@@ -25,11 +25,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.comic {
+.main {
   position: relative;
-  height: 100%;
-  overflow: hidden;
-
+  min-height: 100%;
   &__body {
     height: 100%;
   }

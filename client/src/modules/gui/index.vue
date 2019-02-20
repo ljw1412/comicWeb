@@ -26,7 +26,7 @@ import SearchForm from './views/forms/search'
 import DetailForm from './views/forms/detail'
 import ReaderForm from './views/forms/reader'
 // import SettingForm from './views/forms/setting'
-
+import noScrollBar from '@/mixins/noScrollBar'
 import { on, off } from '../../utils/dom.js'
 import { mapState, mapMutations } from 'vuex'
 import Color from 'color'
@@ -34,6 +34,8 @@ import themeColor from '../../utils/themeColor.js'
 
 export default {
   name: 'Gui',
+
+  mixins: [noScrollBar],
 
   components: {
     Desktop,

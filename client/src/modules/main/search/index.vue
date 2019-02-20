@@ -1,14 +1,21 @@
 <template>
-  <div class="search">
-    <div ref="searchInput"
-      class="search__input-wrapper"
-      :class="{'search__input-wrapper--isSearched':isSearched}">
-      <i-input v-model="keyword"
-        search
-        @on-search="search"></i-input>
-    </div>
-    <div v-show="isDisplayResult"
-      class="search__result">
+  <div class="search-wrapper">
+    <div class="search">
+      <div ref="searchInput"
+        class="search__input-wrapper"
+        :class="{'search__input-wrapper--isSearched':isSearched}">
+        <div class="search__input">
+          <i-input v-model="keyword"
+            search
+            @on-search="search"></i-input>
+        </div>
+      </div>
+      <div v-show="isDisplayResult"
+        class="search__result">
+        <div v-for="item of comicList"
+          :key="item.comicId"
+          class="result__item">{{item.name}}</div>
+      </div>
     </div>
   </div>
 </template>
@@ -16,6 +23,14 @@
 <script>
 import { on, off } from '../../../utils/dom'
 export default {
+  computed: {
+    scrollViewInnerStyle() {
+      const style = { width: '100%' }
+      !this.isDisplayResult && (style.height = '100%')
+      return style
+    }
+  },
+
   data() {
     return {
       keyword: '',
@@ -29,6 +44,8 @@ export default {
 
   methods: {
     search(keyword) {
+      if (!keyword.trim()) return
+      this.comicList = []
       this.isSearched = true
       this.$callApi({
         method: 'post',
@@ -43,12 +60,8 @@ export default {
       })
     },
 
-    displayResult() {
-      if (
-        this.$refs.searchInput.className.includes(
-          'search__input-wrapper--isSearched'
-        )
-      ) {
+    displayResult(event) {
+      if (event.propertyName === 'height') {
         this.isDisplayResult = true
         off(this.$refs.searchInput, 'transitionend', this.displayResult)
       }
@@ -62,24 +75,36 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.search {
+.search-wrapper {
   position: relative;
   height: 100%;
-  padding-top: 80px;
+  overflow: auto;
+  .search {
+    height: 100%;
+    &__input-wrapper {
+      position: fixed;
+      top: 0;
+      height: 100%;
+      width: 100%;
+      background-color: #fff;
+      transition: height 1s;
+      &--isSearched {
+        height: 80px;
+      }
 
-  &__input-wrapper {
-    position: absolute;
-    width: 500px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    transition: top 1s;
-    &--isSearched {
-      top: 40px;
+      .search__input {
+        position: absolute;
+        width: 500px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
     }
-  }
-  &__result {
-    background-color: #abcabc;
+
+    &__result {
+      margin-top: 80px;
+      background-color: #abcabc;
+    }
   }
 }
 </style>

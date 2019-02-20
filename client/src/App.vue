@@ -15,12 +15,18 @@ export default {
   padding: 0;
   margin: 0;
 }
-html,
-body,
-#app {
-  height: 100%;
+
+html.no-scroll,
+html.no-scroll body,
+html.no-scroll #app {
   overflow: hidden;
+  height: 100%;
 }
+// html,
+// body,
+// #app {
+//   height: 100%;
+// }
 
 // ::-webkit-scrollbar {
 //   width: 0;

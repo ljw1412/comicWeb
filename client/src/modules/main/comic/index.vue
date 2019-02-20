@@ -15,6 +15,5 @@ export default {
 .comic {
   position: relative;
   height: 100%;
-  overflow: hidden;
 }
 </style>

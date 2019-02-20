@@ -18,8 +18,12 @@
 
 <script>
 import VScrollView from '@/components/vScrollView'
+import noScrollBar from '@/mixins/noScrollBar'
 import SideMenu from './base/sideMenu'
+
 export default {
+  mixins: [noScrollBar],
+
   components: {
     VScrollView,
     SideMenu
