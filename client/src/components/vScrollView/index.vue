@@ -276,7 +276,7 @@ export default {
     position: relative;
     overflow: hidden;
     &--always .scroll-bar,
-    &--hover:hover .scroll-bar {
+    &--hover:hover > .scroll-view + .scroll-bar {
       opacity: 1;
     }
   }
