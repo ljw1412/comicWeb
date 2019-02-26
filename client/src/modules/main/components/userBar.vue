@@ -10,6 +10,7 @@
     <transition enter-active-class="scaleInRight"
       leave-active-class="fadeOut"
       :duration="{ enter: 1000, leave: 500 }"
+      v-on:before-enter="cardBeforeEnter"
       v-on:afterEnter="cardAfterEnter"
       v-on:afterLeave="cardAfterLeave">
       <div v-if="isDisplayCard"
@@ -37,6 +38,10 @@ export default {
       this.isDisplayMask = this.isDisplayCard
     },
 
+    cardBeforeEnter() {
+      document.body.style.overflow = 'hidden'
+    },
+
     cardAfterEnter(el) {
       this.isDisplayCardContent = true
     },
@@ -44,6 +49,7 @@ export default {
     cardAfterLeave(el) {
       this.isDisplayCardContent = false
       this.isDisplayMask = false
+      document.body.style.overflow = ''
     }
   }
 }

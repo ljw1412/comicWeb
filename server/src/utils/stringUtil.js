@@ -8,5 +8,13 @@ module.exports = {
     return str.replace(/\B_([a-z])/g, function(all, letter) {
       return letter.toUpperCase()
     })
+  },
+  // 驼峰转连字符
+  hyphenate(str) {
+    return str.replace(/\B([A-Z])/g, '-$1').toLowerCase()
+  },
+  // 连字符转驼峰
+  camelize(str) {
+    return str.replace(/-(\w)/g, (_, c) => (c ? c.toUpperCase() : ''))
   }
 }
