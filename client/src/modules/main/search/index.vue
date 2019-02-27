@@ -14,6 +14,7 @@
             @on-search="search"></i-input>
         </div>
       </div>
+      <google-loading :type="2"></google-loading>
       <div v-show="isDisplayResult"
         class="search__result">
         <div v-if="count"
@@ -28,7 +29,12 @@
 
 <script>
 import { on, off } from '../../../utils/dom'
+import { GoogleLoading } from '@/components/vLoading'
 export default {
+  components: {
+    GoogleLoading
+  },
+
   computed: {
     scrollViewInnerStyle() {
       const style = { width: '100%' }
