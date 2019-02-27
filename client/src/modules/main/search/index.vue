@@ -1,7 +1,7 @@
 <template>
   <div class="search-wrapper">
     <div class="search">
-      <div ref="searchInput"
+      <div ref="searchInputWrapper"
         class="search__input-wrapper"
         :class="{
           'search__input-wrapper--isSearched':isSearched,
@@ -14,9 +14,10 @@
             @on-search="search"></i-input>
         </div>
       </div>
-      <div v-show="isSearched"
+      <div v-show="isDisplayResult"
         class="search__result">
-        <div class="result__statistics">为您找到相关漫画 <span class="result__count">{{count}}</span> 本</div>
+        <div v-if="count"
+          class="result__statistics">为您找到相关漫画 <span class="result__count">{{count}}</span> 本</div>
         <div v-for="item of comicList"
           :key="item.comicId"
           class="result__item">{{item.name}}</div>
@@ -39,6 +40,7 @@ export default {
     return {
       keyword: '',
       isSearched: false,
+      isDisplayResult: false,
       isShowShadow: false,
       comicList: [],
       count: 0,
@@ -65,10 +67,19 @@ export default {
         this.count = count
         this.isShowShadow = true
       })
+    },
+
+    displayResult(event) {
+      if (event.propertyName === 'height') {
+        this.isDisplayResult = true
+        off(this.$refs.searchInputWrapper, 'transitionend', this.displayResult)
+      }
     }
   },
 
-  mounted() {}
+  mounted() {
+    on(this.$refs.searchInputWrapper, 'transitionend', this.displayResult)
+  }
 }
 </script>
 
@@ -80,14 +91,13 @@ export default {
   .search {
     height: 100%;
     &__input-wrapper {
-      height: 100%;
       position: fixed;
       top: 0;
       height: 100%;
       width: 100%;
       background-color: #fff;
       border-bottom: 1px solid #ebebeb;
-      // transition: height 2s;
+      transition: height 1s;
       * {
         transition-duration: 1s;
       }

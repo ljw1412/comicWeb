@@ -9,7 +9,7 @@ import LoginPage from '@/modules/login'
 const index = {
   path: '/',
   name: 'index',
-  redirect: { name: 'vui' }
+  redirect: { name: 'main' }
 }
 
 const login = {
