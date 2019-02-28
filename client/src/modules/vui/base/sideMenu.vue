@@ -52,6 +52,10 @@ export default {
             {
               name: 'vreader',
               label: 'VReader 阅读器'
+            },
+            {
+              name: 'vloading',
+              label: 'VLoading 加载中'
             }
           ]
         }

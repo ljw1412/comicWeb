@@ -4,6 +4,7 @@ import VInput from '@/modules/vui/vInput'
 import VScrollView from '@/modules/vui/vScrollView'
 import VReader from '@/modules/vui/vReader'
 import VMarquee from '@/modules/vui/vMarquee'
+import VLoading from '@/modules/vui/vLoading'
 
 const module = {
   path: '/vui',
@@ -16,7 +17,8 @@ module.children = [
   { path: 'vgrid', name: 'vgrid', component: VGrid },
   { path: 'vinput', name: 'vinput', component: VInput },
   { path: 'vreader', name: 'vreader', component: VReader },
-  { path: 'vmarquee', name: 'vmarquee', component: VMarquee }
+  { path: 'vmarquee', name: 'vmarquee', component: VMarquee },
+  { path: 'vloading', name: 'vloading', component: VLoading }
 ]
 
 export default module
