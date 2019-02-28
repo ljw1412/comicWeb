@@ -14,7 +14,7 @@
             @on-search="search"></i-input>
         </div>
       </div>
-      <google-loading :type="2"></google-loading>
+      <google-loading :type="4"></google-loading>
       <div v-show="isDisplayResult"
         class="search__result">
         <div v-if="count"

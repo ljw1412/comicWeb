@@ -1,7 +1,7 @@
 <template>
   <div class="v-loading-wrappper">
     <div class="v-loading"
-      :class="`animation-${type}`">
+      :class="animationClasses">
       <div v-for="index of 4"
         class="shape"
         :key="'shape'+index"
@@ -13,7 +13,17 @@
 
 <script>
 export default {
-  props: { type: { type: Number, default: 1 } }
+  props: { type: { type: Number, default: 1 } },
+
+  computed: {
+    finalType() {
+      return this.type > 6 ? 6 : this.type < 1 ? 1 : this.type
+    },
+
+    animationClasses() {
+      return `animation-${this.finalType}`
+    }
+  }
 }
 </script>
 
@@ -71,17 +81,19 @@ export default {
     -webkit-animation: rotation 1s infinite;
     animation: rotation 3s infinite;
   }
-  &.animation-3 .shape1 {
-    border-top-left-radius: 10px;
-  }
-  &.animation-3 .shape2 {
-    border-top-right-radius: 10px;
-  }
-  &.animation-3 .shape3 {
-    border-bottom-left-radius: 10px;
-  }
-  &.animation-3 .shape4 {
-    border-bottom-right-radius: 10px;
+  &.animation-3 {
+    .shape1 {
+      border-top-left-radius: 10px;
+    }
+    .shape2 {
+      border-top-right-radius: 10px;
+    }
+    .shape3 {
+      border-bottom-left-radius: 10px;
+    }
+    .shape4 {
+      border-bottom-right-radius: 10px;
+    }
   }
   &.animation-4,
   &.animation-5 {
@@ -102,23 +114,42 @@ export default {
   }
 }
 
-.animation-1 {
-  .shape1 {
-    animation: animation1shape1 0.5s ease 0s infinite alternate;
-  }
-  .shape2 {
-    animation: animation1shape2 0.5s ease 0s infinite alternate;
-  }
-  .shape3 {
-    animation: animation1shape3 0.5s ease 0s infinite alternate;
-  }
-  .shape4 {
-    animation: animation1shape4 0.5s ease 0s infinite alternate;
+@for $j from 1 through 3 {
+  .animation-#{$j} {
+    @for $i from 1 through 4 {
+      .shape#{$i} {
+        animation: animation#{$j}shape#{$i} 0.5s ease 0s infinite alternate;
+      }
+    }
   }
 }
 
-@mixin animation1($shapeNum, $translateX, $translateY) {
-  @keyframes animation1shape#{$shapeNum} {
+.animation-4 {
+  @each $i, $delay in (1: 0, 2: 0.3, 3: 0.3, 4: 0) {
+    .shape#{$i} {
+      animation: animation4shape#{$i} 0.3s ease $delay + s infinite alternate;
+    }
+  }
+}
+
+.animation-5 {
+  @for $i from 1 through 4 {
+    .shape#{$i} {
+      animation: animation5shape#{$i} 2s ease 0s infinite reverse;
+    }
+  }
+}
+
+.animation-6 {
+  @for $i from 1 through 4 {
+    .shape#{$i} {
+      animation: animation6shape#{$i} 2s linear 0s infinite normal;
+    }
+  }
+}
+
+@mixin animationTranslate($animationNum, $shapeNum, $translateX, $translateY) {
+  @keyframes animation#{$animationNum}shape#{$shapeNum} {
     from {
       transform: translate(0, 0);
     }
@@ -128,10 +159,36 @@ export default {
   }
 }
 
-@include animation1(1, 16, 16);
-@include animation1(2, -16, 16);
-@include animation1(3, 16, -16);
-@include animation1(4, -16, -16);
+@mixin animationT2($animationNum, $index, $x25, $y25, $x50, $y50, $x75, $y75) {
+  @keyframes animation#{$animationNum}shape#{$index} {
+    0% {
+      transform: translate(0, 0);
+    }
+    25% {
+      transform: translate($x25 + px, $y25 + px);
+    }
+    50% {
+      transform: translate($x50 + px, $y50 + px);
+    }
+    75% {
+      transform: translate($x75 + px, $y75 + px);
+    }
+  }
+}
+
+@each $index, $size in (1: 16, 2: 20, 3: 5, 4: 5) {
+  @include animationTranslate($index, 1, $size, $size);
+  @include animationTranslate($index, 2, -$size, $size);
+  @include animationTranslate($index, 3, $size, -$size);
+  @include animationTranslate($index, 4, -$size, -$size);
+}
+
+@each $index, $size in (5: 15, 6: 18) {
+  @include animationT2($index, 1, 0, $size, $size, $size, $size, 0);
+  @include animationT2($index, 2, -$size, 0, -$size, $size, 0, $size);
+  @include animationT2($index, 3, $size, 0, $size, -$size, 0, -$size);
+  @include animationT2($index, 4, 0, -$size, -$size, -$size, -$size, 0);
+}
 
 @keyframes rotation {
   from {
