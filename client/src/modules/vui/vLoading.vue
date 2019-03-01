@@ -5,7 +5,7 @@
     <h2>代码示例</h2>
     <example>
       <div slot="demo">
-        <div v-for="index of 6"
+        <div v-for="index of 7"
           :key="index">
           <google-loading :type="index"></google-loading>
           <span>type:{{index}}</span>

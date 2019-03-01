@@ -1,5 +1,6 @@
 <template>
-  <div class="v-loading-wrappper">
+  <div class="v-loading-wrappper"
+    :class="`v-loading-wrappper-${finalType}`">
     <div class="v-loading"
       :class="animationClasses">
       <div v-for="index of 4"
@@ -17,7 +18,7 @@ export default {
 
   computed: {
     finalType() {
-      return this.type > 6 ? 6 : this.type < 1 ? 1 : this.type
+      return this.type > 7 ? 7 : this.type < 1 ? 1 : this.type
     },
 
     animationClasses() {
@@ -34,6 +35,11 @@ export default {
   width: 50px;
   height: 50px;
   padding: 10px;
+  &-7 {
+    width: 70px;
+    height: 70px;
+    padding: 20px;
+  }
 }
 .v-loading {
   position: relative;
@@ -64,7 +70,10 @@ export default {
     }
   }
 
-  &.animation-1 {
+  &.animation-1,
+  &.animation-4,
+  &.animation-5,
+  &.animation-7 {
     transform: rotate(45deg);
   }
   &.animation-2,
@@ -78,7 +87,6 @@ export default {
   &.animation-2,
   &.animation-3,
   &.animation-4 {
-    -webkit-animation: rotation 1s infinite;
     animation: rotation 3s infinite;
   }
   &.animation-3 {
@@ -95,22 +103,38 @@ export default {
       border-bottom-right-radius: 10px;
     }
   }
-  &.animation-4,
-  &.animation-5 {
-    transform: rotate(45deg);
-  }
-  &.animation-5 .shape {
+  &.animation-5 .shape,
+  &.animation-7 .shape {
     width: 15px;
     height: 15px;
   }
   &.animation-6 {
-    -webkit-animation: rotation 1s infinite;
-    animation: rotation 1s infinite;
+    animation: rotation 1.5s infinite;
   }
   &.animation-6 .shape {
     width: 12px;
     height: 12px;
     border-radius: 2px;
+  }
+  &.animation-7 {
+    @keyframes loading-center-absolute {
+      0% {
+        transform: rotate(45deg);
+      }
+      25% {
+        transform: rotate(135deg);
+      }
+      50% {
+        transform: rotate(225deg);
+      }
+      75% {
+        transform: rotate(315deg);
+      }
+      100% {
+        transform: rotate(405deg);
+      }
+    }
+    animation: loading-center-absolute 8s infinite;
   }
 }
 
@@ -148,6 +172,14 @@ export default {
   }
 }
 
+.animation-7 {
+  @for $i from 1 through 4 {
+    .shape#{$i} {
+      animation: animation7shape#{$i} 2s infinite;
+    }
+  }
+}
+
 @mixin animationTranslate($animationNum, $shapeNum, $translateX, $translateY) {
   @keyframes animation#{$animationNum}shape#{$shapeNum} {
     from {
@@ -176,6 +208,17 @@ export default {
   }
 }
 
+@mixin animationTR($index, $sX, $sY, $sAngle, $eX, $eY, $eAngle) {
+  @keyframes animation7shape#{$index} {
+    25% {
+      transform: translate($sX + px, $sY + px) rotate($sAngle + deg);
+    }
+    100% {
+      transform: translate($eX + px, $eY + px) rotate($eAngle + deg);
+    }
+  }
+}
+
 @each $index, $size in (1: 16, 2: 20, 3: 5, 4: 5) {
   @include animationTranslate($index, 1, $size, $size);
   @include animationTranslate($index, 2, -$size, $size);
@@ -189,6 +232,11 @@ export default {
   @include animationT2($index, 3, $size, 0, $size, -$size, 0, -$size);
   @include animationT2($index, 4, 0, -$size, -$size, -$size, -$size, 0);
 }
+
+@include animationTR(1, 0, -15, -180, 0, 0, -180);
+@include animationTR(2, 15, 0, -180, 0, 0, -180);
+@include animationTR(3, -15, 0, -180, 0, 0, -180);
+@include animationTR(4, 0, 15, -180, 0, 0, -180);
 
 @keyframes rotation {
   from {
