@@ -41,6 +41,7 @@ export default {
     padding: 20px;
   }
 }
+
 .v-loading {
   position: relative;
   display: inline-block;

@@ -22,6 +22,10 @@ html.no-scroll #app {
   overflow: hidden;
   height: 100%;
 }
+
+html.no-scroll .main {
+  height: 100%;
+}
 // html,
 // body,
 // #app {

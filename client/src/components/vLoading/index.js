@@ -1,3 +1,4 @@
-import GoogleLoading from './googleLoading.vue'
+import VLoading from './loading.vue'
+import VLoadingBar from './loadingBar.vue'
 
-export { GoogleLoading }
+export { VLoading, VLoadingBar }

@@ -3,12 +3,29 @@
     <h1>VLoading</h1>
     <h4>加载中的等待动画</h4>
     <h2>代码示例</h2>
+    <h3>VLoading - 行内加载等待动画</h3>
+    <example>
+      <div class="demo"
+        slot="demo">
+        <div class="demo__item"
+          v-for="index of 7"
+          :key="index">
+          <v-loading :type="index"></v-loading>
+          <span>type:{{index}}</span>
+        </div>
+      </div>
+    </example>
+    <h3>VLoadingBar - 加载进度条</h3>
     <example>
       <div slot="demo">
-        <div v-for="index of 7"
-          :key="index">
-          <google-loading :type="index"></google-loading>
-          <span>type:{{index}}</span>
+        <v-loading-bar ref="loadBar"
+          v-model="isDisplayLoadBar"></v-loading-bar>
+      </div>
+      <div slot="controller">
+        <div class="controller__item">value : 开始加载 <i-switch v-model="isDisplayLoadBar"></i-switch>
+        </div>
+        <div class="controller__item">
+          <i-button @click="$refs.loadBar.done()">完成加载</i-button>
         </div>
       </div>
     </example>
@@ -17,14 +34,30 @@
 
 <script>
 import Example from './base/example'
-import { GoogleLoading } from '@/components/vLoading'
+import { VLoading, VLoadingBar } from '@/components/vLoading'
 export default {
   components: {
     Example,
-    GoogleLoading
+    VLoading,
+    VLoadingBar
+  },
+
+  data() {
+    return {
+      isDisplayLoadBar: false
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.demo {
+  display: flex;
+  flex-wrap: wrap;
+  .demo__item {
+  }
+}
+.controller__item {
+  margin: 10px 0;
+}
 </style>
