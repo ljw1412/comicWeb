@@ -8,7 +8,12 @@
         :style="backgroudStyles"></div>
     </div>
     <!-- 菜单栏 -->
-    <div class="taskbar__menu">菜单</div>
+    <div class="taskbar__menu">
+      <Icon class="menu__icon"
+        type="logo-windows"
+        size="24"
+        color="#fff" />
+    </div>
     <!-- 任务栏 -->
     <div class="taskbar__tasks">
       <template v-for="(item,index) of taskList">
@@ -182,9 +187,16 @@ export default {
   }
 
   &__menu {
+    position: relative;
     flex-shrink: 0;
     width: 50px;
     @include interact;
+    .menu__icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
   }
 
   &__tasks {
