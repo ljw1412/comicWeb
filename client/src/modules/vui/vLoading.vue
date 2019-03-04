@@ -54,8 +54,6 @@ export default {
 .demo {
   display: flex;
   flex-wrap: wrap;
-  .demo__item {
-  }
 }
 .controller__item {
   margin: 10px 0;
