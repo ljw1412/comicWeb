@@ -18,10 +18,13 @@
 import Topbar from './components/topbar'
 import Sidebar from './components/sidebar'
 import SkinPicker from './components/skinPicker'
+import noScrollBar from '@/mixins/noScrollBar'
 import { mapState, mapMutations } from 'vuex'
 import { SET_THEME } from '@/store/admin.js'
 
 export default {
+  mixins: [noScrollBar],
+
   components: {
     SkinPicker,
     Topbar,
