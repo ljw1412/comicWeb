@@ -13,7 +13,7 @@
 import { on, off } from '../../utils/dom'
 export default {
   props: {
-    value: Boolean,
+    value: { type: Boolean, default: false },
     height: String,
     progressColor: String,
     bgColor: String
@@ -42,14 +42,14 @@ export default {
 
   watch: {
     value(val) {
-      this.$nextTick(() => {
+      setTimeout(() => {
         this.isLoading = val
         if (val) {
           on(this.$refs.progress, 'transitionend', this.transitionEnd)
         } else {
           off(this.$refs.progress, 'transitionend', this.transitionEnd)
         }
-      })
+      }, 0)
     }
   }
 }
