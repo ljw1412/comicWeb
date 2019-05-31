@@ -1,8 +1,9 @@
 <template>
   <div class="main">
-    <website-dialog :visible="isDisplayWebsiteDialog"
+    <!-- <website-dialog :visible="isDisplayWebsiteDialog"
       @close="isDisplayWebsiteDialog = false"></website-dialog>
-    <user-bar></user-bar>
+    <user-bar></user-bar> -->
+    <sidebar class="main__sidebar"></sidebar>
     <div class="main__body">
       <!-- <button @click="isDisplayWebsiteDialog = true">a</button> -->
       <router-view />
@@ -11,10 +12,17 @@
 </template>
 
 <script>
-import WebsiteDialog from './components/websiteDialog'
-import UserBar from './components/userBar'
+// import WebsiteDialog from './components/websiteDialog'
+// import UserBar from './components/userBar'
+import noScrollBar from '@/mixins/noScrollBar'
+import Sidebar from './components/sidebar'
 export default {
-  components: { WebsiteDialog, UserBar },
+  mixins: [noScrollBar],
+
+  components: {
+    Sidebar
+    // WebsiteDialog, UserBar
+  },
 
   data() {
     return {
@@ -27,9 +35,13 @@ export default {
 <style lang="scss" scoped>
 .main {
   position: relative;
-  min-height: 100%;
+  display: flex;
+  height: 100%;
   &__body {
-    height: 100%;
+    flex-grow: 1;
+  }
+  &__sidebar {
+    flex-shrink: 0;
   }
 }
 </style>
