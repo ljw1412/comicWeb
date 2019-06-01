@@ -2,22 +2,51 @@
   <div class="avatar-area"
     :class="{'avatar-area--collapsed':isCollapsed}">
     <div class="avatar"></div>
-    <transition enter-active-class="fade-enter-active">
+    <transition enter-active-class="fade-enter-active"
+      v-on:after-enter="infoAfterEnter">
       <div v-show="!isCollapsed"
         class="info">
         <div class="info__row">
           <span class="info__username">用户名</span>
           <span class="info__m-coin">M币</span>
         </div>
-        <div class="info__level">LV1</div>
+        <div class="info__level">
+          <level-bar v-if="isDisplayedInfo"
+            :level="1"
+            :current="70"
+            :max="100"></level-bar>
+        </div>
       </div>
     </transition>
   </div>
 </template>
 
 <script>
+import LevelBar from '../levelBar'
 export default {
-  props: { isCollapsed: Boolean }
+  name: 'AvatarArea',
+
+  components: {
+    LevelBar
+  },
+
+  props: { isCollapsed: Boolean },
+
+  data() {
+    return {
+      isDisplayedInfo: false
+    }
+  },
+
+  methods: {
+    infoAfterEnter(el) {
+      this.isDisplayedInfo = true
+    }
+
+    // infoLeave(el) {
+    //   this.isDisplayedInfo = false
+    // }
+  }
 }
 </script>
 
@@ -57,6 +86,7 @@ export default {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      margin-bottom: 6px;
     }
     &__username {
       font-size: 20px;
