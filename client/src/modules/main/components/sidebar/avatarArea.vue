@@ -1,7 +1,8 @@
 <template>
   <div class="avatar-area"
     :class="{'avatar-area--collapsed':isCollapsed}">
-    <div class="avatar"></div>
+    <div class="avatar"
+      @click="handleAvatarClick"></div>
     <transition enter-active-class="fade-enter-active"
       v-on:after-enter="infoAfterEnter">
       <div v-show="!isCollapsed"
@@ -23,6 +24,7 @@
 
 <script>
 import LevelBar from '../levelBar'
+import { mapActions } from 'vuex'
 export default {
   name: 'AvatarArea',
 
@@ -39,13 +41,18 @@ export default {
   },
 
   methods: {
+    ...mapActions('main', ['showLogin']),
     infoAfterEnter(el) {
       this.isDisplayedInfo = true
-    }
+    },
 
     // infoLeave(el) {
     //   this.isDisplayedInfo = false
     // }
+
+    handleAvatarClick() {
+      this.showLogin()
+    }
   }
 }
 </script>
@@ -69,6 +76,7 @@ export default {
   padding: 20px;
   transition-duration: 0.3s;
   .avatar {
+    cursor: pointer;
     flex-shrink: 0;
     width: 60px;
     height: 60px;

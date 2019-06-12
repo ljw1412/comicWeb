@@ -8,6 +8,7 @@
       <!-- <button @click="isDisplayWebsiteDialog = true">a</button> -->
       <router-view />
     </div>
+    <login-dialog></login-dialog>
   </div>
 </template>
 
@@ -16,11 +17,13 @@
 // import UserBar from './components/userBar'
 import noScrollBar from '@/mixins/noScrollBar'
 import Sidebar from './components/sidebar'
+import LoginDialog from './components/loginDialog'
 export default {
   mixins: [noScrollBar],
 
   components: {
-    Sidebar
+    Sidebar,
+    LoginDialog
     // WebsiteDialog, UserBar
   },
 
