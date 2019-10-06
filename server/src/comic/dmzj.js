@@ -13,9 +13,11 @@ const headers = {
 }
 const query = '?channel=Android&version=2.6.004'
 const searchUrl = 'https://sacg.dmzj.com/comicsum/search.php?s={keyword}'
-const detailUrl = 'http://v2.api.dmzj.com/comic/{comicId}.json' + query
+// const detailUrl = 'http://v2.api.dmzj.com/comic/{comicId}.json' + query
+// const chapterUrl ='http://v2.api.dmzj.com/chapter/{comicId}/{chapterId}.json' + query
+const detailUrl = 'http://v3api.dmzj.com/comic/comic_{comicId}.json' + query
 const chapterUrl =
-  'http://v2.api.dmzj.com/chapter/{comicId}/{chapterId}.json' + query
+  'http://v3api.dmzj.com/chapter/{comicId}/{chapterId}.json' + query
 
 const { baseServerUrl } = require('../../config/server')
 const imageBaseUrl = `//${baseServerUrl}/image?website=dmzj&url=`
