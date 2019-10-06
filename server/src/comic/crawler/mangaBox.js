@@ -19,7 +19,7 @@ async function browsePage(url) {
         'Mozilla/5.0 (Linux; U; Android 8.0.0; zh-cn;  MI8 Build/JRO03L) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30 XiaoMi/MiuiBrowser/1.0'
       // 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1'
     },
-    timeout: 5000
+    timeout: 10000
   }).catch(() => '')
   return res ? res.text() : res
 }
