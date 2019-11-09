@@ -40,7 +40,9 @@ async function getComicInfo(url) {
   const sourceCode = await browsePage(url)
   const $ = cheerio.load(sourceCode)
   let info = $('script:contains(@context)').html()
-  info = JSON.parse(info)
+  console.log(info.replace(/\s/g, ''))
+
+  info = JSON.parse(info.replace(/\s/g, ''))
   const comic = {}
   if (!info['@graph']) return comic
   info['@graph'].forEach(item => {
